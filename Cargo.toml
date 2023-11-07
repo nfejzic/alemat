@@ -1,0 +1,12 @@
+[package]
+name = "alemat"
+version = "0.1.0"
+edition = "2021"
+authors = ["Nadir Fejzic <nadirfejzo@gmail.com>"]
+description = "Library for type-safe building of MathML."
+repository = "https://github.com/nfejzic/alemat"
+license = "Apache-2.0"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
