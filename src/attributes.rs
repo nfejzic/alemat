@@ -48,7 +48,7 @@ pub enum Attribute {
     MathColor(String),
 
     /// Presentational hint for the font size of the element. Must be a value that is
-    /// [lenght-percentage](https://www.w3.org/TR/css-values-4/#typedef-length-percentage).
+    /// [length-percentage](https://www.w3.org/TR/css-values-4/#typedef-length-percentage).
     MathSize(String),
 
     /// The `nonce` attribute, same as in HTML.
