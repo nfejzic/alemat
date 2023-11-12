@@ -1,22 +1,25 @@
 //! Elements found in the MathML Core Specification. These elements are called MathML Core
 //! elements.
 
-mod annotation;
-mod maction;
-mod math;
-mod merror;
-mod mfrac;
-mod mi;
-mod mmultiscripts;
-mod mn;
-mod mo;
+macro_rules! pub_mods {
+    ($($mod:ident),* $(,)?) => {
+        $(mod $mod;)*
 
-pub use annotation::*;
-pub use maction::*;
-pub use math::*;
-pub use merror::*;
-pub use mfrac::*;
-pub use mi::*;
-pub use mmultiscripts::*;
-pub use mn::*;
-pub use mo::*;
+        $(pub use $mod::*;)*
+    };
+}
+
+pub_mods! {
+    annotation,
+    maction,
+    math,
+    merror,
+    mfrac,
+    mi,
+    mmultiscripts,
+    mn,
+    mo,
+    munderover,
+    mpadded,
+    mphantom,
+}

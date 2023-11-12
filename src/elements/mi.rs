@@ -13,7 +13,7 @@ pub enum IdentAttr {
     /// bar.
     /// It must have a value that is a valid
     /// [<length-percentage>](https://www.w3.org/TR/css-values-4/#typedef-length-percentage).
-    MathVariant,
+    MathVariant(String),
 }
 
 /// The `mi` (`Ident`) element represents a symbolic name or arbitrary text that should be rendered
