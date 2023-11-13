@@ -22,4 +22,9 @@ pub_mods! {
     munderover,
     mpadded,
     mphantom,
+    mroot,
+    mrow,
+    ms,
+    mspace,
+    mstyle,
 }
