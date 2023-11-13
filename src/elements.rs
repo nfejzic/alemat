@@ -27,4 +27,7 @@ pub_mods! {
     ms,
     mspace,
     mstyle,
+    msubsup,
+    mtable,
+    mtext,
 }

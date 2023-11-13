@@ -53,3 +53,16 @@ where
         }
     }
 }
+
+/// The `semantics` element is the container element that associates annotations with a MathML
+/// expression. Typically, the `semantics` element has as its first child element a MathML
+/// expression to be annotated while subsequent child elements represent text annotations within an
+/// `annotation` element, or more complex markup annotations within an `annotation-xml` element.
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
+pub struct Semantics {
+    /// Children of the `semantics` element. Rendering is same as `mrow`.
+    children: MathMl,
+
+    /// The `semantics` element accepts the global [`Attribute`]s.
+    attr: Vec<Attribute>,
+}
