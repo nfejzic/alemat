@@ -4,6 +4,7 @@ use crate::{attributes::Attribute, MathMl};
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Multiscripts {
     content: MathMl,
+    /// Accepts the global [`Attribute`]s.
     attributes: Vec<Attribute>,
 }
 
@@ -20,22 +21,9 @@ where
 }
 
 /// Presubscripts and tensor notations are represented by the `mmultiscripts` element. The
-/// `mprescripts` element is used as a separator between the `postscripts` and `prescripts`. These
-/// two elements accept the global attributes.
+/// `mprescripts` element is used as a separator between the `postscripts` and `prescripts`.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
-pub struct MultiScripts {
-    children: MathMl,
+pub struct Prescripts {
+    /// Accepts the global [`Attribute`]s.
     attr: Vec<Attribute>,
-}
-
-impl<T> From<T> for MultiScripts
-where
-    T: Into<MathMl>,
-{
-    fn from(value: T) -> Self {
-        Self {
-            children: value.into(),
-            attr: Default::default(),
-        }
-    }
 }

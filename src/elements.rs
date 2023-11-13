@@ -1,33 +1,57 @@
 //! Elements found in the MathML Core Specification. These elements are called MathML Core
 //! elements.
 
-macro_rules! pub_mods {
-    ($($mod:ident),* $(,)?) => {
-        $(mod $mod;)*
+mod maction;
+mod math;
+mod merror;
+mod mmultiscripts;
+mod mphantom;
+mod mrow;
+mod mstyle;
 
-        $(pub use $mod::*;)*
-    };
+pub mod grouping {
+    pub use super::maction::*;
+    pub use super::math::*;
+    pub use super::merror::*;
+    pub use super::mmultiscripts::Prescripts;
+    pub use super::mphantom::*;
+    pub use super::mrow::*;
+    pub use super::mstyle::*;
 }
 
-pub_mods! {
-    annotation,
-    maction,
-    math,
-    merror,
-    mfrac,
-    mi,
-    mmultiscripts,
-    mn,
-    mo,
-    munderover,
-    mpadded,
-    mphantom,
-    mroot,
-    mrow,
-    ms,
-    mspace,
-    mstyle,
-    msubsup,
-    mtable,
-    mtext,
+mod mroot;
+
+pub mod radicals {
+    pub use super::mroot::*;
 }
+
+mod msubsup;
+mod munderover;
+
+pub mod scripted {
+    pub use super::mmultiscripts::Multiscripts;
+    pub use super::msubsup::*;
+    pub use super::munderover::*;
+}
+
+mod annotation;
+mod mfrac;
+mod mi;
+mod mn;
+mod mo;
+mod mpadded;
+mod ms;
+mod mspace;
+mod mtable;
+mod mtext;
+
+pub use annotation::*;
+pub use mfrac::*;
+pub use mi::*;
+pub use mn::*;
+pub use mo::*;
+pub use mpadded::*;
+pub use ms::*;
+pub use mspace::*;
+pub use mtable::*;
+pub use mtext::*;
