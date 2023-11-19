@@ -1,4 +1,4 @@
-use crate::attributes::Attribute;
+use crate::{attributes::Attribute, MathMl, Tag};
 
 /// The `mn` element represents a "numeric literal" or other data that should be rendered as a
 /// numeric literal. Generally speaking, a numeric literal is a sequence of digits, perhaps
@@ -9,14 +9,30 @@ pub struct Num {
     attributes: Vec<Attribute>,
 }
 
-impl<T> From<T> for Num
+impl From<String> for Num {
+    fn from(value: String) -> Self {
+        Self {
+            num: value,
+            attributes: Default::default(),
+        }
+    }
+}
+
+impl<'a> From<&'a str> for Num {
+    fn from(value: &'a str) -> Self {
+        Self::from(String::from(value))
+    }
+}
+
+crate::from_types!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize);
+
+impl<T> From<T> for MathMl
 where
-    T: Into<String>,
+    T: Into<Num>,
 {
     fn from(value: T) -> Self {
-        Self {
-            num: value.into(),
-            attributes: Default::default(),
+        MathMl {
+            content: vec![Tag::Num(value.into())],
         }
     }
 }
