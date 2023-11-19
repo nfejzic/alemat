@@ -18,7 +18,8 @@ impl<'a> From<&'a str> for Num {
     }
 }
 
-crate::from_types!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize);
+crate::from_types!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize => Num;
+            |val| Num { num: format!("{}", val), attributes: Default::default() });
 
 impl<T> From<T> for MathMl
 where

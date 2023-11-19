@@ -4,6 +4,8 @@ pub mod attributes;
 pub mod elements;
 pub mod markers;
 
+use elements::Num;
+
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub(crate) enum Tag {
     Num(Num),
@@ -16,19 +18,16 @@ pub struct MathMl {
 }
 
 macro_rules! from_types {
-    ($($type:ty),* $(,)?) => {
+    ($($type:path),* $(,)? => $for_type:path; $func:expr) => {
         $(
-        impl From<$type> for Num {
+        impl From<$type> for $for_type {
             fn from(value: $type) -> Self {
-                Self {
-                    num: format!("{}", value),
-                    attributes: Vec::default(),
-                }
+                let from_value = $func;
+                from_value(value)
             }
         }
         )*
     };
 }
 
-use elements::Num;
 pub(crate) use from_types;
