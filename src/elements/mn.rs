@@ -9,18 +9,12 @@ pub struct Num {
     attributes: Vec<Attribute>,
 }
 
-impl From<String> for Num {
-    fn from(value: String) -> Self {
-        Self {
-            num: value,
-            attributes: Default::default(),
-        }
-    }
-}
-
 impl<'a> From<&'a str> for Num {
     fn from(value: &'a str) -> Self {
-        Self::from(String::from(value))
+        Self {
+            num: String::from(value),
+            attributes: Default::default(),
+        }
     }
 }
 
