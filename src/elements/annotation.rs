@@ -47,10 +47,7 @@ pub struct Annotation {
 
 impl Annotation {
     pub fn builder() -> AnnotationBuilder<Uninit> {
-        AnnotationBuilder {
-            content: None,
-            ..Default::default()
-        }
+        AnnotationBuilder::default()
     }
 }
 
@@ -114,4 +111,47 @@ pub struct Semantics {
 
     /// The `semantics` element accepts the global [`Attribute`]s.
     attr: Vec<Attribute>,
+}
+
+impl Semantics {
+    pub fn builder() -> SemanticsBuilder<Uninit> {
+        SemanticsBuilder::default()
+    }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
+pub struct SemanticsBuilder<T> {
+    content: Option<MathMl>,
+    attr: Vec<Attribute>,
+
+    _marker: PhantomData<(T,)>,
+}
+
+impl<T> SemanticsBuilder<T> {
+    pub fn content(self, content: impl Into<MathMl>) -> SemanticsBuilder<Init> {
+        SemanticsBuilder {
+            content: Some(content.into()),
+            attr: self.attr,
+            _marker: PhantomData,
+        }
+    }
+
+    pub fn attr<A>(mut self, attr: A) -> SemanticsBuilder<T>
+    where
+        A: IntoIterator<Item = Attribute>,
+    {
+        self.attr.extend(attr);
+        self
+    }
+}
+
+impl SemanticsBuilder<Init> {
+    pub fn build(self) -> Semantics {
+        Semantics {
+            children: self
+                .content
+                .expect("Content is guaranteed to be initialized at compile time."),
+            attr: self.attr,
+        }
+    }
 }
