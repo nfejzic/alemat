@@ -68,24 +68,13 @@ where
 ///
 /// let frac = Frac::builder().num("1").denom("2").build();
 /// ```
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct FracBuilder<N, D> {
     num: Option<MathMl>,
     denom: Option<MathMl>,
     attr: Vec<FracAttr>,
 
     _marker: PhantomData<(N, D)>,
-}
-
-impl Default for FracBuilder<Uninit, Uninit> {
-    fn default() -> Self {
-        Self {
-            num: None,
-            denom: None,
-            attr: Vec::default(),
-            _marker: Default::default(),
-        }
-    }
 }
 
 impl<N, D> FracBuilder<N, D> {

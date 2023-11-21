@@ -1,4 +1,9 @@
-use crate::attributes::Attribute;
+use std::marker::PhantomData;
+
+use crate::{
+    attributes::Attribute,
+    markers::{Init, Uninit},
+};
 
 /// An attribute of `mi` element. Either one of the global [`Attribute`]s, or `mathvariant`
 /// attribute.
@@ -24,6 +29,12 @@ pub struct Ident {
     attributes: Vec<IdentAttr>,
 }
 
+impl Ident {
+    pub fn builder() -> IdentBuilder<Uninit> {
+        IdentBuilder::default()
+    }
+}
+
 impl<T> From<T> for Ident
 where
     T: Into<String>,
@@ -32,6 +43,41 @@ where
         Self {
             ident: value.into(),
             attributes: Default::default(),
+        }
+    }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
+pub struct IdentBuilder<T> {
+    ident: Option<String>,
+    attributes: Vec<IdentAttr>,
+    _marker: PhantomData<(T,)>,
+}
+
+impl<T> IdentBuilder<T> {
+    pub fn ident(self, ident: impl Into<String>) -> IdentBuilder<Uninit> {
+        IdentBuilder {
+            ident: Some(ident.into()),
+            attributes: self.attributes,
+            _marker: PhantomData,
+        }
+    }
+
+    pub fn attr<I, A>(mut self, attr: I) -> Self
+    where
+        I: IntoIterator<Item = A>,
+        A: Into<IdentAttr>,
+    {
+        self.attributes.extend(attr.into_iter().map(Into::into));
+        self
+    }
+}
+
+impl IdentBuilder<Init> {
+    pub fn build(self) -> Ident {
+        Ident {
+            ident: self.ident.expect("Content is guaranteed to be init."),
+            attributes: self.attributes,
         }
     }
 }
