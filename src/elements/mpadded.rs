@@ -16,6 +16,12 @@ pub enum PaddedAttr {
     Global(Attribute),
 }
 
+impl From<Attribute> for PaddedAttr {
+    fn from(value: Attribute) -> Self {
+        Self::Global(value)
+    }
+}
+
 /// The `mpadded` element renders the same as its in-flow child content, but with the size and
 /// relative positioning point of its content modified according to `mpadded`’s attributes.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
@@ -33,5 +39,16 @@ where
             children: value.into(),
             attributes: Default::default(),
         }
+    }
+}
+
+impl Padded {
+    pub fn add_attr<I, A>(mut self, attr: I) -> Self
+    where
+        I: IntoIterator<Item = A>,
+        A: Into<PaddedAttr>,
+    {
+        self.attributes.extend(attr.into_iter().map(Into::into));
+        self
     }
 }
