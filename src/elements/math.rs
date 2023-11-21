@@ -1,4 +1,10 @@
-use crate::{attributes::Attribute, MathMl};
+use std::marker::PhantomData;
+
+use crate::{
+    attributes::Attribute,
+    markers::{Init, Uninit},
+    MathMl,
+};
 
 /// The display attribute, if present, must be an ASCII case-insensitive match to `block` or
 /// `inline`.
@@ -39,6 +45,15 @@ impl Math {
             attributes: Default::default(),
         }
     }
+
+    pub fn builder() -> MathBuilder<Uninit> {
+        MathBuilder {
+            content: None,
+            attributes: Vec::default(),
+
+            _marker: PhantomData,
+        }
+    }
 }
 
 impl<T> From<T> for Math
@@ -49,6 +64,42 @@ where
         Self {
             content: value.into(),
             attributes: Default::default(),
+        }
+    }
+}
+
+pub struct MathBuilder<T> {
+    content: Option<MathMl>,
+    attributes: Vec<MathAttr>,
+
+    _marker: PhantomData<(T,)>,
+}
+
+impl<T> MathBuilder<T> {
+    pub fn content(self, content: impl Into<MathMl>) -> MathBuilder<Init> {
+        MathBuilder {
+            content: Some(content.into()),
+            attributes: self.attributes,
+
+            _marker: PhantomData,
+        }
+    }
+
+    pub fn attr<I, A>(mut self, attr: I) -> Self
+    where
+        I: IntoIterator<Item = A>,
+        A: Into<MathAttr>,
+    {
+        self.attributes.extend(attr.into_iter().map(Into::into));
+        self
+    }
+}
+
+impl MathBuilder<Init> {
+    pub fn build(self) -> Math {
+        Math {
+            content: self.content.expect("Content is guaranteed to be init."),
+            attributes: self.attributes,
         }
     }
 }
