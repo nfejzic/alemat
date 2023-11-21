@@ -1,4 +1,10 @@
-use crate::{attributes::Attribute, MathMl};
+use std::marker::PhantomData;
+
+use crate::{
+    attributes::Attribute,
+    markers::{Init, Uninit},
+    MathMl,
+};
 
 /// Presubscripts and tensor notations are represented by the `mmultiscripts` element.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
@@ -20,10 +26,55 @@ where
     }
 }
 
+impl Multiscripts {
+    pub fn builder() -> MultiscriptsBuilder<Uninit> {
+        MultiscriptsBuilder::default()
+    }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
+pub struct MultiscriptsBuilder<T> {
+    content: Option<MathMl>,
+    attr: Vec<Attribute>,
+
+    _marker: PhantomData<(T,)>,
+}
+
+impl<T> MultiscriptsBuilder<T> {
+    pub fn content(self, content: impl Into<MathMl>) -> MultiscriptsBuilder<Init> {
+        MultiscriptsBuilder {
+            content: Some(content.into()),
+            attr: self.attr,
+            _marker: PhantomData,
+        }
+    }
+
+    pub fn attr<I, A>(mut self, attr: I) -> Self
+    where
+        I: IntoIterator<Item = A>,
+        A: Into<Attribute>,
+    {
+        self.attr.extend(attr.into_iter().map(Into::into));
+        self
+    }
+}
+
 /// Presubscripts and tensor notations are represented by the `mmultiscripts` element. The
 /// `mprescripts` element is used as a separator between the `postscripts` and `prescripts`.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Prescripts {
     /// Accepts the global [`Attribute`]s.
     attr: Vec<Attribute>,
+}
+
+impl Prescripts {
+    pub fn with_attr<I, A>(attr: I) -> Self
+    where
+        I: IntoIterator<Item = A>,
+        A: Into<Attribute>,
+    {
+        Self {
+            attr: attr.into_iter().map(Into::into).collect(),
+        }
+    }
 }

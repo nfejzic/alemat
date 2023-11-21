@@ -38,6 +38,12 @@ pub enum AnnotationAttr {
     Encoding(String),
 }
 
+impl From<Attribute> for AnnotationAttr {
+    fn from(value: Attribute) -> Self {
+        Self::Global(value)
+    }
+}
+
 /// The `annotation` (and `annotation-xml`) element.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Annotation {
@@ -80,11 +86,12 @@ impl<T> AnnotationBuilder<T> {
         }
     }
 
-    pub fn attr<A>(mut self, attr: A) -> AnnotationBuilder<T>
+    pub fn attr<I, A>(mut self, attr: I) -> AnnotationBuilder<T>
     where
-        A: IntoIterator<Item = AnnotationAttr>,
+        I: IntoIterator<Item = A>,
+        A: Into<AnnotationAttr>,
     {
-        self.attr.extend(attr);
+        self.attr.extend(attr.into_iter().map(Into::into));
         self
     }
 }
