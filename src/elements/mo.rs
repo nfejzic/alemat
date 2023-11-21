@@ -1,4 +1,9 @@
-use crate::attributes::Attribute;
+use std::marker::PhantomData;
+
+use crate::{
+    attributes::Attribute,
+    markers::{Init, Uninit},
+};
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum OpForm {
@@ -53,13 +58,19 @@ pub enum OperatorAttr {
     MovableLimits,
 }
 
-/// The mo element represents an operator or anything that should be rendered as an operator. In
+impl From<Attribute> for OperatorAttr {
+    fn from(value: Attribute) -> Self {
+        Self::Global(value)
+    }
+}
+
+/// The `mo` element represents an operator or anything that should be rendered as an operator. In
 /// general, the notational conventions for mathematical operators are quite complicated, and
 /// therefore MathML provides a relatively sophisticated mechanism for specifying the rendering
-/// behavior of an <mo> element.
+/// behavior of an `<mo>` element.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Operator {
-    num: String,
+    op: String,
     attributes: Vec<OperatorAttr>,
 }
 
@@ -69,8 +80,49 @@ where
 {
     fn from(value: T) -> Self {
         Self {
-            num: value.into(),
+            op: value.into(),
             attributes: Default::default(),
+        }
+    }
+}
+
+impl Operator {
+    pub fn builder() -> OperatorBuilder<Uninit> {
+        OperatorBuilder::default()
+    }
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
+pub struct OperatorBuilder<T> {
+    op: Option<String>,
+    attr: Vec<OperatorAttr>,
+    _marker: PhantomData<(T,)>,
+}
+
+impl<T> OperatorBuilder<T> {
+    pub fn op(self, op: impl Into<String>) -> OperatorBuilder<Init> {
+        OperatorBuilder {
+            op: Some(op.into()),
+            attr: self.attr,
+            _marker: PhantomData,
+        }
+    }
+
+    pub fn attr<I, A>(mut self, attr: I) -> Self
+    where
+        I: IntoIterator<Item = A>,
+        A: Into<OperatorAttr>,
+    {
+        self.attr.extend(attr.into_iter().map(Into::into));
+        self
+    }
+}
+
+impl OperatorBuilder<Init> {
+    pub fn build(self) -> Operator {
+        Operator {
+            op: self.op.expect("Op is guaranteed to be init."),
+            attributes: self.attr,
         }
     }
 }
