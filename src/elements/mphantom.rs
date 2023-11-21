@@ -30,12 +30,11 @@ where
 }
 
 impl Phantom {
-    pub fn add_attr<I, A>(mut self, attr: I) -> Self
+    pub fn add_attr<I, A>(&mut self, attr: I)
     where
         I: IntoIterator<Item = A>,
         A: Into<Attribute>,
     {
         self.attributes.extend(attr.into_iter().map(Into::into));
-        self
     }
 }

@@ -3,6 +3,7 @@ use std::marker::PhantomData;
 use crate::{
     attributes::Attribute,
     markers::{Init, Uninit},
+    MathMl, Tag,
 };
 
 /// An attribute of `mi` element. Either one of the global [`Attribute`]s, or `mathvariant`
@@ -43,6 +44,14 @@ where
         Self {
             ident: value.into(),
             attributes: Default::default(),
+        }
+    }
+}
+
+impl From<Ident> for MathMl {
+    fn from(value: Ident) -> Self {
+        MathMl {
+            content: vec![Tag::Ident(value)],
         }
     }
 }

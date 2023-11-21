@@ -4,11 +4,12 @@ pub mod attributes;
 pub mod elements;
 pub mod markers;
 
-use elements::Num;
+use elements::{Ident, Num};
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub(crate) enum Tag {
     Num(Num),
+    Ident(Ident),
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]

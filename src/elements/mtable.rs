@@ -34,6 +34,52 @@ pub struct Table {
     attributes: Vec<Attribute>,
 }
 
+impl<R> FromIterator<R> for Table
+where
+    R: Into<TableRow>,
+{
+    fn from_iter<T: IntoIterator<Item = R>>(iter: T) -> Self {
+        Self {
+            rows: iter.into_iter().map(Into::into).collect(),
+            attributes: Default::default(),
+        }
+    }
+}
+
+impl<I, C, const N: usize> From<I> for Table
+where
+    I: IntoIterator<Item = [C; N]>,
+    C: Into<TableCell>,
+{
+    fn from(value: I) -> Self {
+        Self::from_iter(value)
+    }
+}
+
+/// Create a [`Table`] easily using this macro.
+///
+/// # Example
+///
+/// ```rust
+/// use alemat::table;
+/// use alemat::elements::{Ident, Num};
+///
+/// let table = table![
+///     [Ident::from("x"), Num::from(41)],
+///     [Ident::from("x"), Num::from(41)]
+/// ];
+/// ```
+#[macro_export]
+macro_rules! table {
+    ($([$($cell:expr),*]),*) => {
+        $crate::elements::Table::from([
+            $(
+            $crate::row![$($cell),*],
+            )*
+        ])
+    }
+}
+
 /// The `mtr` is laid out as `table-row`. The user agent stylesheet must contain the following
 /// rules in order to implement that behavior:
 ///
@@ -49,6 +95,66 @@ pub struct TableRow {
     /// The `mtr` accepts the global [`Attribute`]s.
     attr: Vec<Attribute>,
 }
+
+impl<C> FromIterator<C> for TableRow
+where
+    C: Into<TableCell>,
+{
+    fn from_iter<T: IntoIterator<Item = C>>(iter: T) -> Self {
+        Self {
+            cells: iter.into_iter().map(Into::into).collect(),
+            attr: Default::default(),
+        }
+    }
+}
+
+impl TableRow {
+    pub fn add_attr<I, A>(&mut self, attr: I)
+    where
+        I: IntoIterator<Item = A>,
+        A: Into<Attribute>,
+    {
+        self.attr.extend(attr.into_iter().map(Into::into));
+    }
+}
+
+impl<I, C> From<I> for TableRow
+where
+    I: IntoIterator<Item = C>,
+    C: Into<TableCell>,
+{
+    fn from(value: I) -> Self {
+        Self {
+            cells: value.into_iter().map(Into::into).collect(),
+            attr: Default::default(),
+        }
+    }
+}
+
+/// Create a row of [`TableCell`]s. To be used in [`Table`].
+///
+/// # Example:
+///
+/// ```rust
+/// use alemat::row;
+/// use alemat::elements::{Ident, Num};
+/// let row = row![Ident::from("x"), Num::from(42)];
+///
+/// // create a table
+/// use alemat::elements::Table;
+/// let table = Table::from([
+///     row![Ident::from("x"), Num::from(42)],
+///     row![Ident::from("y"), Num::from(43)],
+/// ]);
+/// ```
+#[macro_export]
+macro_rules! row {
+    ($($cell:expr),* $(,)?) => {
+         [$($crate::elements::TableCell::from($cell)),*]
+    }
+}
+
+pub use row;
 
 /// The `mtd` accepts the global [`Attribute`]s as well as `columnspan` and `rowspan`.
 ///
@@ -70,6 +176,12 @@ pub enum TableCellAttr {
     Global(Attribute),
 }
 
+impl From<Attribute> for TableCellAttr {
+    fn from(value: Attribute) -> Self {
+        Self::Global(value)
+    }
+}
+
 /// The `mtd` is laid out as a `table-cell` with content centered in the cell and a default
 /// padding. The user agent stylesheet must contain the following rules:
 ///
@@ -86,4 +198,26 @@ pub enum TableCellAttr {
 pub struct TableCell {
     children: MathMl,
     attr: Vec<TableCellAttr>,
+}
+
+impl<T> From<T> for TableCell
+where
+    T: Into<MathMl>,
+{
+    fn from(value: T) -> Self {
+        Self {
+            children: value.into(),
+            attr: Default::default(),
+        }
+    }
+}
+
+impl TableCell {
+    pub fn add_attr<I, A>(&mut self, attr: I)
+    where
+        I: IntoIterator<Item = A>,
+        A: Into<TableCellAttr>,
+    {
+        self.attr.extend(attr.into_iter().map(Into::into));
+    }
 }
