@@ -4,7 +4,7 @@ use crate::attributes::Attribute;
 /// computer algebra systems or other systems containing "programming languages".
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct StrLiteral {
-    num: String,
+    literal: String,
     attr: Vec<Attribute>,
 }
 
@@ -14,8 +14,19 @@ where
 {
     fn from(value: T) -> Self {
         Self {
-            num: value.into(),
+            literal: value.into(),
             attr: Default::default(),
         }
+    }
+}
+
+impl StrLiteral {
+    pub fn add_attr<I, A>(mut self, attr: I) -> Self
+    where
+        I: IntoIterator<Item = A>,
+        A: Into<Attribute>,
+    {
+        self.attr.extend(attr.into_iter().map(Into::into));
+        self
     }
 }

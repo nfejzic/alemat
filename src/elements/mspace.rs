@@ -29,9 +29,26 @@ pub enum SpaceAttr {
     Global(Attribute),
 }
 
+impl From<Attribute> for SpaceAttr {
+    fn from(value: Attribute) -> Self {
+        Self::Global(value)
+    }
+}
+
 /// The mspace empty element represents a blank space of any desired size, as set by its
 /// attributes.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Space {
     attr: Vec<SpaceAttr>,
+}
+
+impl Space {
+    pub fn add_attr<I, A>(mut self, attr: I) -> Self
+    where
+        I: IntoIterator<Item = A>,
+        A: Into<SpaceAttr>,
+    {
+        self.attr.extend(attr.into_iter().map(Into::into));
+        self
+    }
 }
