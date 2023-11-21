@@ -56,12 +56,7 @@ impl Action {
     }
 
     pub fn builder() -> ActionBuilder<Uninit> {
-        ActionBuilder {
-            content: None,
-            attributes: Default::default(),
-
-            _marker: PhantomData,
-        }
+        ActionBuilder::default()
     }
 }
 
@@ -77,6 +72,7 @@ where
     }
 }
 
+#[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct ActionBuilder<T> {
     content: Option<MathMl>,
     attributes: Vec<ActionAttr>,

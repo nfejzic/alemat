@@ -47,12 +47,7 @@ impl Math {
     }
 
     pub fn builder() -> MathBuilder<Uninit> {
-        MathBuilder {
-            content: None,
-            attributes: Vec::default(),
-
-            _marker: PhantomData,
-        }
+        MathBuilder::default()
     }
 }
 
@@ -68,6 +63,7 @@ where
     }
 }
 
+#[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct MathBuilder<T> {
     content: Option<MathMl>,
     attributes: Vec<MathAttr>,
