@@ -12,7 +12,7 @@ pub(crate) enum Tag {
     Ident(Ident),
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct MathMl {
     content: Vec<Tag>,
     // TODO: decide what fields should go inside
