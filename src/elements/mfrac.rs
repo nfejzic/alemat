@@ -58,6 +58,8 @@ where
     }
 }
 
+crate::tag_from_type!(Frac => Frac);
+
 /// Builder for [`Frac`]. It uses static type checking to ensure that all required fields have been
 /// initialized. Only then is the `build` function available.
 ///
