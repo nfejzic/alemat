@@ -56,6 +56,8 @@ impl From<Ident> for MathMl {
     }
 }
 
+crate::tag_from_type!(Ident => Ident);
+
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct IdentBuilder<T> {
     ident: Option<String>,
