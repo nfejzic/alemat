@@ -3,7 +3,7 @@ use std::marker::PhantomData;
 use crate::{
     attributes::Attribute,
     markers::{Init, Uninit},
-    MathMl, Tag,
+    MathMl,
 };
 
 /// The content of `annotation` element, either text or MathML.

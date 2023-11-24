@@ -44,7 +44,7 @@ macro_rules! from_types {
 
 macro_rules! tag_from_type {
     ($variant:ident => $type:path) => {
-        impl From<$type> for Tag {
+        impl From<$type> for crate::Tag {
             fn from(value: $type) -> Self {
                 Self::$variant(value)
             }
