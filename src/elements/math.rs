@@ -28,6 +28,7 @@ pub enum MathAttr {
     AltText(String),
 }
 
+// TODO: figure out if this element is actually needed.
 /// MathML specifies a single top-level or root math element, which encapsulates each instance of
 /// MathML markup within a document. All other MathML content must be contained in a `<math>`
 /// element.
