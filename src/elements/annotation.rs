@@ -3,7 +3,7 @@ use std::marker::PhantomData;
 use crate::{
     attributes::Attribute,
     markers::{Init, Uninit},
-    MathMl,
+    MathMl, Tag,
 };
 
 /// The content of `annotation` element, either text or MathML.
@@ -69,6 +69,8 @@ where
     }
 }
 
+crate::tag_from_type!(Annotation => Annotation);
+
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct AnnotationBuilder<T> {
     content: Option<AnnotationContent>,
@@ -125,6 +127,8 @@ impl Semantics {
         SemanticsBuilder::default()
     }
 }
+
+crate::tag_from_type!(Semantics => Semantics);
 
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct SemanticsBuilder<T> {
