@@ -4,12 +4,23 @@ pub mod attributes;
 pub mod elements;
 pub mod markers;
 
-use elements::{Ident, Num};
+use elements::{
+    Annotation, Frac, Ident, Matrix, Num, Operator, Padded, Semantics, Space, Table, Text,
+};
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub(crate) enum Tag {
-    Num(Num),
+    Annotation(Annotation),
+    Frac(Frac),
     Ident(Ident),
+    Num(Num),
+    Operator(Operator),
+    Padded(Padded),
+    Semantics(Semantics),
+    Space(Space),
+    Table(Table),
+    Text(Text),
+    Matrix(Matrix),
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
@@ -31,4 +42,14 @@ macro_rules! from_types {
     };
 }
 
-pub(crate) use from_types;
+macro_rules! tag_from_type {
+    ($variant:ident => $type:path) => {
+        impl From<$type> for Tag {
+            fn from(value: $type) -> Self {
+                Self::$variant(value)
+            }
+        }
+    };
+}
+
+pub(crate) use {from_types, tag_from_type};
