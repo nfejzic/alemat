@@ -41,6 +41,8 @@ where
     }
 }
 
+crate::tag_from_type!(Error => Error);
+
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct ErrorBuilder<T> {
     content: Option<MathMl>,
