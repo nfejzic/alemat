@@ -18,7 +18,7 @@ pub enum IdentAttr {
     /// The linethickness attribute indicates the fraction line thickness to use for the fraction
     /// bar.
     /// It must have a value that is a valid
-    /// [<length-percentage>](https://www.w3.org/TR/css-values-4/#typedef-length-percentage).
+    /// [`<length-percentage>`](https://www.w3.org/TR/css-values-4/#typedef-length-percentage).
     MathVariant(String),
 }
 

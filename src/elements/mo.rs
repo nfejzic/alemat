@@ -30,19 +30,19 @@ pub enum OperatorAttr {
     Separator,
 
     /// Must be a
-    /// [<length-percentage>](https://www.w3.org/TR/css-values-4/#typedef-length-percentage).
+    /// [`<length-percentage>`](https://www.w3.org/TR/css-values-4/#typedef-length-percentage).
     LeftSpace(String),
 
     /// Must be a
-    /// [<length-percentage>](https://www.w3.org/TR/css-values-4/#typedef-length-percentage).
+    /// [`<length-percentage>`](https://www.w3.org/TR/css-values-4/#typedef-length-percentage).
     RightSpace(String),
 
     /// Must be a
-    /// [<length-percentage>](https://www.w3.org/TR/css-values-4/#typedef-length-percentage).
+    /// [`<length-percentage>`](https://www.w3.org/TR/css-values-4/#typedef-length-percentage).
     MaxSize(String),
 
     /// Must be a
-    /// [<length-percentage>](https://www.w3.org/TR/css-values-4/#typedef-length-percentage).
+    /// [`<length-percentage>`](https://www.w3.org/TR/css-values-4/#typedef-length-percentage).
     MinSize(String),
 
     /// Either `true` or `false`. In this implementation, the attribute is `true` if present.

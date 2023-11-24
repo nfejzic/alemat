@@ -55,8 +55,8 @@ pub enum Attribute {
     Nonce(String),
 
     /// Presentational hint for setting the element's math-depth property to the corresponding
-    /// value. Can be +<U> ([`ScriptLevel::Add`]), -<U> ([`ScriptLevel::Sub`]) or <U>
-    /// ([`ScripLevel::Num`]) where <U> is a usize.
+    /// value. Can be `+<U>` ([`ScriptLevel::Add`]), `-<U>` ([`ScriptLevel::Sub`]) or `<U>`
+    /// ([`ScriptLevel::Num`]) where `<U>` is a [`usize`].
     ScriptLevel(ScriptLevel),
 
     /// The `style` attribute of the element, same as in HTML.

@@ -29,7 +29,7 @@ pub enum MathAttr {
 }
 
 /// MathML specifies a single top-level or root math element, which encapsulates each instance of
-/// MathML markup within a document. All other MathML content must be contained in a <math>
+/// MathML markup within a document. All other MathML content must be contained in a `<math>`
 /// element.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Math {

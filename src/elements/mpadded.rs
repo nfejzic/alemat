@@ -4,7 +4,7 @@ use crate::{attributes::Attribute, MathMl};
 /// `lspace` and `voffset`
 ///
 /// The `width`, `height`, `depth`, `lspace` and `voffset` if present, must have a value that is a
-/// valid [<length-percentage>](https://www.w3.org/TR/css-values-4/#typedef-length-percentage).
+/// valid [`<length-percentage>`](https://www.w3.org/TR/css-values-4/#typedef-length-percentage).
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum PaddedAttr {
     Width(String),
