@@ -72,6 +72,8 @@ where
     }
 }
 
+crate::tag_from_type!(Action => Action);
+
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct ActionBuilder<T> {
     content: Option<MathMl>,

@@ -5,11 +5,13 @@ pub mod elements;
 pub mod markers;
 
 use elements::{
-    Annotation, Frac, Ident, Matrix, Num, Operator, Padded, Semantics, Space, Table, Text,
+    grouping::Action, Annotation, Frac, Ident, Matrix, Num, Operator, Padded, Semantics, Space,
+    Table, Text,
 };
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub(crate) enum Tag {
+    Action(Action),
     Annotation(Annotation),
     Frac(Frac),
     Ident(Ident),
