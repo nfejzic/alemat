@@ -32,6 +32,8 @@ impl Multiscripts {
     }
 }
 
+crate::tag_from_type!(Multiscripts => Multiscripts);
+
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct MultiscriptsBuilder<T> {
     content: Option<MathMl>,
@@ -56,6 +58,15 @@ impl<T> MultiscriptsBuilder<T> {
     {
         self.attr.extend(attr.into_iter().map(Into::into));
         self
+    }
+}
+
+impl MultiscriptsBuilder<Init> {
+    pub fn build(self) -> Multiscripts {
+        Multiscripts {
+            content: self.content.expect("Guaranteed to be init"),
+            attributes: self.attr,
+        }
     }
 }
 

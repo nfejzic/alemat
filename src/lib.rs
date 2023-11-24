@@ -6,6 +6,7 @@ pub mod markers;
 
 use elements::{
     grouping::{Action, Error},
+    scripted::Multiscripts,
     Annotation, Frac, Ident, Matrix, Num, Operator, Padded, Semantics, Space, Table, Text,
 };
 
@@ -16,6 +17,7 @@ pub(crate) enum Tag {
     Error(Error),
     Frac(Frac),
     Ident(Ident),
+    Multiscripts(Multiscripts),
     Num(Num),
     Operator(Operator),
     Padded(Padded),
