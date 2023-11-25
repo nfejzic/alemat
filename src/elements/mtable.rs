@@ -1,7 +1,5 @@
 use crate::{attributes::Attribute, MathMl};
 
-pub type Matrix = Table;
-
 pub enum ColumnLine {
     /// No line is drawn.
     None,
@@ -33,6 +31,8 @@ pub struct Table {
     /// The `mtable` accepts the global [`Attribute`]s.
     attributes: Vec<Attribute>,
 }
+
+crate::tag_from_type!(Table => Table);
 
 impl<R> FromIterator<R> for Table
 where

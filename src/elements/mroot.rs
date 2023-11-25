@@ -12,18 +12,20 @@ use crate::{
 ///
 /// The `msqrt` and `mroot` elements accept the global [`Attribute`]s.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
-pub struct Radicals {
+pub struct Radical {
     /// The index of the radical, e.g. the 3 in `∛`.
     index: String,
     content: MathMl,
     attributes: Vec<Attribute>,
 }
 
-impl Radicals {
+impl Radical {
     pub fn builder() -> RadicalsBuilder<Uninit, Uninit> {
         RadicalsBuilder::default()
     }
 }
+
+crate::tag_from_type!(Radical => Radical);
 
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct RadicalsBuilder<T1, T2> {
@@ -64,8 +66,8 @@ impl<T1, T2> RadicalsBuilder<T1, T2> {
 }
 
 impl RadicalsBuilder<Init, Init> {
-    pub fn build(self) -> Radicals {
-        Radicals {
+    pub fn build(self) -> Radical {
+        Radical {
             index: self.index.expect("Index is guaranteed to be init."),
             content: self.content.expect("Content is guaranteed to be init."),
             attributes: self.attr,

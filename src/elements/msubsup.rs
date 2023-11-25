@@ -16,6 +16,8 @@ pub struct SubSup {
     attributes: Vec<Attribute>,
 }
 
+crate::tag_from_type!(SubSup => SubSup);
+
 impl SubSup {
     pub fn builder() -> SubSupBuilder<Uninit, Uninit> {
         SubSupBuilder::default()

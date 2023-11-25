@@ -36,6 +36,8 @@ impl UnderOver {
     }
 }
 
+crate::tag_from_type!(UnderOver => UnderOver);
+
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct UnderOverBuilder<T1, T2> {
     expr: Option<MathMl>,

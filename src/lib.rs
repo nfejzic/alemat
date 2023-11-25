@@ -5,9 +5,10 @@ pub mod elements;
 pub mod markers;
 
 use elements::{
-    grouping::{Action, Error},
-    scripted::Multiscripts,
-    Annotation, Frac, Ident, Matrix, Num, Operator, Padded, Semantics, Space, Table, Text,
+    grouping::{Action, Error, Phantom, Row, Style},
+    radicals::Radical,
+    scripted::{Multiscripts, SubSup, UnderOver},
+    Annotation, Frac, Ident, Num, Operator, Padded, Semantics, Space, StrLiteral, Table, Text,
 };
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
@@ -21,11 +22,17 @@ pub(crate) enum Tag {
     Num(Num),
     Operator(Operator),
     Padded(Padded),
+    Phantom(Phantom),
+    Radical(Radical),
+    Row(Row),
     Semantics(Semantics),
     Space(Space),
+    StrLiteral(StrLiteral),
+    Style(Style),
+    SubSup(SubSup),
     Table(Table),
     Text(Text),
-    Matrix(Matrix),
+    UnderOver(UnderOver),
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]

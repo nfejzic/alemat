@@ -92,6 +92,8 @@ impl Operator {
     }
 }
 
+crate::tag_from_type!(Operator => Operator);
+
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct OperatorBuilder<T> {
     op: Option<String>,

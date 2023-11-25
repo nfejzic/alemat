@@ -29,3 +29,5 @@ impl StrLiteral {
         self.attr.extend(attr.into_iter().map(Into::into));
     }
 }
+
+crate::tag_from_type!(StrLiteral => StrLiteral);
