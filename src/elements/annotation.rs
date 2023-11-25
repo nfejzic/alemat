@@ -88,7 +88,7 @@ impl<T> AnnotationBuilder<T> {
         }
     }
 
-    pub fn attr<I, A>(mut self, attr: I) -> AnnotationBuilder<T>
+    pub fn attr<I, A>(mut self, attr: I) -> Self
     where
         I: IntoIterator<Item = A>,
         A: Into<AnnotationAttr>,
@@ -147,7 +147,7 @@ impl<T> SemanticsBuilder<T> {
         }
     }
 
-    pub fn attr<A>(mut self, attr: A) -> SemanticsBuilder<T>
+    pub fn attr<A>(mut self, attr: A) -> Self
     where
         A: IntoIterator<Item = Attribute>,
     {

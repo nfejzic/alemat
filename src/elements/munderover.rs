@@ -80,7 +80,7 @@ impl<T1, T2> UnderOverBuilder<T1, T2> {
         }
     }
 
-    pub fn attr<I, A>(mut self, attr: I) -> UnderOverBuilder<T1, T2>
+    pub fn attr<I, A>(mut self, attr: I) -> Self
     where
         I: IntoIterator<Item = A>,
         A: Into<UnderOverAttr>,

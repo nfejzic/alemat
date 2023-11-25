@@ -50,7 +50,7 @@ where
 
 impl From<Ident> for MathMl {
     fn from(value: Ident) -> Self {
-        MathMl {
+        Self {
             content: vec![Tag::Ident(value)],
         }
     }

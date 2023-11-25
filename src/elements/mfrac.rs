@@ -101,7 +101,7 @@ impl<N, D> FracBuilder<N, D> {
     }
 
     /// Add attributes to the `mfrac` element. Previous attributes will not be overwritten.
-    pub fn attr<A>(mut self, attr: A) -> FracBuilder<N, D>
+    pub fn attr<A>(mut self, attr: A) -> Self
     where
         A: IntoIterator<Item = FracAttr>,
     {

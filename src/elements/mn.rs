@@ -26,7 +26,7 @@ where
     T: Into<Num>,
 {
     fn from(value: T) -> Self {
-        MathMl {
+        Self {
             content: vec![Tag::Num(value.into())],
         }
     }
