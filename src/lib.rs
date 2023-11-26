@@ -3,6 +3,9 @@
 pub mod attributes;
 pub mod elements;
 pub mod markers;
+mod to_mathml;
+
+pub use to_mathml::*;
 
 use elements::{
     grouping::{Action, Error, Phantom, Row, Style},
