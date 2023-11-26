@@ -3,7 +3,7 @@ use std::marker::PhantomData;
 use crate::{
     attributes::Attribute,
     markers::{Init, Uninit},
-    MathMl,
+    MathMl, ToMathMl,
 };
 
 /// The content of `annotation` element, either text or MathML.
@@ -60,6 +60,15 @@ impl From<Attribute> for AnnotationAttr {
     }
 }
 
+impl ToMathMl for AnnotationAttr {
+    fn to_mathml(&self) -> String {
+        match self {
+            Self::Global(g_attr) => g_attr.to_mathml(),
+            Self::Encoding(enc) => format!(r#"encoding="{enc}""#),
+        }
+    }
+}
+
 /// The `annotation` (and `annotation-xml`) element.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Annotation {
@@ -67,11 +76,7 @@ pub struct Annotation {
     attributes: Vec<AnnotationAttr>,
 }
 
-impl Annotation {
-    pub fn builder() -> AnnotationBuilder<Uninit> {
-        AnnotationBuilder::default()
-    }
-}
+crate::tag_from_type!(Annotation => Annotation);
 
 impl<T> From<T> for Annotation
 where
@@ -85,7 +90,29 @@ where
     }
 }
 
-crate::tag_from_type!(Annotation => Annotation);
+impl ToMathMl for Annotation {
+    fn to_mathml(&self) -> String {
+        let (tag, content) = match self.content {
+            AnnotationContent::Text(ref t) => ("annotation", t.clone()),
+            AnnotationContent::MathMl(ref m) => ("annotation-xml", m.to_mathml()),
+        };
+
+        let attrs = self
+            .attributes
+            .iter()
+            .map(ToMathMl::to_mathml)
+            .collect::<Vec<_>>()
+            .join(" ");
+
+        format!("<{tag} {attrs}>{content}</{tag}>")
+    }
+}
+
+impl Annotation {
+    pub fn builder() -> AnnotationBuilder<Uninit> {
+        AnnotationBuilder::default()
+    }
+}
 
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct AnnotationBuilder<T> {
@@ -145,6 +172,19 @@ impl Semantics {
 }
 
 crate::tag_from_type!(Semantics => Semantics);
+
+impl ToMathMl for Semantics {
+    fn to_mathml(&self) -> String {
+        let content = self.children.to_mathml();
+        let attrs = self
+            .attr
+            .iter()
+            .map(ToMathMl::to_mathml)
+            .collect::<String>();
+
+        format!("<semantics {attrs}>{content}</semantics>")
+    }
+}
 
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct SemanticsBuilder<T> {
