@@ -35,6 +35,22 @@ where
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum AnnotationAttr {
     Global(Attribute),
+
+    /// NOTE: Authors can use the encoding attribute to distinguish annotations for HTML
+    /// integration point, clipboard copy, alternative rendering, etc. In particular, CSS can be
+    /// used to render alternative annotations e.g.
+    ///
+    /// ```css
+    /// /* Hide the annotated child. */
+    /// semantics > :first-child { display: none; }
+    ///  /* Show all text annotations. */
+    /// semantics > annotation { display: inline; }
+    /// /* Show all HTML annotations. */
+    /// semantics > annotation-xml[encoding="text/html" i],
+    /// semantics > annotation-xml[encoding="application/xhtml+xml" i] {
+    /// display: inline-block;
+    /// }
+    /// ```
     Encoding(String),
 }
 
