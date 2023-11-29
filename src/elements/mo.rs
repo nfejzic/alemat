@@ -12,6 +12,16 @@ pub enum OpForm {
     Postfix,
 }
 
+impl std::fmt::Display for OpForm {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            OpForm::Infix => f.write_str("infix"),
+            OpForm::Prefix => f.write_str("prefix"),
+            OpForm::Postfix => f.write_str("postfix"),
+        }
+    }
+}
+
 /// Attribute for the `mo` (`Operator`) element.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum OperatorAttr {
@@ -21,34 +31,37 @@ pub enum OperatorAttr {
     /// Either `infix`, `prefix` or `postfix`.
     Form(OpForm),
 
-    /// The specification does not define any observable behavior that is specific to the fence
-    /// attribute.
+    /// A `bool` specifying whether the operator is a fence (such as parentheses). There is no
+    /// visual effect for this attribute. Attribute's presence means that it's set to `true`.
     Fence,
 
-    /// The specification does not define any observable behavior that is specific to the separator
-    /// attribute.
+    /// A `bool` specifying whether the operator is a separator (such as commas). There is no
+    /// visual effect for this attribute. Attribute's presence means that it's set to `true`.
     Separator,
 
-    /// Must be a
-    /// [`<length-percentage>`](https://www.w3.org/TR/css-values-4/#typedef-length-percentage).
+    /// A `lspace`
+    /// [`<length-percentage>`](https://www.w3.org/TR/css-values-4/#typedef-length-percentage)
+    /// indicating amount of space before the operator.
     LeftSpace(String),
 
-    /// Must be a
-    /// [`<length-percentage>`](https://www.w3.org/TR/css-values-4/#typedef-length-percentage).
+    /// A `rspace` [`<length-percentage>`] indicating the amount of space after the operator.
     RightSpace(String),
 
-    /// Must be a
-    /// [`<length-percentage>`](https://www.w3.org/TR/css-values-4/#typedef-length-percentage).
+    /// A `maxsize`
+    /// [`<length-percentage>`](https://www.w3.org/TR/css-values-4/#typedef-length-percentage)
+    /// indicating the maximum size of the operator when it is stretchy.
     MaxSize(String),
 
-    /// Must be a
-    /// [`<length-percentage>`](https://www.w3.org/TR/css-values-4/#typedef-length-percentage).
+    /// A `minsize`
+    /// [`<length-percentage>`](https://www.w3.org/TR/css-values-4/#typedef-length-percentage)
+    /// indicating the minimum size of the operator when it is stretchy.
     MinSize(String),
 
-    /// Either `true` or `false`. In this implementation, the attribute is `true` if present.
+    /// A `bool` indicating whether the operator stretches to the size of the adjacent element.
     Stretchy,
 
-    /// Either `true` or `false`. In this implementation, the attribute is `true` if present.
+    /// A `bool` indicating whether a stretchy operator should be vertically symmetric around the
+    /// imaginary math axis (centered fraction line).
     Symmetric,
 
     /// Either `true` or `false`. In this implementation, the attribute is `true` if present.
@@ -90,9 +103,17 @@ impl Operator {
     pub fn builder() -> OperatorBuilder<Uninit> {
         OperatorBuilder::default()
     }
+
+    pub fn op(&self) -> &str {
+        &self.op
+    }
+
+    pub fn attributes(&self) -> &[OperatorAttr] {
+        &self.attributes
+    }
 }
 
-crate::tag_from_type!(Operator => Operator);
+crate::element_from_type!(Operator => Operator);
 
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct OperatorBuilder<T> {

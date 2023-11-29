@@ -3,14 +3,16 @@ use std::marker::PhantomData;
 use crate::{
     attributes::Attribute,
     markers::{Init, Uninit},
-    MathMl, ToMathMl,
+    Element, Elements,
 };
+
+use super::IntoElements;
 
 /// The content of `annotation` element, either text or MathML.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum AnnotationContent {
     Text(String),
-    MathMl(MathMl),
+    Nested(Elements),
 }
 
 impl From<String> for AnnotationContent {
@@ -21,10 +23,16 @@ impl From<String> for AnnotationContent {
 
 impl<T> From<T> for AnnotationContent
 where
-    T: Into<MathMl>,
+    T: IntoElements,
 {
     fn from(value: T) -> Self {
-        Self::MathMl(value.into())
+        Self::Nested(value.into_elements())
+    }
+}
+
+impl From<Element> for AnnotationContent {
+    fn from(value: Element) -> Self {
+        Self::Nested(Elements(vec![value]))
     }
 }
 
@@ -60,15 +68,6 @@ impl From<Attribute> for AnnotationAttr {
     }
 }
 
-impl ToMathMl for AnnotationAttr {
-    fn to_mathml(&self) -> String {
-        match self {
-            Self::Global(g_attr) => g_attr.to_mathml(),
-            Self::Encoding(enc) => format!(r#"encoding="{enc}""#),
-        }
-    }
-}
-
 /// The `annotation` (and `annotation-xml`) element.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Annotation {
@@ -76,41 +75,19 @@ pub struct Annotation {
     attributes: Vec<AnnotationAttr>,
 }
 
-crate::tag_from_type!(Annotation => Annotation);
-
-impl<T> From<T> for Annotation
-where
-    T: Into<AnnotationContent>,
-{
-    fn from(value: T) -> Self {
-        Self {
-            content: value.into(),
-            attributes: Default::default(),
-        }
-    }
-}
-
-impl ToMathMl for Annotation {
-    fn to_mathml(&self) -> String {
-        let (tag, content) = match self.content {
-            AnnotationContent::Text(ref t) => ("annotation", t.clone()),
-            AnnotationContent::MathMl(ref m) => ("annotation-xml", m.to_mathml()),
-        };
-
-        let attrs = self
-            .attributes
-            .iter()
-            .map(ToMathMl::to_mathml)
-            .collect::<Vec<_>>()
-            .join(" ");
-
-        format!("<{tag} {attrs}>{content}</{tag}>")
-    }
-}
+crate::element_from_type!(Annotation => Annotation);
 
 impl Annotation {
     pub fn builder() -> AnnotationBuilder<Uninit> {
         AnnotationBuilder::default()
+    }
+
+    pub fn content(&self) -> &AnnotationContent {
+        &self.content
+    }
+
+    pub fn attributes(&self) -> &[AnnotationAttr] {
+        &self.attributes
     }
 }
 
@@ -159,7 +136,7 @@ impl AnnotationBuilder<Init> {
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Semantics {
     /// Children of the `semantics` element. Rendering is same as `mrow`.
-    children: MathMl,
+    children: Elements,
 
     /// The `semantics` element accepts the global [`Attribute`]s.
     attr: Vec<Attribute>,
@@ -169,35 +146,30 @@ impl Semantics {
     pub fn builder() -> SemanticsBuilder<Uninit> {
         SemanticsBuilder::default()
     }
-}
 
-crate::tag_from_type!(Semantics => Semantics);
+    pub fn children(&self) -> &[Element] {
+        &self.children
+    }
 
-impl ToMathMl for Semantics {
-    fn to_mathml(&self) -> String {
-        let content = self.children.to_mathml();
-        let attrs = self
-            .attr
-            .iter()
-            .map(ToMathMl::to_mathml)
-            .collect::<String>();
-
-        format!("<semantics {attrs}>{content}</semantics>")
+    pub fn attributes(&self) -> &[Attribute] {
+        &self.attr
     }
 }
 
+crate::element_from_type!(Semantics => Semantics);
+
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct SemanticsBuilder<T> {
-    content: Option<MathMl>,
+    content: Option<Elements>,
     attr: Vec<Attribute>,
 
     _marker: PhantomData<(T,)>,
 }
 
 impl<T> SemanticsBuilder<T> {
-    pub fn content(self, content: impl Into<MathMl>) -> SemanticsBuilder<Init> {
+    pub fn content(self, content: impl IntoElements) -> SemanticsBuilder<Init> {
         SemanticsBuilder {
-            content: Some(content.into()),
+            content: Some(content.into_elements()),
             attr: self.attr,
             _marker: PhantomData,
         }

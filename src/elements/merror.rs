@@ -3,23 +3,25 @@ use std::marker::PhantomData;
 use crate::{
     attributes::Attribute,
     markers::{Init, Uninit},
-    MathMl,
+    Element, Elements,
 };
+
+use super::IntoElements;
 
 /// The merror element displays its contents as an ”error message”. The intent of this element is
 /// to provide a standard way for programs that generate MathML from other input to report syntax
 /// errors in their input.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Error {
-    content: MathMl,
+    content: Elements,
     attributes: Vec<Attribute>,
 }
 
 impl Error {
     /// Create new `merror` element.
-    pub fn with_mathml(math: impl Into<MathMl>) -> Self {
+    pub fn with_mathml(math: impl IntoElements) -> Self {
         Self {
-            content: math.into(),
+            content: math.into_elements(),
             attributes: Default::default(),
         }
     }
@@ -27,34 +29,48 @@ impl Error {
     pub fn builder() -> ErrorBuilder<Uninit> {
         ErrorBuilder::default()
     }
+
+    pub fn content(&self) -> &[Element] {
+        &self.content
+    }
+
+    pub fn attributes(&self) -> &[Attribute] {
+        &self.attributes
+    }
 }
 
-impl<T> From<T> for Error
-where
-    T: Into<MathMl>,
-{
-    fn from(value: T) -> Self {
+impl From<Element> for Error {
+    fn from(value: Element) -> Self {
         Self {
-            content: value.into(),
+            content: Elements(vec![value]),
             attributes: Default::default(),
         }
     }
 }
 
-crate::tag_from_type!(Error => Error);
+impl From<Elements> for Error {
+    fn from(value: Elements) -> Self {
+        Self {
+            content: value,
+            attributes: Default::default(),
+        }
+    }
+}
+
+crate::element_from_type!(Error => Error);
 
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct ErrorBuilder<T> {
-    content: Option<MathMl>,
+    content: Option<Elements>,
     attributes: Vec<Attribute>,
 
     _marker: PhantomData<(T,)>,
 }
 
 impl<T> ErrorBuilder<T> {
-    pub fn content(self, content: impl Into<MathMl>) -> ErrorBuilder<Init> {
+    pub fn content(self, content: impl IntoElements) -> ErrorBuilder<Init> {
         ErrorBuilder {
-            content: Some(content.into()),
+            content: Some(content.into_elements()),
             attributes: self.attributes,
 
             _marker: PhantomData,

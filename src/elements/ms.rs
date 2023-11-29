@@ -28,6 +28,14 @@ impl StrLiteral {
     {
         self.attr.extend(attr.into_iter().map(Into::into));
     }
+
+    pub fn content(&self) -> &str {
+        &self.literal
+    }
+
+    pub fn attributes(&self) -> &[Attribute] {
+        &self.attr
+    }
 }
 
-crate::tag_from_type!(StrLiteral => StrLiteral);
+crate::element_from_type!(StrLiteral => StrLiteral);

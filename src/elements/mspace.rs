@@ -50,6 +50,10 @@ impl Space {
     {
         self.attr.extend(attr.into_iter().map(Into::into));
     }
+
+    pub fn attributes(&self) -> &[SpaceAttr] {
+        &self.attr
+    }
 }
 
-crate::tag_from_type!(Space => Space);
+crate::element_from_type!(Space => Space);

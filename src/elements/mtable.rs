@@ -1,4 +1,4 @@
-use crate::{attributes::Attribute, MathMl};
+use crate::{attributes::Attribute, Element};
 
 pub enum ColumnLine {
     /// No line is drawn.
@@ -32,7 +32,17 @@ pub struct Table {
     attributes: Vec<Attribute>,
 }
 
-crate::tag_from_type!(Table => Table);
+impl Table {
+    pub fn rows(&self) -> &[TableRow] {
+        &self.rows
+    }
+
+    pub fn attributes(&self) -> &[Attribute] {
+        &self.attributes
+    }
+}
+
+crate::element_from_type!(Table => Table);
 
 impl<R> FromIterator<R> for Table
 where
@@ -84,7 +94,7 @@ macro_rules! table {
     ($([$($cell:expr),*]),*) => {
         $crate::elements::Table::from([
             $(
-            $crate::row![$($cell),*],
+            $crate::table_row![$($cell),*],
             )*
         ])
     }
@@ -126,6 +136,14 @@ impl TableRow {
     {
         self.attr.extend(attr.into_iter().map(Into::into));
     }
+
+    pub fn cells(&self) -> &[TableCell] {
+        &self.cells
+    }
+
+    pub fn attributes(&self) -> &[Attribute] {
+        &self.attr
+    }
 }
 
 impl<I, C> From<I> for TableRow
@@ -146,25 +164,25 @@ where
 /// # Example:
 ///
 /// ```rust
-/// use alemat::row;
+/// use alemat::table_row;
 /// use alemat::elements::{Ident, Num};
-/// let row = row![Ident::from("x"), Num::from(42)];
+/// let row = table_row![Ident::from("x"), Num::from(42)];
 ///
 /// // create a table
 /// use alemat::elements::Table;
 /// let table = Table::from([
-///     row![Ident::from("x"), Num::from(42)],
-///     row![Ident::from("y"), Num::from(43)],
+///     table_row![Ident::from("x"), Num::from(42)],
+///     table_row![Ident::from("y"), Num::from(43)],
 /// ]);
 /// ```
 #[macro_export]
-macro_rules! row {
+macro_rules! table_row {
     ($($cell:expr),* $(,)?) => {
          [$($crate::elements::TableCell::from($cell)),*]
     }
 }
 
-pub use row;
+pub use table_row;
 
 /// The `mtd` accepts the global [`Attribute`]s as well as `columnspan` and `rowspan`.
 ///
@@ -206,17 +224,39 @@ impl From<Attribute> for TableCellAttr {
 /// ```
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct TableCell {
-    children: MathMl,
+    children: Vec<Element>,
     attr: Vec<TableCellAttr>,
+}
+
+impl TableCell {
+    pub fn children(&self) -> &[Element] {
+        &self.children
+    }
+
+    pub fn attributes(&self) -> &[TableCellAttr] {
+        &self.attr
+    }
 }
 
 impl<T> From<T> for TableCell
 where
-    T: Into<MathMl>,
+    T: Into<Element>,
 {
     fn from(value: T) -> Self {
         Self {
-            children: value.into(),
+            children: vec![value.into()],
+            attr: Default::default(),
+        }
+    }
+}
+
+impl<T> From<Vec<T>> for TableCell
+where
+    T: Into<Element>,
+{
+    fn from(value: Vec<T>) -> Self {
+        Self {
+            children: value.into_iter().map(Into::into).collect(),
             attr: Default::default(),
         }
     }

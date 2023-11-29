@@ -1,7 +1,10 @@
 use std::marker::PhantomData;
 
+use crate::attributes::Attribute;
 use crate::markers::{Init, Uninit};
-use crate::{attributes::Attribute, MathMl};
+use crate::{Element, Elements};
+
+use super::IntoElements;
 
 /// An attribute of `mfrac` element. Either one of the global [`Attribute`]s, or `linethickness`
 /// attribute.
@@ -12,7 +15,7 @@ pub enum FracAttr {
     /// Global attribute.
     Global(Attribute),
 
-    /// The linethickness attribute indicates the fraction line thickness to use for the fraction
+    /// The `linethickness` attribute indicates the fraction line thickness to use for the fraction
     /// bar.
     /// It must have a value that is a valid
     /// [`<length-percentage>`](https://www.w3.org/TR/css-values-4/#typedef-length-percentage).
@@ -25,8 +28,8 @@ pub enum FracAttr {
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Frac {
     // regular comment
-    num: MathMl,
-    denom: MathMl,
+    num: Elements,
+    denom: Elements,
     attributes: Vec<FracAttr>,
 }
 
@@ -34,12 +37,24 @@ impl Frac {
     pub fn builder() -> FracBuilder<Uninit, Uninit> {
         FracBuilder::default()
     }
+
+    pub fn num(&self) -> &[Element] {
+        &self.num
+    }
+
+    pub fn denom(&self) -> &[Element] {
+        &self.denom
+    }
+
+    pub fn attributes(&self) -> &[FracAttr] {
+        &self.attributes
+    }
 }
 
 impl<N, D> From<(N, D)> for Frac
 where
-    N: Into<MathMl>,
-    D: Into<MathMl>,
+    N: IntoElements,
+    D: IntoElements,
 {
     fn from((num, denom): (N, D)) -> Self {
         let mut i = 0;
@@ -51,14 +66,14 @@ where
         };
 
         Self {
-            num: num.into(),
-            denom: denom.into(),
+            num: num.into_elements(),
+            denom: denom.into_elements(),
             attributes: Default::default(),
         }
     }
 }
 
-crate::tag_from_type!(Frac => Frac);
+crate::element_from_type!(Frac => Frac);
 
 /// Builder for [`Frac`]. It uses static type checking to ensure that all required fields have been
 /// initialized. Only then is the `build` function available.
@@ -67,13 +82,14 @@ crate::tag_from_type!(Frac => Frac);
 ///
 /// ```rust
 /// use alemat::elements::Frac;
+/// use alemat::elements::Num;
 ///
-/// let frac = Frac::builder().num("1").denom("2").build();
+/// let frac = Frac::builder().num(Num::from(1)).denom(Num::from(2)).build();
 /// ```
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct FracBuilder<N, D> {
-    num: Option<MathMl>,
-    denom: Option<MathMl>,
+    num: Option<Elements>,
+    denom: Option<Elements>,
     attr: Vec<FracAttr>,
 
     _marker: PhantomData<(N, D)>,
@@ -81,9 +97,9 @@ pub struct FracBuilder<N, D> {
 
 impl<N, D> FracBuilder<N, D> {
     /// Add or overwrite the numerator to the `mfrac` element.
-    pub fn num(self, num: impl Into<MathMl>) -> FracBuilder<Init, D> {
+    pub fn num(self, num: impl IntoElements) -> FracBuilder<Init, D> {
         FracBuilder {
-            num: Some(num.into()),
+            num: Some(num.into_elements()),
             denom: self.denom,
             attr: self.attr,
             _marker: PhantomData,
@@ -91,10 +107,10 @@ impl<N, D> FracBuilder<N, D> {
     }
 
     /// Add or overwrite the denominator to the `mfrac` element.
-    pub fn denom(self, denom: impl Into<MathMl>) -> FracBuilder<N, Init> {
+    pub fn denom(self, denom: impl IntoElements) -> FracBuilder<N, Init> {
         FracBuilder {
             num: self.num,
-            denom: Some(denom.into()),
+            denom: Some(denom.into_elements()),
             attr: self.attr,
             _marker: PhantomData,
         }

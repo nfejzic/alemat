@@ -1,4 +1,4 @@
-use crate::{attributes::Attribute, MathMl};
+use crate::{attributes::Attribute, Element, Elements};
 
 /// The `mphantom` element was introduced to render its content invisibly, but with the same
 /// metrics size and other dimensions, including alphabetic baseline position that its contents
@@ -13,17 +13,14 @@ use crate::{attributes::Attribute, MathMl};
 /// ```
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Phantom {
-    children: MathMl,
+    children: Elements,
     attributes: Vec<Attribute>,
 }
 
-impl<T> From<T> for Phantom
-where
-    T: Into<MathMl>,
-{
-    fn from(value: T) -> Self {
+impl From<Elements> for Phantom {
+    fn from(value: Elements) -> Self {
         Self {
-            children: value.into(),
+            children: value,
             attributes: Default::default(),
         }
     }
@@ -37,6 +34,14 @@ impl Phantom {
     {
         self.attributes.extend(attr.into_iter().map(Into::into));
     }
+
+    pub fn children(&self) -> &[Element] {
+        &self.children
+    }
+
+    pub fn attributes(&self) -> &[Attribute] {
+        &self.attributes
+    }
 }
 
-crate::tag_from_type!(Phantom => Phantom);
+crate::element_from_type!(Phantom => Phantom);

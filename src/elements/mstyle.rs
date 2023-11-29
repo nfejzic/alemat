@@ -1,21 +1,19 @@
-use crate::{attributes::Attribute, MathMl};
+use crate::{attributes::Attribute, Element, Elements};
 
-/// `mstyle` element was introduced to make style changes that affect the rendering of its contents.
+/// `mstyle` element was introduced to make style changes that affect the rendering of its
+/// contents.
 ///
 /// The `mstyle` element accepts the global [`Attribute`]s.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Style {
-    children: MathMl,
+    children: Elements,
     attr: Vec<Attribute>,
 }
 
-impl<T> From<T> for Style
-where
-    T: Into<MathMl>,
-{
-    fn from(value: T) -> Self {
+impl From<Elements> for Style {
+    fn from(value: Elements) -> Self {
         Self {
-            children: value.into(),
+            children: value,
             attr: Default::default(),
         }
     }
@@ -29,6 +27,14 @@ impl Style {
     {
         self.attr.extend(attr.into_iter().map(Into::into));
     }
+
+    pub fn children(&self) -> &[Element] {
+        &self.children
+    }
+
+    pub fn attributes(&self) -> &[Attribute] {
+        &self.attr
+    }
 }
 
-crate::tag_from_type!(Style => Style);
+crate::element_from_type!(Style => Style);

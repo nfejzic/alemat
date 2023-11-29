@@ -3,36 +3,27 @@ use std::marker::PhantomData;
 use crate::{
     attributes::Attribute,
     markers::{Init, Uninit},
-    MathMl, Tag,
 };
-
-/// An attribute of `mi` element. Either one of the global [`Attribute`]s, or `mathvariant`
-/// attribute.
-///
-/// [`Attribute`]: crate::attributes::Attribute
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
-pub enum IdentAttr {
-    /// Global attribute.
-    Global(Attribute),
-
-    /// The linethickness attribute indicates the fraction line thickness to use for the fraction
-    /// bar.
-    /// It must have a value that is a valid
-    /// [`<length-percentage>`](https://www.w3.org/TR/css-values-4/#typedef-length-percentage).
-    MathVariant(String),
-}
 
 /// The `mi` (`Ident`) element represents a symbolic name or arbitrary text that should be rendered
 /// as an identifier. Identifiers can include variables, function names, and symbolic constants.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Ident {
     ident: String,
-    attributes: Vec<IdentAttr>,
+    attributes: Vec<Attribute>,
 }
 
 impl Ident {
     pub fn builder() -> IdentBuilder<Uninit> {
         IdentBuilder::default()
+    }
+
+    pub fn ident(&self) -> &str {
+        &self.ident
+    }
+
+    pub fn attributes(&self) -> &[Attribute] {
+        &self.attributes
     }
 }
 
@@ -48,20 +39,12 @@ where
     }
 }
 
-impl From<Ident> for MathMl {
-    fn from(value: Ident) -> Self {
-        Self {
-            content: vec![Tag::Ident(value)],
-        }
-    }
-}
-
-crate::tag_from_type!(Ident => Ident);
+crate::element_from_type!(Ident => Ident);
 
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct IdentBuilder<T> {
     ident: Option<String>,
-    attributes: Vec<IdentAttr>,
+    attributes: Vec<Attribute>,
     _marker: PhantomData<(T,)>,
 }
 
@@ -77,7 +60,7 @@ impl<T> IdentBuilder<T> {
     pub fn attr<I, A>(mut self, attr: I) -> Self
     where
         I: IntoIterator<Item = A>,
-        A: Into<IdentAttr>,
+        A: Into<Attribute>,
     {
         self.attributes.extend(attr.into_iter().map(Into::into));
         self

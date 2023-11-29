@@ -1,4 +1,4 @@
-use crate::ToMathMl;
+use std::fmt::Display;
 
 /// Direction for [`Attribute::Dir`].
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
@@ -13,6 +13,55 @@ pub enum ScriptLevel {
     Add(usize),
     Sub(usize),
     Num(usize),
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
+pub enum MathVariant {
+    Normal,
+    Bold,
+    Italic,
+    BoldItalic,
+    DoubleStruck,
+    BoldFraktur,
+    Script,
+    BoldScript,
+    Fraktur,
+    SansSerif,
+    BoldSansSerif,
+    SansSerifItalic,
+    SansSerifBoldItalic,
+    Monospace,
+    Initial,
+    Tailed,
+    Looped,
+    Stretched,
+}
+
+impl Display for MathVariant {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let as_str = match self {
+            MathVariant::Normal => "normal",
+            MathVariant::Bold => "bold",
+            MathVariant::Italic => "italic",
+            MathVariant::BoldItalic => "bold-italic",
+            MathVariant::DoubleStruck => "double-struck",
+            MathVariant::BoldFraktur => "bold-fraktur",
+            MathVariant::Script => "script",
+            MathVariant::BoldScript => "bold-script",
+            MathVariant::Fraktur => "fraktur",
+            MathVariant::SansSerif => "sans-serif",
+            MathVariant::BoldSansSerif => "bold-sans-serif",
+            MathVariant::SansSerifItalic => "sans-serif-italic",
+            MathVariant::SansSerifBoldItalic => "sans-serif-bold-italic",
+            MathVariant::Monospace => "monospace",
+            MathVariant::Initial => "initial",
+            MathVariant::Tailed => "tailed",
+            MathVariant::Looped => "looped",
+            MathVariant::Stretched => "stretched",
+        };
+
+        f.write_str(as_str)
+    }
 }
 
 /// Attribute of a MathML element.
@@ -53,6 +102,11 @@ pub enum Attribute {
     /// [length-percentage](https://www.w3.org/TR/css-values-4/#typedef-length-percentage).
     MathSize(String),
 
+    /// The `mathvariant` attribute, if present, must be an ASCII case-insensitive match to one of
+    /// [`MathVariant`]. [`MathVariant::Normal`] is mapped to none while any other valid value is
+    /// mapped to its ASCII lowercased value, prefixed with `math-`.
+    MathVariant(MathVariant),
+
     /// The `nonce` attribute, same as in HTML.
     Nonce(String),
 
@@ -74,37 +128,4 @@ pub enum Attribute {
         /// Handler function for the event.
         handler: String,
     },
-}
-
-impl ToMathMl for Attribute {
-    fn to_mathml(&self) -> String {
-        match self {
-            Self::Class(c) => format!("class=\"{}\"", c),
-            Self::Data { name, value } => format!("data-{name}={value}"),
-            Self::Dir(dir) => match dir {
-                Dir::RightToLeft => String::from(r#"dir="rtl""#),
-                Dir::LeftToRight => String::from(r#"dir="ltr""#),
-            },
-            Self::DisplayStyle(d) => {
-                if *d {
-                    String::from(r#"display="normal"#)
-                } else {
-                    String::from(r#"display="compact""#)
-                }
-            }
-            Self::Id(id) => format!("id={id}"),
-            Self::MathBackground(c) => format!(r#"mathbackground="{c}""#),
-            Self::MathColor(c) => format!(r#"mathcolor="{c}""#),
-            Self::MathSize(s) => format!(r#"mathsize="{s}""#),
-            Self::Nonce(n) => format!(r#"nonce="{n}""#),
-            Self::ScriptLevel(sl) => match sl {
-                ScriptLevel::Add(num) => format!(r#"scriptlevel="+{}""#, num),
-                ScriptLevel::Sub(num) => format!(r#"scriptlevel="-{}""#, num),
-                ScriptLevel::Num(num) => format!(r#"scriptlevel="{}""#, num),
-            },
-            Self::Style(st) => format!(r#"style="{st}""#),
-            Self::TabIndex(ti) => format!(r#"tabindex="{ti}""#),
-            Self::OnHandler { name, handler } => format!(r#"on{name}="{handler}""#),
-        }
-    }
 }
