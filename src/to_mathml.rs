@@ -10,91 +10,93 @@ use crate::{
 };
 
 pub trait MathMlRenderer {
-    fn render_action(&self, action: &Action) -> String {
+    type Output;
+
+    fn render_action(&self, action: &Action) -> Self::Output {
         unimplemented!("Rendering of {:?} not implemented", action);
     }
 
-    fn render_annotation(&self, annotation: &Annotation) -> String {
+    fn render_annotation(&self, annotation: &Annotation) -> Self::Output {
         unimplemented!("Rendering of {:?} not implemented", annotation);
     }
 
-    fn render_error(&self, error: &Error) -> String {
+    fn render_error(&self, error: &Error) -> Self::Output {
         unimplemented!("Rendering of {:?} not implemented", error);
     }
 
-    fn render_frac(&self, frac: &Frac) -> String {
+    fn render_frac(&self, frac: &Frac) -> Self::Output {
         unimplemented!("Rendering of {:?} not implemented", frac);
     }
 
-    fn render_ident(&self, ident: &Ident) -> String {
+    fn render_ident(&self, ident: &Ident) -> Self::Output {
         unimplemented!("Rendering of {:?} not implemented", ident);
     }
 
-    fn render_multiscripts(&self, multiscripts: &Multiscripts) -> String {
+    fn render_multiscripts(&self, multiscripts: &Multiscripts) -> Self::Output {
         unimplemented!("Rendering of {:?} not implemented", multiscripts);
     }
 
-    fn render_num(&self, num: &Num) -> String {
+    fn render_num(&self, num: &Num) -> Self::Output {
         unimplemented!("Rendering of {:?} not implemented", num);
     }
 
-    fn render_operator(&self, operator: &Operator) -> String {
+    fn render_operator(&self, operator: &Operator) -> Self::Output {
         unimplemented!("Rendering of {:?} not implemented", operator);
     }
 
-    fn render_padded(&self, padded: &Padded) -> String {
+    fn render_padded(&self, padded: &Padded) -> Self::Output {
         unimplemented!("Rendering of {:?} not implemented", padded);
     }
 
-    fn render_phantom(&self, phantom: &Phantom) -> String {
+    fn render_phantom(&self, phantom: &Phantom) -> Self::Output {
         unimplemented!("Rendering of {:?} not implemented", phantom);
     }
 
-    fn render_radical(&self, radical: &Radical) -> String {
+    fn render_radical(&self, radical: &Radical) -> Self::Output {
         unimplemented!("Rendering of {:?} not implemented", radical);
     }
 
-    fn render_row(&self, row: &Row) -> String {
+    fn render_row(&self, row: &Row) -> Self::Output {
         unimplemented!("Rendering of {:?} not implemented", row);
     }
 
-    fn render_semantics(&self, semantics: &Semantics) -> String {
+    fn render_semantics(&self, semantics: &Semantics) -> Self::Output {
         unimplemented!("Rendering of {:?} not implemented", semantics);
     }
 
-    fn render_space(&self, space: &Space) -> String {
+    fn render_space(&self, space: &Space) -> Self::Output {
         unimplemented!("Rendering of {:?} not implemented", space);
     }
 
-    fn render_str_literal(&self, str_literal: &StrLiteral) -> String {
+    fn render_str_literal(&self, str_literal: &StrLiteral) -> Self::Output {
         unimplemented!("Rendering of {:?} not implemented", str_literal);
     }
 
-    fn render_style(&self, style: &Style) -> String {
+    fn render_style(&self, style: &Style) -> Self::Output {
         unimplemented!("Rendering of {:?} not implemented", style);
     }
 
-    fn render_subsup(&self, sub_sup: &SubSup) -> String {
+    fn render_subsup(&self, sub_sup: &SubSup) -> Self::Output {
         unimplemented!("Rendering of {:?} not implemented", sub_sup);
     }
 
-    fn render_table(&self, table: &Table) -> String {
+    fn render_table(&self, table: &Table) -> Self::Output {
         unimplemented!("Rendering of {:?} not implemented", table);
     }
 
-    fn render_text(&self, text: &Text) -> String {
+    fn render_text(&self, text: &Text) -> Self::Output {
         unimplemented!("Rendering of {:?} not implemented", text);
     }
 
-    fn render_underover(&self, under_over: &UnderOver) -> String {
+    fn render_underover(&self, under_over: &UnderOver) -> Self::Output {
         unimplemented!("Rendering of {:?} not implemented", under_over);
     }
 
-    fn render_attr(&self, attr: &Attribute) -> String {
+    fn render_attr(&self, attr: &Attribute) -> Self::Output {
         unimplemented!("Rendering of {:?} not implemented", attr);
     }
 
-    fn render_element(&self, tag: &Element) -> String {
+    fn render_element(&self, tag: &Element) -> Self::Output {
         match tag {
             Element::Action(action) => self.render_action(action),
             Element::Annotation(annotation) => self.render_annotation(annotation),
@@ -119,7 +121,7 @@ pub trait MathMlRenderer {
         }
     }
 
-    fn render_mathml(&self, mathml: &MathMl) -> String {
+    fn render_mathml(&self, mathml: &MathMl) -> Self::Output {
         unimplemented!("Rendering of {:?} not implemented", mathml)
     }
 }

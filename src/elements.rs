@@ -95,7 +95,7 @@ pub enum Element {
 pub struct Elements(pub(crate) Vec<Element>);
 
 impl Deref for Elements {
-    type Target = [Element];
+    type Target = Vec<Element>;
     fn deref(&self) -> &Self::Target {
         &self.0
     }
@@ -110,6 +110,22 @@ impl DerefMut for Elements {
 impl Elements {
     pub fn into_inner(self) -> Vec<Element> {
         self.0
+    }
+}
+
+/// Create a [`Elements`] from a list of [`Element`]s.
+///
+/// # Example:
+///
+/// ```rust
+/// use alemat::children;
+/// use alemat::elements::{Ident, Num, Element};
+/// let children: [Element; 2] = children![Ident::from("x"), Num::from(42)];
+/// ```
+#[macro_export]
+macro_rules! children {
+    ($($element:expr),* $(,)?) => {
+         [$($crate::elements::Element::from($element)),*]
     }
 }
 

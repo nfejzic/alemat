@@ -6,24 +6,54 @@ pub mod elements;
 pub mod markers;
 mod to_mathml;
 
+use attributes::Attribute;
 pub use default_renderer::MathMlFormatter;
 pub(crate) use elements::element_from_type;
+use elements::IntoElements;
 pub use elements::{Element, Elements};
 pub use to_mathml::*;
 
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct MathMl {
-    content: Vec<Element>,
+    content: Elements,
+    attr: Vec<Attribute>,
     // TODO: decide what fields should go inside
 }
 
 impl MathMl {
+    pub fn with_content(content: impl IntoElements) -> Self {
+        Self {
+            content: content.into_elements(),
+            attr: Default::default(),
+        }
+    }
+
+    pub fn append_content(&mut self, content: impl IntoElements) {
+        self.content.append(&mut content.into_elements());
+    }
+
+    pub fn add_attr(&mut self, attr: impl Into<Attribute>) {
+        self.attr.push(attr.into());
+    }
+
+    pub fn extend_attr<I, A>(&mut self, attr: I)
+    where
+        I: IntoIterator<Item = A>,
+        A: Into<Attribute>,
+    {
+        self.attr.extend(attr.into_iter().map(Into::into))
+    }
+
     pub fn len(&self) -> usize {
         self.content.len()
     }
 
     pub fn is_empty(&self) -> bool {
         self.content.is_empty()
+    }
+
+    pub fn render<R: MathMlRenderer>(&self, renderer: &mut R) -> R::Output {
+        renderer.render_mathml(self)
     }
 }
 

@@ -1,6 +1,7 @@
 use alemat::{
     attributes::Attribute,
-    elements::{radicals::Radical, Annotation, Ident, Num, Table},
+    children,
+    elements::{radicals::Radical, Annotation, Ident, Num, Operator, Table},
     row,
 };
 use alemat::{table, table_row};
@@ -23,6 +24,23 @@ fn test_row_api() {
             .content(Ident::from("x"))
             .build()
     ];
+}
+
+#[test]
+fn test_general_api() {
+    let _ = Radical::builder()
+        .content(row![Num::from(42), Operator::from("+"), Ident::from("c")])
+        .index("2")
+        .build();
+
+    let _ = Radical::builder()
+        .content(children![
+            Num::from(42),
+            Operator::from("+"),
+            Ident::from("c")
+        ])
+        .index("2")
+        .build();
 }
 
 #[test]

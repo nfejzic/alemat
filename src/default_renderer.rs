@@ -20,7 +20,9 @@ impl MathMlFormatter {
 }
 
 impl MathMlRenderer for MathMlFormatter {
-    fn render_action(&self, action: &crate::elements::grouping::Action) -> String {
+    type Output = String;
+
+    fn render_action(&self, action: &crate::elements::grouping::Action) -> Self::Output {
         let attributes = action
             .attributes()
             .iter()
@@ -37,7 +39,7 @@ impl MathMlRenderer for MathMlFormatter {
         format!("<maction {attributes}>{content}</maction>")
     }
 
-    fn render_annotation(&self, annotation: &crate::elements::Annotation) -> String {
+    fn render_annotation(&self, annotation: &crate::elements::Annotation) -> Self::Output {
         let (tag, content) = match annotation.content() {
             AnnotationContent::Text(ref t) => ("annotation", t.clone()),
             AnnotationContent::Nested(ref m) => ("annotation-xml", self.render_elements(m)),
@@ -56,7 +58,7 @@ impl MathMlRenderer for MathMlFormatter {
         format!("<{tag} {attrs}>{content}</{tag}>")
     }
 
-    fn render_error(&self, error: &crate::elements::grouping::Error) -> String {
+    fn render_error(&self, error: &crate::elements::grouping::Error) -> Self::Output {
         let content = self.render_elements(error.content());
 
         let attrs = error
@@ -69,7 +71,7 @@ impl MathMlRenderer for MathMlFormatter {
         format!("<merror {attrs}>{content}</merror>")
     }
 
-    fn render_frac(&self, frac: &crate::elements::Frac) -> String {
+    fn render_frac(&self, frac: &crate::elements::Frac) -> Self::Output {
         let num = self.render_elements(frac.num());
         let denom = self.render_elements(frac.denom());
 
@@ -86,7 +88,7 @@ impl MathMlRenderer for MathMlFormatter {
         format!("<mfrac {attributes}>{num}{denom}</mfrac>")
     }
 
-    fn render_ident(&self, ident: &crate::elements::Ident) -> String {
+    fn render_ident(&self, ident: &crate::elements::Ident) -> Self::Output {
         let content = ident.ident();
         let attrs = ident
             .attributes()
@@ -101,7 +103,7 @@ impl MathMlRenderer for MathMlFormatter {
     fn render_multiscripts(
         &self,
         multiscripts: &crate::elements::scripted::Multiscripts,
-    ) -> String {
+    ) -> Self::Output {
         let content = self.render_elements(multiscripts.content());
         let attr = multiscripts
             .attributes()
@@ -113,7 +115,7 @@ impl MathMlRenderer for MathMlFormatter {
         format!("<mmultiscripts {attr}>{content}</mmultiscripts>")
     }
 
-    fn render_num(&self, num: &crate::elements::Num) -> String {
+    fn render_num(&self, num: &crate::elements::Num) -> Self::Output {
         let num_str = num.num();
         let attr = num
             .attributes()
@@ -125,7 +127,7 @@ impl MathMlRenderer for MathMlFormatter {
         format!("<mn {attr}>{num_str}</mn>")
     }
 
-    fn render_operator(&self, operator: &crate::elements::Operator) -> String {
+    fn render_operator(&self, operator: &crate::elements::Operator) -> Self::Output {
         let op = operator.op();
         let attr = operator
             .attributes()
@@ -150,7 +152,7 @@ impl MathMlRenderer for MathMlFormatter {
         format!("<mo {attr}>{op}</mo>")
     }
 
-    fn render_padded(&self, padded: &crate::elements::Padded) -> String {
+    fn render_padded(&self, padded: &crate::elements::Padded) -> Self::Output {
         let content = self.render_elements(padded.children());
         let attr = padded
             .attributes()
@@ -169,7 +171,7 @@ impl MathMlRenderer for MathMlFormatter {
         format!(r#"<mpadded {attr}>{content}</mpadded>"#)
     }
 
-    fn render_phantom(&self, phantom: &crate::elements::grouping::Phantom) -> String {
+    fn render_phantom(&self, phantom: &crate::elements::grouping::Phantom) -> Self::Output {
         let content = self.render_elements(phantom.children());
         let attr = phantom
             .attributes()
@@ -181,7 +183,7 @@ impl MathMlRenderer for MathMlFormatter {
         format!("<mphantom {attr}>{content}</mphantom>")
     }
 
-    fn render_radical(&self, radical: &crate::elements::radicals::Radical) -> String {
+    fn render_radical(&self, radical: &crate::elements::radicals::Radical) -> Self::Output {
         let content = self.render_elements(radical.content());
         let attr = radical
             .attributes()
@@ -199,7 +201,7 @@ impl MathMlRenderer for MathMlFormatter {
         }
     }
 
-    fn render_row(&self, row: &crate::elements::grouping::Row) -> String {
+    fn render_row(&self, row: &crate::elements::grouping::Row) -> Self::Output {
         let content = self.render_elements(row.children());
         let attr = row
             .attributes()
@@ -211,7 +213,7 @@ impl MathMlRenderer for MathMlFormatter {
         format!("<mrow {attr}>{content}</mrow>")
     }
 
-    fn render_semantics(&self, semantics: &crate::elements::Semantics) -> String {
+    fn render_semantics(&self, semantics: &crate::elements::Semantics) -> Self::Output {
         let content = self.render_elements(semantics.children());
         let attrs = semantics
             .attributes()
@@ -223,7 +225,7 @@ impl MathMlRenderer for MathMlFormatter {
         format!("<semantics {attrs}>{content}</semantics>")
     }
 
-    fn render_space(&self, space: &crate::elements::Space) -> String {
+    fn render_space(&self, space: &crate::elements::Space) -> Self::Output {
         let attrs = space
             .attributes()
             .iter()
@@ -239,7 +241,7 @@ impl MathMlRenderer for MathMlFormatter {
         format!("<mspace {attrs}/>")
     }
 
-    fn render_str_literal(&self, str_literal: &crate::elements::StrLiteral) -> String {
+    fn render_str_literal(&self, str_literal: &crate::elements::StrLiteral) -> Self::Output {
         let content = str_literal.content();
         let attr = str_literal
             .attributes()
@@ -251,7 +253,7 @@ impl MathMlRenderer for MathMlFormatter {
         format!("<ms {attr}>{content}</ms>")
     }
 
-    fn render_style(&self, style: &crate::elements::grouping::Style) -> String {
+    fn render_style(&self, style: &crate::elements::grouping::Style) -> Self::Output {
         let content = self.render_elements(style.children());
         let attr = style
             .attributes()
@@ -263,7 +265,7 @@ impl MathMlRenderer for MathMlFormatter {
         format!("<mstyle {attr}>{content}</mstyle>")
     }
 
-    fn render_subsup(&self, sub_sup: &crate::elements::scripted::SubSup) -> String {
+    fn render_subsup(&self, sub_sup: &crate::elements::scripted::SubSup) -> Self::Output {
         let sub = sub_sup.sub();
         let sup = sub_sup.sup();
 
@@ -293,7 +295,7 @@ impl MathMlRenderer for MathMlFormatter {
         format!("<{tag} {attr}>{base}{formatting}</{tag}>")
     }
 
-    fn render_table(&self, table: &crate::elements::Table) -> String {
+    fn render_table(&self, table: &crate::elements::Table) -> Self::Output {
         let mut rows = String::default();
         let mut cells = String::default();
 
@@ -344,7 +346,7 @@ impl MathMlRenderer for MathMlFormatter {
         format!(r#"<mtable {table_attr}>{rows}</mtable>"#)
     }
 
-    fn render_text(&self, text: &crate::elements::Text) -> String {
+    fn render_text(&self, text: &crate::elements::Text) -> Self::Output {
         let content = text.text();
         let attr = text
             .attributes()
@@ -356,7 +358,7 @@ impl MathMlRenderer for MathMlFormatter {
         format!("<mtext {attr}>{content}</mtext>")
     }
 
-    fn render_underover(&self, under_over: &crate::elements::scripted::UnderOver) -> String {
+    fn render_underover(&self, under_over: &crate::elements::scripted::UnderOver) -> Self::Output {
         let under = under_over.under();
         let over = under_over.over();
 
@@ -390,7 +392,7 @@ impl MathMlRenderer for MathMlFormatter {
         format!("<{tag} {attr}>{base}{formatting}</{tag}>")
     }
 
-    fn render_attr(&self, attr: &crate::attributes::Attribute) -> String {
+    fn render_attr(&self, attr: &crate::attributes::Attribute) -> Self::Output {
         match attr {
             Attribute::Class(c) => format!("class=\"{}\"", c),
             Attribute::Data { name, value } => format!("data-{name}={value}"),
@@ -422,7 +424,7 @@ impl MathMlRenderer for MathMlFormatter {
         }
     }
 
-    fn render_mathml(&self, mathml: &crate::MathMl) -> String {
+    fn render_mathml(&self, mathml: &crate::MathMl) -> Self::Output {
         let content = self.render_elements(&mathml.content);
 
         format!("<math>{content}</math>")

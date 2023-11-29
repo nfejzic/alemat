@@ -43,20 +43,18 @@ crate::element_from_type!(Row => Row);
 /// # Example:
 ///
 /// ```rust
-/// use alemat::row;
+/// use alemat::{row, Element};
 /// use alemat::elements::{Ident, Num};
-/// let row = row![Ident::from("x"), Num::from(42)];
+/// use alemat::elements::grouping::Row;
 ///
-/// // create a table
-/// use alemat::elements::Table;
-/// let table = Table::from([
-///     row![Ident::from("x"), Num::from(42)],
-///     row![Ident::from("y"), Num::from(43)],
-/// ]);
+/// let row: Row = row![Ident::from("x"), Num::from(42)];
 /// ```
 #[macro_export]
 macro_rules! row {
-    ($($cell:expr),* $(,)?) => {
-         [$($crate::elements::Element::from($cell)),*]
-    }
+    ($($element:expr),* $(,)?) => {{
+        use $crate::elements::IntoElements;
+        let children = [$($crate::elements::Element::from($element)),*].into_elements();
+
+        $crate::elements::grouping::Row::from(children)
+    }}
 }
