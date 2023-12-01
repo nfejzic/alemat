@@ -1,0 +1,5 @@
+---
+source: tests/grouping/mod.rs
+expression: output
+---
+<math><mstyle mathcolor="red"><msub ><mi >x</mi><mi >i</mi></msub></mstyle></math>
