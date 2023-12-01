@@ -26,6 +26,15 @@ impl From<Elements> for Phantom {
     }
 }
 
+impl<const N: usize> From<[Element; N]> for Phantom {
+    fn from(value: [Element; N]) -> Self {
+        Self {
+            children: Elements(value.to_vec()),
+            attributes: Default::default(),
+        }
+    }
+}
+
 impl Phantom {
     pub fn add_attr<I, A>(&mut self, attr: I)
     where

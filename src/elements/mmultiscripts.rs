@@ -81,7 +81,7 @@ impl MultiscriptsBuilder<Init> {
 
 /// Presubscripts and tensor notations are represented by the `mmultiscripts` element. The
 /// `mprescripts` element is used as a separator between the `postscripts` and `prescripts`.
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Default, Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Prescripts {
     /// Accepts the global [`Attribute`]s.
     attr: Vec<Attribute>,
@@ -97,4 +97,10 @@ impl Prescripts {
             attr: attr.into_iter().map(Into::into).collect(),
         }
     }
+
+    pub fn attributes(&self) -> &[Attribute] {
+        &self.attr
+    }
 }
+
+crate::element_from_type!(Prescripts => Prescripts);

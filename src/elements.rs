@@ -59,7 +59,7 @@ pub use mtable::*;
 pub use mtext::*;
 
 use self::{
-    grouping::{Action, Error, Phantom, Row, Style},
+    grouping::{Action, Error, Phantom, Prescripts, Row, Style},
     mmultiscripts::Multiscripts,
     mroot::Radical,
     msubsup::SubSup,
@@ -74,6 +74,7 @@ pub enum Element {
     Frac(Frac),
     Ident(Ident),
     Multiscripts(Multiscripts),
+    Prescripts(Prescripts),
     Num(Num),
     Operator(Operator),
     Padded(Padded),

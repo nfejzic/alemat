@@ -77,6 +77,12 @@ impl From<Attribute> for OperatorAttr {
     }
 }
 
+impl From<OpForm> for OperatorAttr {
+    fn from(value: OpForm) -> Self {
+        Self::Form(value)
+    }
+}
+
 /// The `mo` element represents an operator or anything that should be rendered as an operator. In
 /// general, the notational conventions for mathematical operators are quite complicated, and
 /// therefore MathML provides a relatively sophisticated mechanism for specifying the rendering

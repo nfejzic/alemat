@@ -1,8 +1,10 @@
 use crate::{
     attributes::{Attribute, Dir, ScriptLevel},
     elements::{
-        grouping::ActionAttr, scripted::UnderOverAttr, AnnotationAttr, AnnotationContent, FracAttr,
-        Num, OperatorAttr, PaddedAttr, SpaceAttr, TableCellAttr,
+        grouping::{ActionAttr, Prescripts},
+        scripted::UnderOverAttr,
+        AnnotationAttr, AnnotationContent, FracAttr, Num, OperatorAttr, PaddedAttr, SpaceAttr,
+        TableCellAttr,
     },
     Element, MathMlRenderer,
 };
@@ -113,6 +115,16 @@ impl MathMlRenderer for MathMlFormatter {
             .join(" ");
 
         format!("<mmultiscripts {attr}>{content}</mmultiscripts>")
+    }
+
+    fn render_prescripts(&self, prescripts: &Prescripts) -> Self::Output {
+        let attr = prescripts
+            .attributes()
+            .iter()
+            .map(|a| self.render_attr(a))
+            .collect::<Vec<_>>()
+            .join(" ");
+        format!("<mprescripts {attr}/>")
     }
 
     fn render_num(&self, num: &crate::elements::Num) -> Self::Output {
@@ -327,7 +339,7 @@ impl MathMlRenderer for MathMlFormatter {
                 .collect::<Vec<_>>()
                 .join(" ");
 
-            rows.push_str("<mtr");
+            rows.push_str("<mtr ");
             rows.push_str(&row_attr);
             rows.push('>');
             rows.push_str(&cells);
@@ -395,7 +407,7 @@ impl MathMlRenderer for MathMlFormatter {
     fn render_attr(&self, attr: &crate::attributes::Attribute) -> Self::Output {
         match attr {
             Attribute::Class(c) => format!("class=\"{}\"", c),
-            Attribute::Data { name, value } => format!("data-{name}={value}"),
+            Attribute::Data { name, value } => format!(r#"data-{name}="{value}""#),
             Attribute::Dir(dir) => match dir {
                 Dir::RightToLeft => String::from(r#"dir="rtl""#),
                 Dir::LeftToRight => String::from(r#"dir="ltr""#),
@@ -407,7 +419,7 @@ impl MathMlRenderer for MathMlFormatter {
                     String::from(r#"display="compact""#)
                 }
             }
-            Attribute::Id(id) => format!("id={id}"),
+            Attribute::Id(id) => format!(r#"id="{id}""#),
             Attribute::MathBackground(c) => format!(r#"mathbackground="{c}""#),
             Attribute::MathColor(c) => format!(r#"mathcolor="{c}""#),
             Attribute::MathSize(s) => format!(r#"mathsize="{s}""#),

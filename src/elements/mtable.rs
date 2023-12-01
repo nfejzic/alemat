@@ -1,4 +1,4 @@
-use crate::{attributes::Attribute, Element};
+use crate::{attributes::Attribute, Element, Elements};
 
 pub enum ColumnLine {
     /// No line is drawn.
@@ -152,10 +152,7 @@ where
     C: Into<TableCell>,
 {
     fn from(value: I) -> Self {
-        Self {
-            cells: value.into_iter().map(Into::into).collect(),
-            attr: Default::default(),
-        }
+        value.into_iter().collect()
     }
 }
 
@@ -183,6 +180,8 @@ macro_rules! table_row {
 }
 
 pub use table_row;
+
+use super::IntoElements;
 
 /// The `mtd` accepts the global [`Attribute`]s as well as `columnspan` and `rowspan`.
 ///
@@ -224,7 +223,7 @@ impl From<Attribute> for TableCellAttr {
 /// ```
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct TableCell {
-    children: Vec<Element>,
+    children: Elements,
     attr: Vec<TableCellAttr>,
 }
 
@@ -236,38 +235,40 @@ impl TableCell {
     pub fn attributes(&self) -> &[TableCellAttr] {
         &self.attr
     }
-}
 
-impl<T> From<T> for TableCell
-where
-    T: Into<Element>,
-{
-    fn from(value: T) -> Self {
+    pub fn with_content(content: impl IntoElements) -> Self {
         Self {
-            children: vec![value.into()],
+            children: content.into_elements(),
             attr: Default::default(),
         }
     }
-}
 
-impl<T> From<Vec<T>> for TableCell
-where
-    T: Into<Element>,
-{
-    fn from(value: Vec<T>) -> Self {
-        Self {
-            children: value.into_iter().map(Into::into).collect(),
-            attr: Default::default(),
-        }
-    }
-}
-
-impl TableCell {
     pub fn add_attr<I, A>(&mut self, attr: I)
     where
         I: IntoIterator<Item = A>,
         A: Into<TableCellAttr>,
     {
         self.attr.extend(attr.into_iter().map(Into::into));
+    }
+
+    pub fn with_attr<I, A>(mut self, attr: I) -> Self
+    where
+        I: IntoIterator<Item = A>,
+        A: Into<TableCellAttr>,
+    {
+        self.attr.extend(attr.into_iter().map(Into::into));
+        self
+    }
+}
+
+impl<T> From<T> for TableCell
+where
+    T: IntoElements,
+{
+    fn from(value: T) -> Self {
+        Self {
+            children: value.into_elements(),
+            attr: Default::default(),
+        }
     }
 }

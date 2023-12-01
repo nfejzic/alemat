@@ -1,7 +1,7 @@
 use crate::{
     attributes::Attribute,
     elements::{
-        grouping::{Action, Error, Phantom, Row, Style},
+        grouping::{Action, Error, Phantom, Prescripts, Row, Style},
         radicals::Radical,
         scripted::{Multiscripts, SubSup, UnderOver},
         Annotation, Frac, Ident, Num, Operator, Padded, Semantics, Space, StrLiteral, Table, Text,
@@ -34,6 +34,10 @@ pub trait MathMlRenderer {
 
     fn render_multiscripts(&self, multiscripts: &Multiscripts) -> Self::Output {
         unimplemented!("Rendering of {:?} not implemented", multiscripts);
+    }
+
+    fn render_prescripts(&self, prescripts: &Prescripts) -> Self::Output {
+        unimplemented!("Rendering of {:?} not implemented", prescripts);
     }
 
     fn render_num(&self, num: &Num) -> Self::Output {
@@ -118,6 +122,7 @@ pub trait MathMlRenderer {
             Element::Table(table) => self.render_table(table),
             Element::Text(text) => self.render_text(text),
             Element::UnderOver(underover) => self.render_underover(underover),
+            Element::Prescripts(prescripts) => self.render_prescripts(prescripts),
         }
     }
 
