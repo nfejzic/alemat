@@ -1,0 +1,5 @@
+---
+source: tests/others/annotation.rs
+expression: out
+---
+<math ><annotation >This is an annotation</annotation></math>
