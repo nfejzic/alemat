@@ -1,0 +1,5 @@
+---
+source: tests/underover/mod.rs
+expression: out
+---
+<math ><munderover ><mi >x</mi><mi >0</mi><mi >1</mi></munderover></math>

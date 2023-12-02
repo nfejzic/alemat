@@ -1,0 +1,5 @@
+---
+source: tests/underover/mod.rs
+expression: out
+---
+<math display="block"><munderover ><mo >∑</mo><mrow ><mi >i</mi><mo >=</mo><mn >0</mn></mrow><mi >k</mi></munderover><msup ><mn >2</mn><mi >i</mi></msup></math>
