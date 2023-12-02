@@ -13,10 +13,18 @@ use elements::IntoElements;
 pub use elements::{Element, Elements};
 pub use to_mathml::*;
 
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
+pub enum MathMlAttr {
+    Display(String),
+    AltText(String),
+
+    Global(Attribute),
+}
+
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct MathMl {
     content: Elements,
-    attr: Vec<Attribute>,
+    attr: Vec<MathMlAttr>,
     // TODO: decide what fields should go inside
 }
 
@@ -32,14 +40,23 @@ impl MathMl {
         self.content.append(&mut content.into_elements());
     }
 
-    pub fn add_attr(&mut self, attr: impl Into<Attribute>) {
+    pub fn add_attr(&mut self, attr: impl Into<MathMlAttr>) {
         self.attr.push(attr.into());
+    }
+
+    pub fn with_attr<I, A>(mut self, attr: I) -> Self
+    where
+        I: IntoIterator<Item = A>,
+        A: Into<MathMlAttr>,
+    {
+        self.attr.extend(attr.into_iter().map(Into::into));
+        self
     }
 
     pub fn extend_attr<I, A>(&mut self, attr: I)
     where
         I: IntoIterator<Item = A>,
-        A: Into<Attribute>,
+        A: Into<MathMlAttr>,
     {
         self.attr.extend(attr.into_iter().map(Into::into))
     }

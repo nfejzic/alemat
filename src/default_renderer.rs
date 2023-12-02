@@ -6,7 +6,7 @@ use crate::{
         AnnotationAttr, AnnotationContent, FracAttr, Num, OperatorAttr, PaddedAttr, SpaceAttr,
         TableCellAttr,
     },
-    Element, MathMlRenderer,
+    Element, MathMlAttr, MathMlRenderer,
 };
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
@@ -439,6 +439,17 @@ impl MathMlRenderer for MathMlFormatter {
     fn render_mathml(&self, mathml: &crate::MathMl) -> Self::Output {
         let content = self.render_elements(&mathml.content);
 
-        format!("<math>{content}</math>")
+        let attr = mathml
+            .attr
+            .iter()
+            .map(|a| match a {
+                MathMlAttr::Display(d) => format!(r#"display="{d}""#),
+                MathMlAttr::AltText(alt_t) => format!(r#"alttext="{alt_t}""#),
+                MathMlAttr::Global(a) => self.render_attr(a),
+            })
+            .collect::<Vec<_>>()
+            .join(" ");
+
+        format!("<math {attr}>{content}</math>")
     }
 }
