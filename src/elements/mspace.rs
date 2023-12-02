@@ -37,7 +37,7 @@ impl From<Attribute> for SpaceAttr {
 
 /// The mspace empty element represents a blank space of any desired size, as set by its
 /// attributes.
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Space {
     attr: Vec<SpaceAttr>,
 }
@@ -49,6 +49,15 @@ impl Space {
         A: Into<SpaceAttr>,
     {
         self.attr.extend(attr.into_iter().map(Into::into));
+    }
+
+    pub fn with_attr<I, A>(mut self, attr: I) -> Self
+    where
+        I: IntoIterator<Item = A>,
+        A: Into<SpaceAttr>,
+    {
+        self.attr.extend(attr.into_iter().map(Into::into));
+        self
     }
 
     pub fn attributes(&self) -> &[SpaceAttr] {

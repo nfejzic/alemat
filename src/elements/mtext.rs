@@ -32,6 +32,15 @@ impl Text {
         self.attr.extend(attr.into_iter().map(Into::into));
     }
 
+    pub fn with_attr<I, A>(mut self, attr: I) -> Self
+    where
+        I: IntoIterator<Item = A>,
+        A: Into<Attribute>,
+    {
+        self.attr.extend(attr.into_iter().map(Into::into));
+        self
+    }
+
     pub fn text(&self) -> &str {
         &self.text
     }

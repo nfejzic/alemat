@@ -39,6 +39,18 @@ impl From<Elements> for Padded {
     }
 }
 
+impl<const N: usize, I> From<[I; N]> for Padded
+where
+    I: Into<Element>,
+{
+    fn from(value: [I; N]) -> Self {
+        Self {
+            children: Elements(value.map(Into::into).to_vec()),
+            attributes: Default::default(),
+        }
+    }
+}
+
 impl Padded {
     pub fn add_attr<I, A>(&mut self, attr: I)
     where
@@ -46,6 +58,15 @@ impl Padded {
         A: Into<PaddedAttr>,
     {
         self.attributes.extend(attr.into_iter().map(Into::into));
+    }
+
+    pub fn with_attr<I, A>(mut self, attr: I) -> Self
+    where
+        I: IntoIterator<Item = A>,
+        A: Into<PaddedAttr>,
+    {
+        self.attributes.extend(attr.into_iter().map(Into::into));
+        self
     }
 
     pub fn children(&self) -> &[Element] {

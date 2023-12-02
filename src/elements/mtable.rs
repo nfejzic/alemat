@@ -1,5 +1,6 @@
 use crate::{attributes::Attribute, Element, Elements};
 
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum ColumnLine {
     /// No line is drawn.
     None,
@@ -11,8 +12,19 @@ pub enum ColumnLine {
     Dashed,
 }
 
+impl AsRef<str> for ColumnLine {
+    fn as_ref(&self) -> &str {
+        match self {
+            ColumnLine::None => "none",
+            ColumnLine::Solid => "solid",
+            ColumnLine::Dashed => "dashed",
+        }
+    }
+}
+
 /// The `mtable` accepts the global [`Attribute`]s as well as `columnlines` that can be used to
 /// render augmented matrix.
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum TableAttr {
     /// The `columnlines` attribute is a space-separated list of values, one for each column.
     ColumnLines(Vec<ColumnLine>),
@@ -29,7 +41,7 @@ pub enum TableAttr {
 pub struct Table {
     rows: Vec<TableRow>,
     /// The `mtable` accepts the global [`Attribute`]s.
-    attributes: Vec<Attribute>,
+    attributes: Vec<TableAttr>,
 }
 
 impl Table {
@@ -37,7 +49,7 @@ impl Table {
         &self.rows
     }
 
-    pub fn attributes(&self) -> &[Attribute] {
+    pub fn attributes(&self) -> &[TableAttr] {
         &self.attributes
     }
 }
@@ -70,9 +82,18 @@ impl Table {
     pub fn add_attr<I, A>(&mut self, attr: I)
     where
         I: IntoIterator<Item = A>,
-        A: Into<Attribute>,
+        A: Into<TableAttr>,
     {
         self.attributes.extend(attr.into_iter().map(Into::into));
+    }
+
+    pub fn with_attr<I, A>(mut self, attr: I) -> Self
+    where
+        I: IntoIterator<Item = A>,
+        A: Into<TableAttr>,
+    {
+        self.attributes.extend(attr.into_iter().map(Into::into));
+        self
     }
 }
 
@@ -91,7 +112,7 @@ impl Table {
 /// ```
 #[macro_export]
 macro_rules! table {
-    ($([$($cell:expr),*]),*) => {
+    ($([$($cell:expr),* $(,)?]),* $(,)?) => {
         $crate::elements::Table::from([
             $(
             $crate::table_row![$($cell),*],

@@ -4,7 +4,7 @@ use crate::{
         grouping::{ActionAttr, Prescripts},
         scripted::UnderOverAttr,
         AnnotationAttr, AnnotationContent, FracAttr, Num, OperatorAttr, PaddedAttr, SpaceAttr,
-        TableCellAttr,
+        TableAttr, TableCellAttr,
     },
     Element, MathMlAttr, MathMlRenderer,
 };
@@ -351,7 +351,14 @@ impl MathMlRenderer for MathMlFormatter {
         let table_attr = table
             .attributes()
             .iter()
-            .map(|a| self.render_attr(a))
+            .map(|a| match a {
+                TableAttr::ColumnLines(cl) => {
+                    let lines = cl.iter().map(AsRef::as_ref).collect::<Vec<_>>().join(" ");
+
+                    format!(r#"columnlines="{lines}""#)
+                }
+                TableAttr::Global(ga) => self.render_attr(ga),
+            })
             .collect::<Vec<_>>()
             .join(" ");
 
@@ -376,8 +383,8 @@ impl MathMlRenderer for MathMlFormatter {
 
         let (tag, formatting) = match (under, over) {
             (None, None) => unreachable!("SubSup element must have at least one of sub or sup."),
-            (None, Some(over)) => ("munder", self.render_elements(over)),
-            (Some(under), None) => ("mover", self.render_elements(under)),
+            (None, Some(over)) => ("mover", self.render_elements(over)),
+            (Some(under), None) => ("munder", self.render_elements(under)),
             (Some(under), Some(over)) => {
                 let tag = "munderover";
 

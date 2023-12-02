@@ -2,6 +2,7 @@ use std::marker::PhantomData;
 
 use crate::{
     attributes::Attribute,
+    elements::grouping::Row,
     markers::{Init, Uninit},
     Element, Elements,
 };
@@ -141,8 +142,14 @@ impl UnderOverBuilder<Init, Init> {
             }
         };
 
+        let mut expr = self.expr.expect("Expr is guaranteed to be init.");
+
+        if expr.len() > 1 {
+            expr = Row::from(expr).into_elements();
+        }
+
         UnderOver {
-            expr: self.expr.expect("Expr is guaranteed to be init."),
+            expr,
             inner,
             attributes: self.attr,
         }
