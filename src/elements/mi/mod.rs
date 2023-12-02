@@ -1,3 +1,5 @@
+mod dict;
+
 use std::marker::PhantomData;
 
 use crate::{
