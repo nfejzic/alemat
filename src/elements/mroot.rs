@@ -78,6 +78,18 @@ impl<T1, T2> RadicalsBuilder<T1, T2> {
         }
     }
 
+    /// `mroot` and `msqrt` behave differently when they have multiple children:
+    ///
+    /// * `msqrt` can have any number of chldren
+    /// * `mroot` needs to have exactly two children:
+    ///   - the first is the base
+    ///   - the second is the index
+    ///
+    /// You can pass as may children as you want, but if you pass more than two with an index other
+    /// than "2" they will be wrapped in a `mrow`. If you use [`alemat::row!`] to wrap children in a row
+    /// yourself, they won't be wrapped again.
+    ///
+    /// [`alemat::row!`]: crate::row
     pub fn content(self, content: impl IntoElements) -> RadicalsBuilder<T1, Init> {
         RadicalsBuilder {
             index: self.index,
