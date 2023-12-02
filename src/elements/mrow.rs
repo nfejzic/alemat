@@ -1,5 +1,7 @@
 use crate::{attributes::Attribute, Element, Elements};
 
+use super::IntoElements;
+
 /// The `mrow` element is used to group together any number of sub-expressions, usually consisting
 /// of one or more `mo` elements acting as "operators" on one or more other expressions that are
 /// their "operands".
@@ -13,6 +15,15 @@ impl From<Elements> for Row {
     fn from(value: Elements) -> Self {
         Self {
             children: value,
+            attr: Default::default(),
+        }
+    }
+}
+
+impl<const N: usize, I: Into<Element>> From<[I; N]> for Row {
+    fn from(value: [I; N]) -> Self {
+        Self {
+            children: value.into_elements(),
             attr: Default::default(),
         }
     }

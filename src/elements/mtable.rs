@@ -49,6 +49,32 @@ impl Table {
         &self.rows
     }
 
+    pub fn add_row(&mut self, row: TableRow) {
+        self.rows.push(row);
+    }
+
+    pub fn add_rows<I, R>(&mut self, rows: I)
+    where
+        I: IntoIterator<Item = R>,
+        R: Into<TableRow>,
+    {
+        self.rows.extend(rows.into_iter().map(Into::into));
+    }
+
+    pub fn with_row(mut self, row: TableRow) -> Self {
+        self.rows.push(row);
+        self
+    }
+
+    pub fn with_rows<I, R>(mut self, rows: I) -> Self
+    where
+        I: IntoIterator<Item = R>,
+        R: Into<TableRow>,
+    {
+        self.rows.extend(rows.into_iter().map(Into::into));
+        self
+    }
+
     pub fn attributes(&self) -> &[TableAttr] {
         &self.attributes
     }
@@ -158,6 +184,32 @@ impl TableRow {
         self.attr.extend(attr.into_iter().map(Into::into));
     }
 
+    pub fn add_cell(&mut self, cell: TableCell) {
+        self.cells.push(cell);
+    }
+
+    pub fn add_cells<I, C>(&mut self, cells: I)
+    where
+        I: IntoIterator<Item = C>,
+        C: Into<TableCell>,
+    {
+        self.cells.extend(cells.into_iter().map(Into::into));
+    }
+
+    pub fn with_cell(mut self, cell: TableCell) -> Self {
+        self.cells.push(cell);
+        self
+    }
+
+    pub fn with_cells<I, C>(mut self, cells: I) -> Self
+    where
+        I: IntoIterator<Item = C>,
+        C: Into<TableCell>,
+    {
+        self.cells.extend(cells.into_iter().map(Into::into));
+        self
+    }
+
     pub fn cells(&self) -> &[TableCell] {
         &self.cells
     }
@@ -248,6 +300,36 @@ pub struct TableCell {
     attr: Vec<TableCellAttr>,
 }
 
+impl<T> From<T> for TableCell
+where
+    T: Into<Element>,
+{
+    fn from(value: T) -> Self {
+        Self {
+            children: Elements(vec![value.into()]),
+            attr: Vec::default(),
+        }
+    }
+}
+
+impl From<Elements> for TableCell {
+    fn from(children: Elements) -> Self {
+        Self {
+            children,
+            attr: Vec::default(),
+        }
+    }
+}
+
+impl<const N: usize, I: Into<Element>> From<[I; N]> for TableCell {
+    fn from(value: [I; N]) -> Self {
+        Self {
+            children: value.into_elements(),
+            attr: Default::default(),
+        }
+    }
+}
+
 impl TableCell {
     pub fn children(&self) -> &[Element] {
         &self.children
@@ -279,17 +361,5 @@ impl TableCell {
     {
         self.attr.extend(attr.into_iter().map(Into::into));
         self
-    }
-}
-
-impl<T> From<T> for TableCell
-where
-    T: IntoElements,
-{
-    fn from(value: T) -> Self {
-        Self {
-            children: value.into_elements(),
-            attr: Default::default(),
-        }
     }
 }

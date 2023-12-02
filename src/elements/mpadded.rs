@@ -1,5 +1,7 @@
 use crate::{attributes::Attribute, Element, Elements};
 
+use super::IntoElements;
+
 /// The `mpadded` element accepts global attributes as well as the `width`, `height`, `depth`,
 /// `lspace` and `voffset`
 ///
@@ -45,7 +47,7 @@ where
 {
     fn from(value: [I; N]) -> Self {
         Self {
-            children: Elements(value.map(Into::into).to_vec()),
+            children: value.into_elements(),
             attributes: Default::default(),
         }
     }

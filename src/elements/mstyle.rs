@@ -1,5 +1,7 @@
 use crate::{attributes::Attribute, Element, Elements};
 
+use super::IntoElements;
+
 /// `mstyle` element was introduced to make style changes that affect the rendering of its
 /// contents.
 ///
@@ -19,11 +21,11 @@ impl From<Elements> for Style {
     }
 }
 
-impl<const N: usize> From<[Element; N]> for Style {
-    fn from(value: [Element; N]) -> Self {
+impl<const N: usize, I: Into<Element>> From<[I; N]> for Style {
+    fn from(value: [I; N]) -> Self {
         Self {
-            children: Elements(value.to_vec()),
-            attr: Default::default(),
+            children: value.into_elements(),
+            attr: Vec::default(),
         }
     }
 }
