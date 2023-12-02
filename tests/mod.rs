@@ -1,7 +1,6 @@
 mod grouping;
 mod radicals;
-mod subsup;
-mod underover;
+mod scripted;
 
 macro_rules! snap_test {
     ($input:expr $(, name: $name:expr)?) => {
