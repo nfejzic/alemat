@@ -84,11 +84,11 @@ impl<T1, T2> SubSupBuilder<T1, T2> {
         }
     }
 
-    pub fn supscript(self, sub: impl IntoElements) -> SubSupBuilder<T1, Init> {
+    pub fn supscript(self, sup: impl IntoElements) -> SubSupBuilder<T1, Init> {
         SubSupBuilder {
             base: self.base,
-            sub: self.sup,
-            sup: Some(sub.into_elements()),
+            sub: self.sub,
+            sup: Some(sup.into_elements()),
             attr: self.attr,
             _marker: PhantomData,
         }
