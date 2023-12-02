@@ -1,5 +1,5 @@
 use alemat::elements::scripted::{SubSup, UnderOver};
-use alemat::elements::{Ident, Num, Operator};
+use alemat::elements::{Ident, Num, Operator, Text};
 use alemat::{MathMl, MathMlAttr, MathMlFormatter};
 
 #[test]
@@ -100,4 +100,44 @@ fn underover_summation() {
     .render(&mut MathMlFormatter);
 
     crate::snap_test!(out, name: "underover_summation");
+}
+
+#[test]
+fn under_brace() {
+    let out = MathMl::with_content(alemat::children![UnderOver::builder()
+        .expr(alemat::children![
+            Num::from(1),
+            Operator::plus(),
+            Num::from(2)
+        ])
+        .under(
+            UnderOver::builder()
+                .expr(Operator::ubrace())
+                .under(Text::from("Some expression"))
+                .build()
+        )
+        .build()])
+    .render(&mut MathMlFormatter);
+
+    crate::snap_test!(out, name: "underover_under_brace");
+}
+
+#[test]
+fn over_brace() {
+    let out = MathMl::with_content(alemat::children![UnderOver::builder()
+        .expr(alemat::children![
+            Num::from(1),
+            Operator::plus(),
+            Num::from(2)
+        ])
+        .over(
+            UnderOver::builder()
+                .expr(Operator::obrace())
+                .over(Text::from("Some expression"))
+                .build()
+        )
+        .build()])
+    .render(&mut MathMlFormatter);
+
+    crate::snap_test!(out, name: "underover_over_brace");
 }

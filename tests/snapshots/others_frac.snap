@@ -1,0 +1,5 @@
+---
+source: tests/others/mfrac.rs
+expression: out
+---
+<math ><mfrac ><mi >x</mi><mi >y</mi></mfrac></math>
