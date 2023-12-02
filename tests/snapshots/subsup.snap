@@ -1,0 +1,5 @@
+---
+source: tests/subsup/mod.rs
+expression: out
+---
+<math ><msubsup ><mi >x</mi><mi >0</mi><mi >1</mi></msubsup></math>

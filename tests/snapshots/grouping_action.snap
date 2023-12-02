@@ -2,4 +2,4 @@
 source: tests/grouping/mod.rs
 expression: output
 ---
-<math><maction id="action-id"><mi >x</mi></maction></math>
+<math ><maction id="action-id"><mi >x</mi></maction></math>

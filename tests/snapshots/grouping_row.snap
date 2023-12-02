@@ -2,4 +2,4 @@
 source: tests/grouping/mod.rs
 expression: output
 ---
-<math><mrow ><mi >x</mi><mo >+</mo><mn >42</mn></mrow></math>
+<math ><mrow ><mi >x</mi><mo >+</mo><mn >42</mn></mrow></math>
