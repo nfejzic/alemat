@@ -392,7 +392,7 @@ impl MathMlRenderer for MathMlFormatter {
                 let tag = "munderover";
 
                 let mut formatting = self.render_elements(under);
-                formatting.push_str(&mut self.render_elements(over));
+                formatting.push_str(&self.render_elements(over));
 
                 (tag, formatting)
             }
