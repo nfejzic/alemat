@@ -1,5 +1,0 @@
----
-source: tests/grouping/mod.rs
-expression: output
----
-<math><merror><mrow><mi>x</mi><mo>+</mo><mi>y</mi></mrow></merror></math>
