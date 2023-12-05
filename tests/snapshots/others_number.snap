@@ -2,4 +2,4 @@
 source: tests/others/mn.rs
 expression: out
 ---
-<math ><mn >1</mn></math>
+<math><mn>1</mn></math>

@@ -1,6 +1,6 @@
 use alemat::{
     elements::{ColumnLine, Frac, Ident, Num, Operator, TableAttr},
-    MathMl, MathMlFormatter,
+    MathMl,
 };
 
 #[test]
@@ -21,7 +21,7 @@ fn matrix() {
             Operator::rparens(),
         ]
     ])
-    .render_with(&mut MathMlFormatter);
+    .render();
 
     crate::snap_test!(out, name: "others_table_matrix");
 }
@@ -49,7 +49,7 @@ fn matrix_augmented() {
             Operator::rparens(),
         ]
     ])
-    .render_with(&mut MathMlFormatter);
+    .render();
 
     crate::snap_test!(out, name: "others_table_matrix_augmented");
 }
@@ -72,7 +72,7 @@ fn matrix_square() {
             Operator::rbracket(),
         ]
     ])
-    .render_with(&mut MathMlFormatter);
+    .render();
 
     crate::snap_test!(out, name: "others_table_matrix_square");
 }

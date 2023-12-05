@@ -5,7 +5,7 @@ use alemat::{
         scripted::{Multiscripts, SubSup},
         Frac, Ident, Num, OpForm, Operator,
     },
-    row, MathMl, MathMlFormatter,
+    row, MathMl,
 };
 
 use crate::snap_test;
@@ -18,7 +18,7 @@ fn action() {
             .attr([ActionAttr::Global(Attribute::Id(String::from("action-id")))])
             .build(),
     )
-    .render_with(&mut MathMlFormatter);
+    .render();
 
     snap_test!(output, name: "grouping_action");
 }
@@ -34,7 +34,7 @@ fn merror() {
             ])
             .build(),
     )
-    .render_with(&mut MathMlFormatter);
+    .render();
 
     snap_test!(output, name: "grouping_merror");
 }
@@ -57,7 +57,7 @@ fn mmultiscripts() {
             ])
             .build(),
     )
-    .render_with(&mut MathMlFormatter);
+    .render();
     snap_test!(output, name: "grouping_mmultiscripts");
 }
 
@@ -83,15 +83,15 @@ fn mphantom() {
             ])
             .build(),
     )
-    .render_with(&mut MathMlFormatter);
+    .render();
 
     snap_test!(output, name: "grouping_mphantom");
 }
 
 #[test]
 fn mrow() {
-    let output = MathMl::with_content(row![Ident::from("x"), Operator::from("+"), Num::from(42)])
-        .render_with(&mut MathMlFormatter);
+    let output =
+        MathMl::with_content(row![Ident::from("x"), Operator::from("+"), Num::from(42)]).render();
 
     snap_test!(output, name: "grouping_row");
 }
@@ -105,7 +105,7 @@ fn mstyle() {
             .build()])
         .with_attr([Attribute::MathColor(String::from("red"))]),
     )
-    .render_with(&mut MathMlFormatter);
+    .render();
 
     snap_test!(output, name: "grouping_mstyle");
 }

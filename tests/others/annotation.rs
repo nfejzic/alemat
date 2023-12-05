@@ -1,7 +1,7 @@
 use alemat::{
     children,
     elements::{Annotation, Ident, Operator},
-    MathMl, MathMlFormatter,
+    MathMl,
 };
 
 #[test]
@@ -11,7 +11,7 @@ fn annotation() {
             .content(String::from("This is an annotation"))
             .build(),
     )
-    .render_with(&mut MathMlFormatter);
+    .render();
 
     crate::snap_test!(out, name: "others_annotation");
 }
@@ -27,7 +27,7 @@ fn annotation_xml() {
             ])
             .build(),
     )
-    .render_with(&mut MathMlFormatter);
+    .render();
 
     crate::snap_test!(out, name: "others_annotation_xml");
 }

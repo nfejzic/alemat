@@ -2,4 +2,4 @@
 source: tests/others/mi.rs
 expression: out
 ---
-<math ><mi >Ψ</mi></math>
+<math><mi>Ψ</mi></math>

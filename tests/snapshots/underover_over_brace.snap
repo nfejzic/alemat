@@ -2,4 +2,4 @@
 source: tests/scripted/mod.rs
 expression: out
 ---
-<math ><mover ><mrow ><mn >1</mn><mo >+</mo><mn >2</mn></mrow><mover ><mo >⏞</mo><mtext >Some expression</mtext></mover></mover></math>
+<math><mover ><mrow><mn>1</mn><mo>+</mo><mn>2</mn></mrow><mover ><mo>⏞</mo><mtext>Some expression</mtext></mover></mover></math>

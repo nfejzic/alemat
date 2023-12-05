@@ -2,4 +2,4 @@
 source: tests/others/mo.rs
 expression: out
 ---
-<math ><mo >∏</mo></math>
+<math><mo>∏</mo></math>

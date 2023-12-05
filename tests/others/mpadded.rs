@@ -1,7 +1,7 @@
 use alemat::{
     attributes::Attribute,
     elements::{Frac, Num, Padded, PaddedAttr},
-    MathMl, MathMlFormatter,
+    MathMl,
 };
 
 #[test]
@@ -22,7 +22,7 @@ fn padded() {
             PaddedAttr::Global(Attribute::Style("background: lightblue;".into())),
         ]),
     )
-    .render_with(&mut MathMlFormatter);
+    .render();
 
     crate::snap_test!(out, name: "others_padded");
 }

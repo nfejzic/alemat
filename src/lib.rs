@@ -8,6 +8,7 @@ pub mod markers;
 mod to_mathml;
 
 use attributes::Attribute;
+use buf_writer::BufMathMlWriter;
 pub use default_renderer::MathMlFormatter;
 pub(crate) use elements::element_from_type;
 use elements::IntoElements;
@@ -76,6 +77,13 @@ impl MathMl {
 
     pub fn render_with<R: Render>(&self, renderer: &mut R) -> R::Output {
         renderer.render_mathml(self)
+    }
+
+    pub fn render(&self) -> String {
+        let mut buf_writer = BufMathMlWriter::default();
+        buf_writer.write_mathml(self);
+
+        buf_writer.into_inner()
     }
 }
 

@@ -1,7 +1,7 @@
 use alemat::{
     attributes::Attribute,
     elements::{Frac, Num, Space, SpaceAttr},
-    MathMl, MathMlFormatter,
+    MathMl,
 };
 
 #[test]
@@ -29,7 +29,7 @@ fn mspace() {
             ])
             .build()
     ])
-    .render_with(&mut MathMlFormatter);
+    .render();
 
     crate::snap_test!(out, name: "others_mspace");
 }

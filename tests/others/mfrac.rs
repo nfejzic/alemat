@@ -1,6 +1,6 @@
 use alemat::{
     elements::{Frac, Ident},
-    MathMl, MathMlFormatter,
+    MathMl,
 };
 
 #[test]
@@ -11,7 +11,7 @@ fn frac() {
             .denom(Ident::from("y"))
             .build(),
     )
-    .render_with(&mut MathMlFormatter);
+    .render();
 
     crate::snap_test!(out, name: "others_frac");
 }

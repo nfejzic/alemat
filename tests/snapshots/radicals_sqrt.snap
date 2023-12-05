@@ -2,4 +2,4 @@
 source: tests/radicals/mod.rs
 expression: output
 ---
-<math ><msqrt ><mn >1</mn><mo >+</mo><msubsup ><mi >n</mi><mn >2</mn><mn >3</mn></msubsup></msqrt></math>
+<math><msqrt><mn>1</mn><mo>+</mo><msubsup><mi>n</mi><mn>2</mn><mn>3</mn></msubsup></msqrt></math>

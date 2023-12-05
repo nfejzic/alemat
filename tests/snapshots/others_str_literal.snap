@@ -2,4 +2,4 @@
 source: tests/others/ms.rs
 expression: out
 ---
-<math ><ms >Hello there</ms></math>
+<math><ms>Hello there</ms></math>

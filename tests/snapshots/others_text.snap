@@ -2,4 +2,4 @@
 source: tests/others/mtext.rs
 expression: out
 ---
-<math ><mtext >Hello world</mtext></math>
+<math><mtext>Hello world</mtext></math>

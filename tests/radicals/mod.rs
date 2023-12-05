@@ -1,6 +1,6 @@
 use alemat::{
     elements::{radicals::Radical, scripted::SubSup, Ident, Num, Operator},
-    MathMl, MathMlFormatter,
+    MathMl,
 };
 
 #[test]
@@ -19,7 +19,7 @@ fn sqrt() {
             ])
             .build(),
     )
-    .render_with(&mut MathMlFormatter);
+    .render();
 
     crate::snap_test!(output, name: "radicals_sqrt");
 }
@@ -40,7 +40,7 @@ fn root() {
             ])
             .build(),
     )
-    .render_with(&mut MathMlFormatter);
+    .render();
 
     crate::snap_test!(output, name: "radicals_root");
 }
