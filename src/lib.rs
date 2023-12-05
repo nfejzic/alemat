@@ -29,6 +29,10 @@ pub struct MathMl {
 }
 
 impl MathMl {
+    pub fn content(&self) -> &Elements {
+        &self.content
+    }
+
     pub fn with_content(content: impl IntoElements) -> Self {
         Self {
             content: content.into_elements(),
