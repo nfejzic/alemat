@@ -1,3 +1,5 @@
+use std::borrow::Borrow;
+
 use crate::{
     attributes::Attribute,
     elements::{
@@ -132,9 +134,7 @@ pub trait Render {
 }
 
 pub trait Writer {
-    type Buffer<'s>
-    where
-        Self: 's;
+    type Buffer;
 
     fn write_action(&mut self, action: &Action) {
         unimplemented!("Rendering of {:?} not implemented", action);
@@ -254,5 +254,9 @@ pub trait Writer {
         unimplemented!("Rendering of {:?} not implemented", mathml)
     }
 
-    fn buffer(&self) -> Self::Buffer<'_>;
+    fn buffer<T>(&self) -> &T
+    where
+        Self::Buffer: Borrow<T>;
+
+    fn into_inner(self) -> Self::Buffer;
 }
