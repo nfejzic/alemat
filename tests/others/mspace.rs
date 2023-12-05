@@ -29,7 +29,7 @@ fn mspace() {
             ])
             .build()
     ])
-    .render(&mut MathMlFormatter);
+    .render_with(&mut MathMlFormatter);
 
     crate::snap_test!(out, name: "others_mspace");
 }

@@ -18,7 +18,7 @@ fn action() {
             .attr([ActionAttr::Global(Attribute::Id(String::from("action-id")))])
             .build(),
     )
-    .render(&mut MathMlFormatter);
+    .render_with(&mut MathMlFormatter);
 
     snap_test!(output, name: "grouping_action");
 }
@@ -34,7 +34,7 @@ fn merror() {
             ])
             .build(),
     )
-    .render(&mut MathMlFormatter);
+    .render_with(&mut MathMlFormatter);
 
     snap_test!(output, name: "grouping_merror");
 }
@@ -57,7 +57,7 @@ fn mmultiscripts() {
             ])
             .build(),
     )
-    .render(&mut MathMlFormatter);
+    .render_with(&mut MathMlFormatter);
     snap_test!(output, name: "grouping_mmultiscripts");
 }
 
@@ -83,7 +83,7 @@ fn mphantom() {
             ])
             .build(),
     )
-    .render(&mut MathMlFormatter);
+    .render_with(&mut MathMlFormatter);
 
     snap_test!(output, name: "grouping_mphantom");
 }
@@ -91,7 +91,7 @@ fn mphantom() {
 #[test]
 fn mrow() {
     let output = MathMl::with_content(row![Ident::from("x"), Operator::from("+"), Num::from(42)])
-        .render(&mut MathMlFormatter);
+        .render_with(&mut MathMlFormatter);
 
     snap_test!(output, name: "grouping_row");
 }
@@ -105,7 +105,7 @@ fn mstyle() {
             .build()])
         .with_attr([Attribute::MathColor(String::from("red"))]),
     )
-    .render(&mut MathMlFormatter);
+    .render_with(&mut MathMlFormatter);
 
     snap_test!(output, name: "grouping_mstyle");
 }

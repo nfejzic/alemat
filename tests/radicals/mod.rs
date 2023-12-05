@@ -19,7 +19,7 @@ fn sqrt() {
             ])
             .build(),
     )
-    .render(&mut MathMlFormatter);
+    .render_with(&mut MathMlFormatter);
 
     crate::snap_test!(output, name: "radicals_sqrt");
 }
@@ -40,7 +40,7 @@ fn root() {
             ])
             .build(),
     )
-    .render(&mut MathMlFormatter);
+    .render_with(&mut MathMlFormatter);
 
     crate::snap_test!(output, name: "radicals_root");
 }

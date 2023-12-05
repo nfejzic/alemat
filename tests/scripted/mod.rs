@@ -11,7 +11,7 @@ fn subsup() {
             .base(Ident::from("x"))
             .build(),
     )
-    .render(&mut MathMlFormatter);
+    .render_with(&mut MathMlFormatter);
 
     crate::snap_test!(out, name: "subsup_subsup");
 }
@@ -28,7 +28,7 @@ fn subsup_integral() {
         Ident::from("dx"),
     ])
     .with_attr([MathMlAttr::Display(String::from("block"))])
-    .render(&mut MathMlFormatter);
+    .render_with(&mut MathMlFormatter);
 
     crate::snap_test!(out, name: "subsup_integral");
 }
@@ -47,7 +47,7 @@ fn subsup_summation() {
             .build()
     ])
     .with_attr([MathMlAttr::Display(String::from("block"))])
-    .render(&mut MathMlFormatter);
+    .render_with(&mut MathMlFormatter);
 
     crate::snap_test!(out, name: "subsup_summation");
 }
@@ -61,7 +61,7 @@ fn underover() {
             .expr(Ident::from("x"))
             .build(),
     )
-    .render(&mut MathMlFormatter);
+    .render_with(&mut MathMlFormatter);
 
     crate::snap_test!(out, name: "underover_underover");
 }
@@ -78,7 +78,7 @@ fn underover_integral() {
         Ident::from("dx"),
     ])
     .with_attr([MathMlAttr::Display(String::from("block"))])
-    .render(&mut MathMlFormatter);
+    .render_with(&mut MathMlFormatter);
 
     crate::snap_test!(out, name: "underover_integral");
 }
@@ -97,7 +97,7 @@ fn underover_summation() {
             .build()
     ])
     .with_attr([MathMlAttr::Display(String::from("block"))])
-    .render(&mut MathMlFormatter);
+    .render_with(&mut MathMlFormatter);
 
     crate::snap_test!(out, name: "underover_summation");
 }
@@ -117,7 +117,7 @@ fn under_brace() {
                 .build()
         )
         .build()])
-    .render(&mut MathMlFormatter);
+    .render_with(&mut MathMlFormatter);
 
     crate::snap_test!(out, name: "underover_under_brace");
 }
@@ -137,7 +137,7 @@ fn over_brace() {
                 .build()
         )
         .build()])
-    .render(&mut MathMlFormatter);
+    .render_with(&mut MathMlFormatter);
 
     crate::snap_test!(out, name: "underover_over_brace");
 }

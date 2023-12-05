@@ -11,7 +11,7 @@ fn frac() {
             .denom(Ident::from("y"))
             .build(),
     )
-    .render(&mut MathMlFormatter);
+    .render_with(&mut MathMlFormatter);
 
     crate::snap_test!(out, name: "others_frac");
 }

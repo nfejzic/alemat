@@ -22,7 +22,7 @@ fn padded() {
             PaddedAttr::Global(Attribute::Style("background: lightblue;".into())),
         ]),
     )
-    .render(&mut MathMlFormatter);
+    .render_with(&mut MathMlFormatter);
 
     crate::snap_test!(out, name: "others_padded");
 }

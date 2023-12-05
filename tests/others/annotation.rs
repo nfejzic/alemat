@@ -11,7 +11,7 @@ fn annotation() {
             .content(String::from("This is an annotation"))
             .build(),
     )
-    .render(&mut MathMlFormatter);
+    .render_with(&mut MathMlFormatter);
 
     crate::snap_test!(out, name: "others_annotation");
 }
@@ -27,7 +27,7 @@ fn annotation_xml() {
             ])
             .build(),
     )
-    .render(&mut MathMlFormatter);
+    .render_with(&mut MathMlFormatter);
 
     crate::snap_test!(out, name: "others_annotation_xml");
 }

@@ -21,7 +21,7 @@ fn matrix() {
             Operator::rparens(),
         ]
     ])
-    .render(&mut MathMlFormatter);
+    .render_with(&mut MathMlFormatter);
 
     crate::snap_test!(out, name: "others_table_matrix");
 }
@@ -49,7 +49,7 @@ fn matrix_augmented() {
             Operator::rparens(),
         ]
     ])
-    .render(&mut MathMlFormatter);
+    .render_with(&mut MathMlFormatter);
 
     crate::snap_test!(out, name: "others_table_matrix_augmented");
 }
@@ -72,7 +72,7 @@ fn matrix_square() {
             Operator::rbracket(),
         ]
     ])
-    .render(&mut MathMlFormatter);
+    .render_with(&mut MathMlFormatter);
 
     crate::snap_test!(out, name: "others_table_matrix_square");
 }
