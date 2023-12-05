@@ -1,6 +1,7 @@
 //! Library for type-safe building of MathML.
 
 pub mod attributes;
+mod buf_writer;
 mod default_renderer;
 pub mod elements;
 pub mod markers;
