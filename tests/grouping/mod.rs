@@ -34,7 +34,7 @@ fn merror() {
     )
     .render();
 
-    crate::snap_test!(output, name: "grouping_action");
+    crate::snap_test!(output, name: "grouping_error");
 }
 
 #[test]
