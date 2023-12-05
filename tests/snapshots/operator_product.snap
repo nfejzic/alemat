@@ -1,5 +1,10 @@
 ---
 source: tests/others/mo.rs
-expression: out
+expression: input
 ---
-<math><mo>∏</mo></math>
+<math>
+  <mo>
+    ∏
+  </mo>
+</math>
+

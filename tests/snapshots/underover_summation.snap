@@ -1,5 +1,34 @@
 ---
 source: tests/scripted/mod.rs
-expression: out
+expression: input
 ---
-<math display="block"><munderover ><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>0</mn></mrow><mi>k</mi></munderover><msup><mn>2</mn><mi>i</mi></msup></math>
+<math display="block">
+  <munderover>
+    <mo>
+      ∑
+    </mo>
+    <mrow>
+      <mi>
+        i
+      </mi>
+      <mo>
+        =
+      </mo>
+      <mn>
+        0
+      </mn>
+    </mrow>
+    <mi>
+      k
+    </mi>
+  </munderover>
+  <msup>
+    <mn>
+      2
+    </mn>
+    <mi>
+      i
+    </mi>
+  </msup>
+</math>
+

@@ -8,8 +8,6 @@ use alemat::{
     row, MathMl,
 };
 
-use crate::snap_test;
-
 #[test]
 fn action() {
     let output = MathMl::with_content(
@@ -20,7 +18,7 @@ fn action() {
     )
     .render();
 
-    snap_test!(output, name: "grouping_action");
+    crate::snap_test!(output, name: "grouping_action");
 }
 
 #[test]
@@ -36,7 +34,7 @@ fn merror() {
     )
     .render();
 
-    snap_test!(output, name: "grouping_merror");
+    crate::snap_test!(output, name: "grouping_action");
 }
 
 #[test]
@@ -58,7 +56,7 @@ fn mmultiscripts() {
             .build(),
     )
     .render();
-    snap_test!(output, name: "grouping_mmultiscripts");
+    crate::snap_test!(output, name: "grouping_mmultiscripts");
 }
 
 #[test]
@@ -85,7 +83,7 @@ fn mphantom() {
     )
     .render();
 
-    snap_test!(output, name: "grouping_mphantom");
+    crate::snap_test!(output, name: "grouping_mphantom");
 }
 
 #[test]
@@ -93,7 +91,7 @@ fn mrow() {
     let output =
         MathMl::with_content(row![Ident::from("x"), Operator::from("+"), Num::from(42)]).render();
 
-    snap_test!(output, name: "grouping_row");
+    crate::snap_test!(output, name: "grouping_row");
 }
 
 #[test]
@@ -107,5 +105,5 @@ fn mstyle() {
     )
     .render();
 
-    snap_test!(output, name: "grouping_mstyle");
+    crate::snap_test!(output, name: "grouping_mstyle");
 }

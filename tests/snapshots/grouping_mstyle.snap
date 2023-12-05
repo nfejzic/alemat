@@ -1,5 +1,17 @@
 ---
 source: tests/grouping/mod.rs
-expression: output
+expression: input
 ---
-<math><mstyle mathcolor="red"><msub><mi>x</mi><mi>i</mi></msub></mstyle></math>
+<math>
+  <mstyle mathcolor="red">
+    <msub>
+      <mi>
+        x
+      </mi>
+      <mi>
+        i
+      </mi>
+    </msub>
+  </mstyle>
+</math>
+

@@ -1,5 +1,18 @@
 ---
 source: tests/grouping/mod.rs
-expression: output
+expression: input
 ---
-<math><mrow><mi>x</mi><mo>+</mo><mn>42</mn></mrow></math>
+<math>
+  <mrow>
+    <mi>
+      x
+    </mi>
+    <mo>
+      +
+    </mo>
+    <mn>
+      42
+    </mn>
+  </mrow>
+</math>
+

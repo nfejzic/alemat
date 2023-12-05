@@ -1,5 +1,20 @@
 ---
 source: tests/grouping/mod.rs
-expression: output
+expression: input
 ---
-<math><maction id="action-id"><mi>x</mi></maction></math>
+<math>
+  <merror>
+    <mrow>
+      <mi>
+        x
+      </mi>
+      <mo>
+        +
+      </mo>
+      <mi>
+        y
+      </mi>
+    </mrow>
+  </merror>
+</math>
+

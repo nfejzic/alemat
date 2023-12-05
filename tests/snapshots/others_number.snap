@@ -1,5 +1,10 @@
 ---
 source: tests/others/mn.rs
-expression: out
+expression: input
 ---
-<math><mn>1</mn></math>
+<math>
+  <mn>
+    1
+  </mn>
+</math>
+

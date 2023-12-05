@@ -1,5 +1,28 @@
 ---
 source: tests/scripted/mod.rs
-expression: out
+expression: input
 ---
-<math><munder ><mrow><mn>1</mn><mo>+</mo><mn>2</mn></mrow><munder ><mo>⏟</mo><mtext>Some expression</mtext></munder></munder></math>
+<math>
+  <munder>
+    <mrow>
+      <mn>
+        1
+      </mn>
+      <mo>
+        +
+      </mo>
+      <mn>
+        2
+      </mn>
+    </mrow>
+    <munder>
+      <mo>
+        ⏟
+      </mo>
+      <mtext>
+        Some expression
+      </mtext>
+    </munder>
+  </munder>
+</math>
+

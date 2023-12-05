@@ -1,5 +1,10 @@
 ---
 source: tests/others/mi.rs
-expression: out
+expression: input
 ---
-<math><mi>Ψ</mi></math>
+<math>
+  <mi>
+    Ψ
+  </mi>
+</math>
+
