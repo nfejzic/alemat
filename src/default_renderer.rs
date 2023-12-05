@@ -6,7 +6,7 @@ use crate::{
         AnnotationAttr, AnnotationContent, FracAttr, Num, OperatorAttr, PaddedAttr, SpaceAttr,
         TableAttr, TableCellAttr,
     },
-    Element, MathMlAttr, MathMlRenderer,
+    Element, MathMlAttr, Render,
 };
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
@@ -21,7 +21,7 @@ impl MathMlFormatter {
     }
 }
 
-impl MathMlRenderer for MathMlFormatter {
+impl Render for MathMlFormatter {
     type Output = String;
 
     fn render_action(&mut self, action: &crate::elements::grouping::Action) -> Self::Output {

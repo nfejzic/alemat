@@ -69,7 +69,7 @@ impl MathMl {
         self.content.is_empty()
     }
 
-    pub fn render<R: MathMlRenderer>(&self, renderer: &mut R) -> R::Output {
+    pub fn render<R: Render>(&self, renderer: &mut R) -> R::Output {
         renderer.render_mathml(self)
     }
 }

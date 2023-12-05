@@ -9,7 +9,7 @@ use crate::{
     Element, MathMl,
 };
 
-pub trait MathMlRenderer {
+pub trait Render {
     type Output;
 
     fn render_action(&mut self, action: &Action) -> Self::Output {
