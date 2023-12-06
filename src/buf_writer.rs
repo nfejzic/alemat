@@ -9,7 +9,7 @@ use crate::{
         AnnotationAttr, AnnotationContent, FracAttr, Num, OperatorAttr, PaddedAttr, SpaceAttr,
         TableAttr, TableCellAttr,
     },
-    Element, MathMlAttr, Renderer, Writer,
+    Element, MathMlAttr, MathMlDisplay, Renderer, Writer,
 };
 
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
@@ -580,7 +580,13 @@ impl Writer for BufMathMlWriter {
             self.write_str(" ")?;
 
             match attr {
-                MathMlAttr::Display(d) => write!(self, r#"display="{d}""#)?,
+                MathMlAttr::Display(d) => {
+                    write!(self, r#"display=""#)?;
+                    match d {
+                        MathMlDisplay::Block => write!(self, r#"block""#)?,
+                        MathMlDisplay::Inline => write!(self, r#"inline""#)?,
+                    }
+                }
                 MathMlAttr::AltText(alt_t) => write!(self, r#"alttext="{alt_t}""#)?,
                 MathMlAttr::Global(a) => self.write_attr(a)?,
             }
