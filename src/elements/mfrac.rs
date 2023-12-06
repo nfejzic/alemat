@@ -34,18 +34,22 @@ pub struct Frac {
 }
 
 impl Frac {
+    /// Create the builder for [`Frac`] element.
     pub fn builder() -> FracBuilder<Uninit, Uninit> {
         FracBuilder::default()
     }
 
+    /// Get a reference to the content of the numerator.
     pub fn num(&self) -> &[Element] {
         &self.num
     }
 
+    /// Get a reference to the content of the denominator.
     pub fn denom(&self) -> &[Element] {
         &self.denom
     }
 
+    /// Get a reference to all attributes of the [`Frac`] element.
     pub fn attributes(&self) -> &[FracAttr] {
         &self.attributes
     }
@@ -127,6 +131,7 @@ impl<N, D> FracBuilder<N, D> {
 }
 
 impl FracBuilder<Init, Init> {
+    /// Build the [`Frac`] element.
     pub fn build(self) -> Frac {
         let num = self
             .num
