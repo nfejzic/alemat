@@ -1,3 +1,5 @@
+//! Global attributes of MathML elements.
+
 use std::fmt::Display;
 
 /// Direction for [`Attribute::Dir`].
@@ -15,6 +17,7 @@ pub enum ScriptLevel {
     Num(usize),
 }
 
+/// MathVariant for [`Attribute::MathVariant`].
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum MathVariant {
     Normal,
