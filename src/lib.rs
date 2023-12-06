@@ -120,6 +120,11 @@ impl MathMl {
         renderer.render_mathml(self)
     }
 
+    pub fn write<W: Writer>(&self, writer: &mut W) -> Result<W::Buffer, W::Error> {
+        writer.write_mathml(self)?;
+        Ok(writer.finish())
+    }
+
     /// Render this `math` element and its children using the default renderer.
     ///
     /// In this implementation, [`BufMathMlWriter`] is used.

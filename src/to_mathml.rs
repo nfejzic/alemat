@@ -353,6 +353,9 @@ pub trait Writer {
     where
         Self::Buffer: Borrow<T>;
 
+    /// Produce a rendered representation of the [`MathMl`] content written into the [`Writer`].
+    fn finish(&mut self) -> Self::Buffer;
+
     /// Consume the [`Writer`] and return the inner buffer.
     fn into_inner(self) -> Self::Buffer;
 }

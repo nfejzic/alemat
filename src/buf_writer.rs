@@ -606,6 +606,10 @@ impl Writer for BufMathMlWriter {
     fn into_inner(self) -> Self::Buffer {
         self.buf
     }
+
+    fn finish(&mut self) -> Self::Buffer {
+        std::mem::take(&mut self.buf)
+    }
 }
 
 impl Renderer for BufMathMlWriter {
