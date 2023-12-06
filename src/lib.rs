@@ -7,8 +7,8 @@ pub mod elements;
 pub mod markers;
 mod to_mathml;
 
-use attributes::Attribute;
-use buf_writer::BufMathMlWriter;
+pub use attributes::Attribute;
+pub use buf_writer::BufMathMlWriter;
 pub use default_renderer::MathMlFormatter;
 pub(crate) use elements::element_from_type;
 use elements::IntoElements;
