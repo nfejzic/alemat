@@ -9,12 +9,26 @@ use super::IntoElements;
 /// valid [`<length-percentage>`](https://www.w3.org/TR/css-values-4/#typedef-length-percentage).
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum PaddedAttr {
+    /// A `<length-percentage>` indicating the desired horizontal length of the `mpadded` element.
     Width(String),
+
+    /// A `<length-percentage>` indicating the desired height (above the baseline) of the `mpadded`
+    /// element.
     Height(String),
+
+    /// A `<length-percentage>` indicating the desired depth (below the baseline) of the `mpadded`
+    /// element.
     Depth(String),
+
+    /// A `<length-percentage>` indicating the horizontal location of the positioning point of the
+    /// child content with respect to the positioning point of the `mpadded` element.
     LeftSpace(String),
+
+    /// A `<length-percentage>` indicating the vertical location of the positioning point of the
+    /// child content with respect to the positioning point of the `mpadded` element.
     VerticalOffset(String),
 
+    /// One of the global [`Attribute`]s.
     Global(Attribute),
 }
 
@@ -54,6 +68,7 @@ where
 }
 
 impl Padded {
+    /// Add attributes.
     pub fn add_attr<I, A>(&mut self, attr: I)
     where
         I: IntoIterator<Item = A>,
@@ -62,6 +77,7 @@ impl Padded {
         self.attributes.extend(attr.into_iter().map(Into::into));
     }
 
+    /// Create new instance of [`Padded`] with additional attributes.
     pub fn with_attr<I, A>(mut self, attr: I) -> Self
     where
         I: IntoIterator<Item = A>,
@@ -71,10 +87,12 @@ impl Padded {
         self
     }
 
+    /// Get a reference to the children of the [`Padded`] element.
     pub fn children(&self) -> &[Element] {
         &self.children
     }
 
+    /// Get a reference to all attributes of the [`Padded`] element.
     pub fn attributes(&self) -> &[PaddedAttr] {
         &self.attributes
     }
