@@ -7,10 +7,14 @@ use crate::{
     markers::{Init, Uninit},
 };
 
+/// The possible values for `form` attribute of `mo` element.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum OpForm {
+    /// `infix` form. Default for operators like `Operator::plus()`.
     Infix,
+    /// `prefix` form. Default for operators like `Operator::lparens()`.
     Prefix,
+    /// `postfix` form. Default for operators like `Operator::rparens()`.
     Postfix,
 }
 
@@ -108,14 +112,17 @@ where
 }
 
 impl Operator {
+    /// Create a builder for [`Operator`] element.
     pub fn builder() -> OperatorBuilder<Uninit> {
         OperatorBuilder::default()
     }
 
+    /// Get a reference to the inner content of the [`Operator`] element.
     pub fn op(&self) -> &str {
         &self.op
     }
 
+    /// Get a reference to all attributes of the [`Operator`] element.
     pub fn attributes(&self) -> &[OperatorAttr] {
         &self.attributes
     }
@@ -123,6 +130,7 @@ impl Operator {
 
 crate::element_from_type!(Operator => Operator);
 
+/// Builder of the [`Operator`] element.
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct OperatorBuilder<T> {
     op: Option<String>,
@@ -131,6 +139,7 @@ pub struct OperatorBuilder<T> {
 }
 
 impl<T> OperatorBuilder<T> {
+    /// Set the operator string for the [`Operator`] element.
     pub fn op(self, op: impl Into<String>) -> OperatorBuilder<Init> {
         OperatorBuilder {
             op: Some(op.into()),
@@ -139,6 +148,7 @@ impl<T> OperatorBuilder<T> {
         }
     }
 
+    /// Add a attributes to this [`Operator`] element.
     pub fn attr<I, A>(mut self, attr: I) -> Self
     where
         I: IntoIterator<Item = A>,
@@ -150,6 +160,7 @@ impl<T> OperatorBuilder<T> {
 }
 
 impl OperatorBuilder<Init> {
+    /// Build the [`Operator`] element.
     pub fn build(self) -> Operator {
         Operator {
             op: self.op.expect("Op is guaranteed to be init."),
