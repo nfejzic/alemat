@@ -1,3 +1,4 @@
+#![warn(missing_docs)]
 //! Library for type-safe building of MathML (core) markup.
 
 pub mod attributes;
