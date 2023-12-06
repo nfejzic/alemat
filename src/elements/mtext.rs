@@ -24,6 +24,7 @@ where
 }
 
 impl Text {
+    /// Add attributes.
     pub fn add_attr<I, A>(&mut self, attr: I)
     where
         I: IntoIterator<Item = A>,
@@ -32,6 +33,7 @@ impl Text {
         self.attr.extend(attr.into_iter().map(Into::into));
     }
 
+    /// Create a new instance of [`Text`] with additional attributes.
     pub fn with_attr<I, A>(mut self, attr: I) -> Self
     where
         I: IntoIterator<Item = A>,
@@ -41,10 +43,12 @@ impl Text {
         self
     }
 
+    /// Get a reference to the text content of the [`Text`] element.
     pub fn text(&self) -> &str {
         &self.text
     }
 
+    /// Get a reference to all attributes of the [`Text`] element.
     pub fn attributes(&self) -> &[Attribute] {
         &self.attr
     }
