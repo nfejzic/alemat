@@ -27,10 +27,12 @@ pub struct SubSup {
 crate::element_from_type!(SubSup => SubSup);
 
 impl SubSup {
+    /// Create a builder for [`SubSup`] element.
     pub fn builder() -> SubSupBuilder<Uninit, Uninit> {
         SubSupBuilder::default()
     }
 
+    /// Get a reference to the subscript content of the [`SubSup`] element if present.
     pub fn sub(&self) -> Option<&[Element]> {
         match self.inner {
             SubSupInner::Sub(ref sub) | SubSupInner::SubSup { ref sub, .. } => Some(sub),
@@ -38,6 +40,7 @@ impl SubSup {
         }
     }
 
+    /// Get a reference to the superscript content of the [`SubSup`] element if present.
     pub fn sup(&self) -> Option<&[Element]> {
         match self.inner {
             SubSupInner::Sup(ref sup) | SubSupInner::SubSup { ref sup, .. } => Some(sup),
@@ -45,15 +48,18 @@ impl SubSup {
         }
     }
 
+    /// Get a reference to the base content of the [`SubSup`] element.
     pub fn base(&self) -> &[Element] {
         &self.base
     }
 
+    /// Get a reference to all attributes of the [`SubSup`] element.
     pub fn attributes(&self) -> &[Attribute] {
         &self.attributes
     }
 }
 
+/// Builder of the [`SubSup`] element.
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct SubSupBuilder<T1, T2> {
     base: Option<Elements>,
@@ -64,6 +70,7 @@ pub struct SubSupBuilder<T1, T2> {
 }
 
 impl<T1, T2> SubSupBuilder<T1, T2> {
+    /// Set the base of the [`SubSup`] element.
     pub fn base(self, base: impl IntoElements) -> SubSupBuilder<Init, T2> {
         SubSupBuilder {
             base: Some(base.into_elements()),
@@ -74,6 +81,7 @@ impl<T1, T2> SubSupBuilder<T1, T2> {
         }
     }
 
+    /// Set the subscript of the [`SubSup`] element.
     pub fn subscript(self, sub: impl IntoElements) -> SubSupBuilder<T1, Init> {
         SubSupBuilder {
             base: self.base,
@@ -84,6 +92,7 @@ impl<T1, T2> SubSupBuilder<T1, T2> {
         }
     }
 
+    /// Set the superscript of the [`SubSup`] element.
     pub fn supscript(self, sup: impl IntoElements) -> SubSupBuilder<T1, Init> {
         SubSupBuilder {
             base: self.base,
@@ -94,6 +103,7 @@ impl<T1, T2> SubSupBuilder<T1, T2> {
         }
     }
 
+    /// Add attributes.
     pub fn attr<I, A>(mut self, attr: I) -> Self
     where
         I: IntoIterator<Item = A>,
@@ -105,6 +115,7 @@ impl<T1, T2> SubSupBuilder<T1, T2> {
 }
 
 impl SubSupBuilder<Init, Init> {
+    /// Build the [`SubSup`] element.
     pub fn build(self) -> SubSup {
         debug_assert!(
             self.sub.is_some() || self.sup.is_some(),
