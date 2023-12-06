@@ -12,6 +12,7 @@ use crate::{
     Element, MathMlAttr, MathMlDisplay, Renderer, Writer,
 };
 
+/// Default implementation of MathMl [`Writer`].
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct BufMathMlWriter {
     buf: String,
