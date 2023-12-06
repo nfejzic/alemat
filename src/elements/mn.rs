@@ -22,6 +22,7 @@ crate::from_types!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isiz
             |val| Num { num: format!("{}", val), attributes: Default::default() });
 
 impl Num {
+    /// Add attributes to this instance of [`Num`].
     pub fn add_attr<I, A>(&mut self, attr: I)
     where
         I: IntoIterator<Item = A>,
@@ -30,6 +31,7 @@ impl Num {
         self.attributes.extend(attr.into_iter().map(Into::into));
     }
 
+    /// Create new instance of [`Num`] with additional attributes.
     pub fn with_attr<I, A>(mut self, attr: I) -> Self
     where
         I: IntoIterator<Item = A>,
@@ -39,10 +41,12 @@ impl Num {
         self
     }
 
+    /// Get a reference to the inner content of the [`Num`] element.
     pub fn num(&self) -> &str {
         &self.num
     }
 
+    /// Get a reference to all attributes of the [`Num`] element.
     pub fn attributes(&self) -> &[Attribute] {
         &self.attributes
     }
