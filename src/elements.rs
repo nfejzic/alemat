@@ -2,7 +2,6 @@
 //! elements.
 
 mod maction;
-mod math;
 mod merror;
 mod mmultiscripts;
 mod mphantom;
@@ -13,7 +12,6 @@ mod mstyle;
 /// `mstyle`, `semantics` and unknown MathML elements.
 pub mod grouping {
     pub use super::maction::*;
-    pub use super::math::*;
     pub use super::merror::*;
     pub use super::mmultiscripts::Prescripts;
     pub use super::mphantom::*;
