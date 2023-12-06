@@ -11,6 +11,7 @@ use crate::{
     Element, MathMlAttr, MathMlDisplay, Renderer,
 };
 
+/// Default MathMl [`Renderer`] implementation.
 #[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct MathMlFormatter;
 
