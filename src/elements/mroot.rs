@@ -36,22 +36,27 @@ pub struct Radical {
 }
 
 impl Radical {
+    /// Create a builder for the [`Radical`] element.
     pub fn builder() -> RadicalsBuilder<Uninit, Uninit> {
         RadicalsBuilder::default()
     }
 
+    /// Get a reference to the index of the radical. e.g. "2" for the square root.
     pub fn index(&self) -> &str {
         &self.index
     }
 
+    /// Check if the radical is a square root.
     pub fn is_square(&self) -> bool {
         self.index.parse::<u8>().map_or(false, |num| num == 2)
     }
 
+    /// Get a reference to the inner content of the [`Radical`] element.
     pub fn content(&self) -> &[Element] {
         &self.content
     }
 
+    /// Get a reference to all attributes of the [`Radical`] element.
     pub fn attributes(&self) -> &[Attribute] {
         &self.attributes
     }
@@ -59,6 +64,7 @@ impl Radical {
 
 crate::element_from_type!(Radical => Radical);
 
+/// Builder of the [`Radical`] element.
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct RadicalsBuilder<T1, T2> {
     index: Option<String>,
@@ -69,6 +75,7 @@ pub struct RadicalsBuilder<T1, T2> {
 }
 
 impl<T1, T2> RadicalsBuilder<T1, T2> {
+    /// Set the index of the radical. e.g. "2" for the square root.
     pub fn index(self, index: impl Into<String>) -> RadicalsBuilder<Init, T2> {
         RadicalsBuilder {
             index: Some(index.into()),
@@ -99,6 +106,7 @@ impl<T1, T2> RadicalsBuilder<T1, T2> {
         }
     }
 
+    /// Add attributes.
     pub fn attr<I, A>(mut self, attr: I) -> Self
     where
         I: IntoIterator<Item = A>,
@@ -110,6 +118,7 @@ impl<T1, T2> RadicalsBuilder<T1, T2> {
 }
 
 impl RadicalsBuilder<Init, Init> {
+    /// Build the [`Radical`] element.
     pub fn build(self) -> Radical {
         let mut radical = Radical {
             index: self.index.expect("Index is guaranteed to be init."),
