@@ -1,0 +1,18 @@
+---
+source: tests/others/annotation.rs
+expression: input
+---
+<math>
+  <annotation-xml>
+    <mi>
+      x
+    </mi>
+    <mo>
+      +
+    </mo>
+    <mi>
+      y
+    </mi>
+  </annotation-xml>
+</math>
+

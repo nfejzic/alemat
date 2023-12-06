@@ -1,4 +1,4 @@
-use crate::{attributes::Attribute, MathMl, Tag};
+use crate::attributes::Attribute;
 
 /// The `mn` element represents a "numeric literal" or other data that should be rendered as a
 /// numeric literal. Generally speaking, a numeric literal is a sequence of digits, perhaps
@@ -21,17 +21,6 @@ impl<'a> From<&'a str> for Num {
 crate::from_types!(u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize => Num;
             |val| Num { num: format!("{}", val), attributes: Default::default() });
 
-impl<T> From<T> for MathMl
-where
-    T: Into<Num>,
-{
-    fn from(value: T) -> Self {
-        Self {
-            content: vec![Tag::Num(value.into())],
-        }
-    }
-}
-
 impl Num {
     pub fn add_attr<I, A>(&mut self, attr: I)
     where
@@ -40,6 +29,23 @@ impl Num {
     {
         self.attributes.extend(attr.into_iter().map(Into::into));
     }
+
+    pub fn with_attr<I, A>(mut self, attr: I) -> Self
+    where
+        I: IntoIterator<Item = A>,
+        A: Into<Attribute>,
+    {
+        self.attributes.extend(attr.into_iter().map(Into::into));
+        self
+    }
+
+    pub fn num(&self) -> &str {
+        &self.num
+    }
+
+    pub fn attributes(&self) -> &[Attribute] {
+        &self.attributes
+    }
 }
 
-crate::tag_from_type!(Num => Num);
+crate::element_from_type!(Num => Num);

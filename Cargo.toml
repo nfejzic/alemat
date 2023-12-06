@@ -9,7 +9,8 @@ license = "Apache-2.0"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-[lints.clippy]
-nursery = "warn"
-
 [dependencies]
+
+[dev-dependencies]
+insta = "1.34.0"
+xmlem = "0.2.3"

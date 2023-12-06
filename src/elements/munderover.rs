@@ -2,9 +2,12 @@ use std::marker::PhantomData;
 
 use crate::{
     attributes::Attribute,
+    elements::grouping::Row,
     markers::{Init, Uninit},
-    MathMl,
+    Element, Elements,
 };
+
+use super::IntoElements;
 
 /// The `munderover` element accepts global attributes as well as `accent` and `accentunder`.
 ///
@@ -20,13 +23,19 @@ pub enum UnderOverAttr {
     Global(Attribute),
 }
 
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
+enum UnderOverInner {
+    Under(Elements),
+    Over(Elements),
+    UnderOver { under: Elements, over: Elements },
+}
+
 /// The munder, mover and munderover elements are used to attach accents or limits placed under or
 /// over a MathML expression.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct UnderOver {
-    expr: MathMl,
-    over: Option<MathMl>,
-    under: Option<MathMl>,
+    expr: Elements,
+    inner: UnderOverInner,
     attributes: Vec<UnderOverAttr>,
 }
 
@@ -34,24 +43,50 @@ impl UnderOver {
     pub fn builder() -> UnderOverBuilder<Uninit, Uninit> {
         UnderOverBuilder::default()
     }
+
+    pub fn expr(&self) -> &[Element] {
+        &self.expr
+    }
+
+    pub fn under(&self) -> Option<&[Element]> {
+        match self.inner {
+            UnderOverInner::Under(ref under) | UnderOverInner::UnderOver { ref under, .. } => {
+                Some(under)
+            }
+            _ => None,
+        }
+    }
+
+    pub fn over(&self) -> Option<&[Element]> {
+        match self.inner {
+            UnderOverInner::Over(ref over) | UnderOverInner::UnderOver { ref over, .. } => {
+                Some(over)
+            }
+            _ => None,
+        }
+    }
+
+    pub fn attributes(&self) -> &[UnderOverAttr] {
+        &self.attributes
+    }
 }
 
-crate::tag_from_type!(UnderOver => UnderOver);
+crate::element_from_type!(UnderOver => UnderOver);
 
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct UnderOverBuilder<T1, T2> {
-    expr: Option<MathMl>,
-    under: Option<MathMl>,
-    over: Option<MathMl>,
+    expr: Option<Elements>,
+    under: Option<Elements>,
+    over: Option<Elements>,
     attr: Vec<UnderOverAttr>,
 
     _marker: PhantomData<(T1, T2)>,
 }
 
 impl<T1, T2> UnderOverBuilder<T1, T2> {
-    pub fn expr(self, expr: impl Into<MathMl>) -> UnderOverBuilder<Init, T2> {
+    pub fn expr(self, expr: impl IntoElements) -> UnderOverBuilder<Init, T2> {
         UnderOverBuilder {
-            expr: Some(expr.into()),
+            expr: Some(expr.into_elements()),
             under: self.under,
             over: self.over,
             attr: self.attr,
@@ -60,20 +95,20 @@ impl<T1, T2> UnderOverBuilder<T1, T2> {
         }
     }
 
-    pub fn over(self, over: impl Into<MathMl>) -> UnderOverBuilder<T1, Init> {
+    pub fn over(self, over: impl IntoElements) -> UnderOverBuilder<T1, Init> {
         UnderOverBuilder {
             expr: self.expr,
             under: self.under,
-            over: Some(over.into()),
+            over: Some(over.into_elements()),
             attr: self.attr,
             _marker: PhantomData,
         }
     }
 
-    pub fn under(self, under: impl Into<MathMl>) -> UnderOverBuilder<T1, Init> {
+    pub fn under(self, under: impl IntoElements) -> UnderOverBuilder<T1, Init> {
         UnderOverBuilder {
             expr: self.expr,
-            under: Some(under.into()),
+            under: Some(under.into_elements()),
             over: self.over,
             attr: self.attr,
             _marker: PhantomData,
@@ -97,10 +132,25 @@ impl UnderOverBuilder<Init, Init> {
             "At least one of 'over' or 'under' must be initialized."
         );
 
+        let inner = match (self.under, self.over) {
+            (None, Some(over)) => UnderOverInner::Over(over),
+            (Some(under), None) => UnderOverInner::Under(under),
+            (Some(under), Some(over)) => UnderOverInner::UnderOver { under, over },
+
+            (None, None) => {
+                unreachable!("T2 set to Init guarantees that at least sub or sup are initialized.")
+            }
+        };
+
+        let mut expr = self.expr.expect("Expr is guaranteed to be init.");
+
+        if expr.len() > 1 {
+            expr = Row::from(expr).into_elements();
+        }
+
         UnderOver {
-            expr: self.expr.expect("Expr is guaranteed to be init."),
-            over: self.over,
-            under: self.under,
+            expr,
+            inner,
             attributes: self.attr,
         }
     }

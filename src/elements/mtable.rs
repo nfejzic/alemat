@@ -1,5 +1,6 @@
-use crate::{attributes::Attribute, MathMl};
+use crate::{attributes::Attribute, Element, Elements};
 
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum ColumnLine {
     /// No line is drawn.
     None,
@@ -11,8 +12,19 @@ pub enum ColumnLine {
     Dashed,
 }
 
+impl AsRef<str> for ColumnLine {
+    fn as_ref(&self) -> &str {
+        match self {
+            ColumnLine::None => "none",
+            ColumnLine::Solid => "solid",
+            ColumnLine::Dashed => "dashed",
+        }
+    }
+}
+
 /// The `mtable` accepts the global [`Attribute`]s as well as `columnlines` that can be used to
 /// render augmented matrix.
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum TableAttr {
     /// The `columnlines` attribute is a space-separated list of values, one for each column.
     ColumnLines(Vec<ColumnLine>),
@@ -29,10 +41,46 @@ pub enum TableAttr {
 pub struct Table {
     rows: Vec<TableRow>,
     /// The `mtable` accepts the global [`Attribute`]s.
-    attributes: Vec<Attribute>,
+    attributes: Vec<TableAttr>,
 }
 
-crate::tag_from_type!(Table => Table);
+impl Table {
+    pub fn rows(&self) -> &[TableRow] {
+        &self.rows
+    }
+
+    pub fn add_row(&mut self, row: TableRow) {
+        self.rows.push(row);
+    }
+
+    pub fn add_rows<I, R>(&mut self, rows: I)
+    where
+        I: IntoIterator<Item = R>,
+        R: Into<TableRow>,
+    {
+        self.rows.extend(rows.into_iter().map(Into::into));
+    }
+
+    pub fn with_row(mut self, row: TableRow) -> Self {
+        self.rows.push(row);
+        self
+    }
+
+    pub fn with_rows<I, R>(mut self, rows: I) -> Self
+    where
+        I: IntoIterator<Item = R>,
+        R: Into<TableRow>,
+    {
+        self.rows.extend(rows.into_iter().map(Into::into));
+        self
+    }
+
+    pub fn attributes(&self) -> &[TableAttr] {
+        &self.attributes
+    }
+}
+
+crate::element_from_type!(Table => Table);
 
 impl<R> FromIterator<R> for Table
 where
@@ -60,9 +108,18 @@ impl Table {
     pub fn add_attr<I, A>(&mut self, attr: I)
     where
         I: IntoIterator<Item = A>,
-        A: Into<Attribute>,
+        A: Into<TableAttr>,
     {
         self.attributes.extend(attr.into_iter().map(Into::into));
+    }
+
+    pub fn with_attr<I, A>(mut self, attr: I) -> Self
+    where
+        I: IntoIterator<Item = A>,
+        A: Into<TableAttr>,
+    {
+        self.attributes.extend(attr.into_iter().map(Into::into));
+        self
     }
 }
 
@@ -81,10 +138,10 @@ impl Table {
 /// ```
 #[macro_export]
 macro_rules! table {
-    ($([$($cell:expr),*]),*) => {
+    ($([$($cell:expr),* $(,)?]),* $(,)?) => {
         $crate::elements::Table::from([
             $(
-            $crate::row![$($cell),*],
+            $crate::table_row![$($cell),*],
             )*
         ])
     }
@@ -126,6 +183,40 @@ impl TableRow {
     {
         self.attr.extend(attr.into_iter().map(Into::into));
     }
+
+    pub fn add_cell(&mut self, cell: TableCell) {
+        self.cells.push(cell);
+    }
+
+    pub fn add_cells<I, C>(&mut self, cells: I)
+    where
+        I: IntoIterator<Item = C>,
+        C: Into<TableCell>,
+    {
+        self.cells.extend(cells.into_iter().map(Into::into));
+    }
+
+    pub fn with_cell(mut self, cell: TableCell) -> Self {
+        self.cells.push(cell);
+        self
+    }
+
+    pub fn with_cells<I, C>(mut self, cells: I) -> Self
+    where
+        I: IntoIterator<Item = C>,
+        C: Into<TableCell>,
+    {
+        self.cells.extend(cells.into_iter().map(Into::into));
+        self
+    }
+
+    pub fn cells(&self) -> &[TableCell] {
+        &self.cells
+    }
+
+    pub fn attributes(&self) -> &[Attribute] {
+        &self.attr
+    }
 }
 
 impl<I, C> From<I> for TableRow
@@ -134,10 +225,7 @@ where
     C: Into<TableCell>,
 {
     fn from(value: I) -> Self {
-        Self {
-            cells: value.into_iter().map(Into::into).collect(),
-            attr: Default::default(),
-        }
+        value.into_iter().collect()
     }
 }
 
@@ -146,25 +234,27 @@ where
 /// # Example:
 ///
 /// ```rust
-/// use alemat::row;
+/// use alemat::table_row;
 /// use alemat::elements::{Ident, Num};
-/// let row = row![Ident::from("x"), Num::from(42)];
+/// let row = table_row![Ident::from("x"), Num::from(42)];
 ///
 /// // create a table
 /// use alemat::elements::Table;
 /// let table = Table::from([
-///     row![Ident::from("x"), Num::from(42)],
-///     row![Ident::from("y"), Num::from(43)],
+///     table_row![Ident::from("x"), Num::from(42)],
+///     table_row![Ident::from("y"), Num::from(43)],
 /// ]);
 /// ```
 #[macro_export]
-macro_rules! row {
+macro_rules! table_row {
     ($($cell:expr),* $(,)?) => {
          [$($crate::elements::TableCell::from($cell)),*]
     }
 }
 
-pub use row;
+pub use table_row;
+
+use super::IntoElements;
 
 /// The `mtd` accepts the global [`Attribute`]s as well as `columnspan` and `rowspan`.
 ///
@@ -206,28 +296,70 @@ impl From<Attribute> for TableCellAttr {
 /// ```
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct TableCell {
-    children: MathMl,
+    children: Elements,
     attr: Vec<TableCellAttr>,
 }
 
 impl<T> From<T> for TableCell
 where
-    T: Into<MathMl>,
+    T: Into<Element>,
 {
     fn from(value: T) -> Self {
         Self {
-            children: value.into(),
+            children: Elements(vec![value.into()]),
+            attr: Vec::default(),
+        }
+    }
+}
+
+impl From<Elements> for TableCell {
+    fn from(children: Elements) -> Self {
+        Self {
+            children,
+            attr: Vec::default(),
+        }
+    }
+}
+
+impl<const N: usize, I: Into<Element>> From<[I; N]> for TableCell {
+    fn from(value: [I; N]) -> Self {
+        Self {
+            children: value.into_elements(),
             attr: Default::default(),
         }
     }
 }
 
 impl TableCell {
+    pub fn children(&self) -> &[Element] {
+        &self.children
+    }
+
+    pub fn attributes(&self) -> &[TableCellAttr] {
+        &self.attr
+    }
+
+    pub fn with_content(content: impl IntoElements) -> Self {
+        Self {
+            children: content.into_elements(),
+            attr: Default::default(),
+        }
+    }
+
     pub fn add_attr<I, A>(&mut self, attr: I)
     where
         I: IntoIterator<Item = A>,
         A: Into<TableCellAttr>,
     {
         self.attr.extend(attr.into_iter().map(Into::into));
+    }
+
+    pub fn with_attr<I, A>(mut self, attr: I) -> Self
+    where
+        I: IntoIterator<Item = A>,
+        A: Into<TableCellAttr>,
+    {
+        self.attr.extend(attr.into_iter().map(Into::into));
+        self
     }
 }

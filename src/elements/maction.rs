@@ -3,8 +3,10 @@ use std::marker::PhantomData;
 use crate::{
     attributes::Attribute,
     markers::{Init, Uninit},
-    MathMl,
+    Element, Elements,
 };
+
+use super::IntoElements;
 
 /// The `maction` element accepts the global [`Attribute`]s as well as `selection` and
 /// `actiontype`.
@@ -13,6 +15,7 @@ use crate::{
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum ActionAttr {
     Global(Attribute),
+
     /// The child element currently visible, only taken into account for `actiontype="toggle"` or
     /// non-standard actiontype values. The default value is `1`, which is the first child element.
     Selection(String),
@@ -42,50 +45,56 @@ pub enum ActionAttr {
 /// Historically, the `maction` element provides a mechanism for binding actions to expressions.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Action {
-    content: MathMl,
+    content: Elements,
     attributes: Vec<ActionAttr>,
+}
+
+impl From<Elements> for Action {
+    fn from(value: Elements) -> Self {
+        Self {
+            content: value,
+            attributes: Default::default(),
+        }
+    }
 }
 
 impl Action {
     /// Create new `maction` element.
-    pub fn with_mathml(math: impl Into<MathMl>) -> Self {
+    pub fn with_mathml(math: impl IntoElements) -> Self {
         Self {
-            content: math.into(),
+            content: math.into_elements(),
             attributes: Default::default(),
         }
     }
 
+    /// Create a builder for [`Action`] element.
     pub fn builder() -> ActionBuilder<Uninit> {
         ActionBuilder::default()
     }
-}
 
-impl<T> From<T> for Action
-where
-    T: Into<MathMl>,
-{
-    fn from(value: T) -> Self {
-        Self {
-            content: value.into(),
-            attributes: Default::default(),
-        }
+    pub fn content(&self) -> &[Element] {
+        &self.content
+    }
+
+    pub fn attributes(&self) -> &[ActionAttr] {
+        &self.attributes
     }
 }
 
-crate::tag_from_type!(Action => Action);
+crate::element_from_type!(Action => Action);
 
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct ActionBuilder<T> {
-    content: Option<MathMl>,
+    content: Option<Elements>,
     attributes: Vec<ActionAttr>,
 
     _marker: PhantomData<(T,)>,
 }
 
 impl<T> ActionBuilder<T> {
-    pub fn content(self, content: impl Into<MathMl>) -> ActionBuilder<Init> {
+    pub fn content(self, content: impl IntoElements) -> ActionBuilder<Init> {
         ActionBuilder {
-            content: Some(content.into()),
+            content: Some(content.into_elements()),
             attributes: self.attributes,
             _marker: PhantomData,
         }

@@ -1,0 +1,10 @@
+---
+source: tests/others/mtext.rs
+expression: input
+---
+<math>
+  <mtext>
+    Hello world
+  </mtext>
+</math>
+

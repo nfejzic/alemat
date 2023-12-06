@@ -1,0 +1,18 @@
+---
+source: tests/scripted/mod.rs
+expression: input
+---
+<math>
+  <munderover>
+    <mi>
+      x
+    </mi>
+    <mi>
+      0
+    </mi>
+    <mi>
+      1
+    </mi>
+  </munderover>
+</math>
+

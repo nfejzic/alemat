@@ -1,0 +1,10 @@
+---
+source: tests/others/ms.rs
+expression: input
+---
+<math>
+  <ms>
+    Hello there
+  </ms>
+</math>
+

@@ -3,24 +3,33 @@ use std::marker::PhantomData;
 use crate::{
     attributes::Attribute,
     markers::{Init, Uninit},
-    MathMl,
+    Element, Elements,
 };
+
+use super::IntoElements;
 
 /// Presubscripts and tensor notations are represented by the `mmultiscripts` element.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Multiscripts {
-    content: MathMl,
+    content: Elements,
     /// Accepts the global [`Attribute`]s.
     attributes: Vec<Attribute>,
 }
 
-impl<T> From<T> for Multiscripts
-where
-    T: Into<MathMl>,
-{
-    fn from(value: T) -> Self {
+impl Multiscripts {
+    pub fn content(&self) -> &[Element] {
+        &self.content
+    }
+
+    pub fn attributes(&self) -> &[Attribute] {
+        &self.attributes
+    }
+}
+
+impl From<Elements> for Multiscripts {
+    fn from(value: Elements) -> Self {
         Self {
-            content: value.into(),
+            content: value,
             attributes: Default::default(),
         }
     }
@@ -32,20 +41,20 @@ impl Multiscripts {
     }
 }
 
-crate::tag_from_type!(Multiscripts => Multiscripts);
+crate::element_from_type!(Multiscripts => Multiscripts);
 
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct MultiscriptsBuilder<T> {
-    content: Option<MathMl>,
+    content: Option<Elements>,
     attr: Vec<Attribute>,
 
     _marker: PhantomData<(T,)>,
 }
 
 impl<T> MultiscriptsBuilder<T> {
-    pub fn content(self, content: impl Into<MathMl>) -> MultiscriptsBuilder<Init> {
+    pub fn content(self, content: impl IntoElements) -> MultiscriptsBuilder<Init> {
         MultiscriptsBuilder {
-            content: Some(content.into()),
+            content: Some(content.into_elements()),
             attr: self.attr,
             _marker: PhantomData,
         }
@@ -72,7 +81,7 @@ impl MultiscriptsBuilder<Init> {
 
 /// Presubscripts and tensor notations are represented by the `mmultiscripts` element. The
 /// `mprescripts` element is used as a separator between the `postscripts` and `prescripts`.
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Default, Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Prescripts {
     /// Accepts the global [`Attribute`]s.
     attr: Vec<Attribute>,
@@ -88,4 +97,10 @@ impl Prescripts {
             attr: attr.into_iter().map(Into::into).collect(),
         }
     }
+
+    pub fn attributes(&self) -> &[Attribute] {
+        &self.attr
+    }
 }
+
+crate::element_from_type!(Prescripts => Prescripts);

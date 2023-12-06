@@ -1,0 +1,10 @@
+---
+source: tests/others/mo.rs
+expression: input
+---
+<math>
+  <mo>
+    ∏
+  </mo>
+</math>
+

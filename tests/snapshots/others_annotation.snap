@@ -1,0 +1,10 @@
+---
+source: tests/others/annotation.rs
+expression: input
+---
+<math>
+  <annotation>
+    This is an annotation
+  </annotation>
+</math>
+

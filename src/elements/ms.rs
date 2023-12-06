@@ -28,6 +28,23 @@ impl StrLiteral {
     {
         self.attr.extend(attr.into_iter().map(Into::into));
     }
+
+    pub fn with_attr<I, A>(mut self, attr: I) -> Self
+    where
+        I: IntoIterator<Item = A>,
+        A: Into<Attribute>,
+    {
+        self.attr.extend(attr.into_iter().map(Into::into));
+        self
+    }
+
+    pub fn content(&self) -> &str {
+        &self.literal
+    }
+
+    pub fn attributes(&self) -> &[Attribute] {
+        &self.attr
+    }
 }
 
-crate::tag_from_type!(StrLiteral => StrLiteral);
+crate::element_from_type!(StrLiteral => StrLiteral);

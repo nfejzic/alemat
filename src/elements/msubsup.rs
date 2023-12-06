@@ -3,40 +3,70 @@ use std::marker::PhantomData;
 use crate::{
     attributes::Attribute,
     markers::{Init, Uninit},
-    MathMl,
+    Element, Elements,
 };
+
+use super::IntoElements;
+
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
+enum SubSupInner {
+    Sub(Elements),
+    Sup(Elements),
+    SubSup { sub: Elements, sup: Elements },
+}
 
 /// The `msub`, `msup` and `msubsup` elements are used to attach subscript and superscript to a MathML
 /// expression. They accept the global [`Attribute`]s.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct SubSup {
-    base: MathMl,
-    sub: Option<MathMl>,
-    sup: Option<MathMl>,
+    base: Elements,
+    inner: SubSupInner,
     attributes: Vec<Attribute>,
 }
 
-crate::tag_from_type!(SubSup => SubSup);
+crate::element_from_type!(SubSup => SubSup);
 
 impl SubSup {
     pub fn builder() -> SubSupBuilder<Uninit, Uninit> {
         SubSupBuilder::default()
     }
+
+    pub fn sub(&self) -> Option<&[Element]> {
+        match self.inner {
+            SubSupInner::Sub(ref sub) | SubSupInner::SubSup { ref sub, .. } => Some(sub),
+            _ => None,
+        }
+    }
+
+    pub fn sup(&self) -> Option<&[Element]> {
+        match self.inner {
+            SubSupInner::Sup(ref sup) | SubSupInner::SubSup { ref sup, .. } => Some(sup),
+            _ => None,
+        }
+    }
+
+    pub fn base(&self) -> &[Element] {
+        &self.base
+    }
+
+    pub fn attributes(&self) -> &[Attribute] {
+        &self.attributes
+    }
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct SubSupBuilder<T1, T2> {
-    base: Option<MathMl>,
-    sub: Option<MathMl>,
-    sup: Option<MathMl>,
+    base: Option<Elements>,
+    sub: Option<Elements>,
+    sup: Option<Elements>,
     attr: Vec<Attribute>,
     _marker: PhantomData<(T1, T2)>,
 }
 
 impl<T1, T2> SubSupBuilder<T1, T2> {
-    pub fn base(self, base: impl Into<MathMl>) -> SubSupBuilder<Init, T2> {
+    pub fn base(self, base: impl IntoElements) -> SubSupBuilder<Init, T2> {
         SubSupBuilder {
-            base: Some(base.into()),
+            base: Some(base.into_elements()),
             sub: self.sub,
             sup: self.sup,
             attr: self.attr,
@@ -44,21 +74,21 @@ impl<T1, T2> SubSupBuilder<T1, T2> {
         }
     }
 
-    pub fn subscript(self, sub: impl Into<MathMl>) -> SubSupBuilder<T1, Init> {
+    pub fn subscript(self, sub: impl IntoElements) -> SubSupBuilder<T1, Init> {
         SubSupBuilder {
             base: self.base,
-            sub: Some(sub.into()),
+            sub: Some(sub.into_elements()),
             sup: self.sup,
             attr: self.attr,
             _marker: PhantomData,
         }
     }
 
-    pub fn supscript(self, sub: impl Into<MathMl>) -> SubSupBuilder<T1, Init> {
+    pub fn supscript(self, sup: impl IntoElements) -> SubSupBuilder<T1, Init> {
         SubSupBuilder {
             base: self.base,
-            sub: self.sup,
-            sup: Some(sub.into()),
+            sub: self.sub,
+            sup: Some(sup.into_elements()),
             attr: self.attr,
             _marker: PhantomData,
         }
@@ -81,10 +111,19 @@ impl SubSupBuilder<Init, Init> {
             "SubSup element must have at least one of sub or sup."
         );
 
+        let inner = match (self.sub, self.sup) {
+            (None, Some(sup)) => SubSupInner::Sup(sup),
+            (Some(sub), None) => SubSupInner::Sub(sub),
+            (Some(sub), Some(sup)) => SubSupInner::SubSup { sub, sup },
+
+            (None, None) => {
+                unreachable!("T2 set to Init guarantees that at least sub or sup are initialized.")
+            }
+        };
+
         SubSup {
             base: self.base.expect("Base is guaranteed to be init."),
-            sub: self.sub,
-            sup: self.sup,
+            inner,
             attributes: self.attr,
         }
     }

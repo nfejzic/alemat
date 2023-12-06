@@ -3,14 +3,16 @@ use std::marker::PhantomData;
 use crate::{
     attributes::Attribute,
     markers::{Init, Uninit},
-    MathMl,
+    Element, Elements,
 };
+
+use super::IntoElements;
 
 /// The content of `annotation` element, either text or MathML.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum AnnotationContent {
     Text(String),
-    MathMl(MathMl),
+    Nested(Elements),
 }
 
 impl From<String> for AnnotationContent {
@@ -21,10 +23,16 @@ impl From<String> for AnnotationContent {
 
 impl<T> From<T> for AnnotationContent
 where
-    T: Into<MathMl>,
+    T: IntoElements,
 {
     fn from(value: T) -> Self {
-        Self::MathMl(value.into())
+        Self::Nested(value.into_elements())
+    }
+}
+
+impl From<Element> for AnnotationContent {
+    fn from(value: Element) -> Self {
+        Self::Nested(Elements(vec![value]))
     }
 }
 
@@ -35,6 +43,22 @@ where
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum AnnotationAttr {
     Global(Attribute),
+
+    /// NOTE: Authors can use the encoding attribute to distinguish annotations for HTML
+    /// integration point, clipboard copy, alternative rendering, etc. In particular, CSS can be
+    /// used to render alternative annotations e.g.
+    ///
+    /// ```css
+    /// /* Hide the annotated child. */
+    /// semantics > :first-child { display: none; }
+    ///  /* Show all text annotations. */
+    /// semantics > annotation { display: inline; }
+    /// /* Show all HTML annotations. */
+    /// semantics > annotation-xml[encoding="text/html" i],
+    /// semantics > annotation-xml[encoding="application/xhtml+xml" i] {
+    /// display: inline-block;
+    /// }
+    /// ```
     Encoding(String),
 }
 
@@ -51,25 +75,21 @@ pub struct Annotation {
     attributes: Vec<AnnotationAttr>,
 }
 
+crate::element_from_type!(Annotation => Annotation);
+
 impl Annotation {
     pub fn builder() -> AnnotationBuilder<Uninit> {
         AnnotationBuilder::default()
     }
-}
 
-impl<T> From<T> for Annotation
-where
-    T: Into<AnnotationContent>,
-{
-    fn from(value: T) -> Self {
-        Self {
-            content: value.into(),
-            attributes: Default::default(),
-        }
+    pub fn content(&self) -> &AnnotationContent {
+        &self.content
+    }
+
+    pub fn attributes(&self) -> &[AnnotationAttr] {
+        &self.attributes
     }
 }
-
-crate::tag_from_type!(Annotation => Annotation);
 
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct AnnotationBuilder<T> {
@@ -116,7 +136,7 @@ impl AnnotationBuilder<Init> {
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Semantics {
     /// Children of the `semantics` element. Rendering is same as `mrow`.
-    children: MathMl,
+    children: Elements,
 
     /// The `semantics` element accepts the global [`Attribute`]s.
     attr: Vec<Attribute>,
@@ -126,22 +146,30 @@ impl Semantics {
     pub fn builder() -> SemanticsBuilder<Uninit> {
         SemanticsBuilder::default()
     }
+
+    pub fn children(&self) -> &[Element] {
+        &self.children
+    }
+
+    pub fn attributes(&self) -> &[Attribute] {
+        &self.attr
+    }
 }
 
-crate::tag_from_type!(Semantics => Semantics);
+crate::element_from_type!(Semantics => Semantics);
 
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct SemanticsBuilder<T> {
-    content: Option<MathMl>,
+    content: Option<Elements>,
     attr: Vec<Attribute>,
 
     _marker: PhantomData<(T,)>,
 }
 
 impl<T> SemanticsBuilder<T> {
-    pub fn content(self, content: impl Into<MathMl>) -> SemanticsBuilder<Init> {
+    pub fn content(self, content: impl IntoElements) -> SemanticsBuilder<Init> {
         SemanticsBuilder {
-            content: Some(content.into()),
+            content: Some(content.into_elements()),
             attr: self.attr,
             _marker: PhantomData,
         }

@@ -1,0 +1,10 @@
+---
+source: tests/others/mn.rs
+expression: input
+---
+<math>
+  <mn>
+    1
+  </mn>
+</math>
+

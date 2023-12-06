@@ -1,4 +1,6 @@
-use crate::{attributes::Attribute, MathMl};
+use crate::{attributes::Attribute, Element, Elements};
+
+use super::IntoElements;
 
 /// The `mpadded` element accepts global attributes as well as the `width`, `height`, `depth`,
 /// `lspace` and `voffset`
@@ -26,17 +28,26 @@ impl From<Attribute> for PaddedAttr {
 /// relative positioning point of its content modified according to `mpadded`’s attributes.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Padded {
-    children: MathMl,
+    children: Elements,
     attributes: Vec<PaddedAttr>,
 }
 
-impl<T> From<T> for Padded
-where
-    T: Into<MathMl>,
-{
-    fn from(value: T) -> Self {
+impl From<Elements> for Padded {
+    fn from(value: Elements) -> Self {
         Self {
-            children: value.into(),
+            children: value,
+            attributes: Default::default(),
+        }
+    }
+}
+
+impl<const N: usize, I> From<[I; N]> for Padded
+where
+    I: Into<Element>,
+{
+    fn from(value: [I; N]) -> Self {
+        Self {
+            children: value.into_elements(),
             attributes: Default::default(),
         }
     }
@@ -50,6 +61,23 @@ impl Padded {
     {
         self.attributes.extend(attr.into_iter().map(Into::into));
     }
+
+    pub fn with_attr<I, A>(mut self, attr: I) -> Self
+    where
+        I: IntoIterator<Item = A>,
+        A: Into<PaddedAttr>,
+    {
+        self.attributes.extend(attr.into_iter().map(Into::into));
+        self
+    }
+
+    pub fn children(&self) -> &[Element] {
+        &self.children
+    }
+
+    pub fn attributes(&self) -> &[PaddedAttr] {
+        &self.attributes
+    }
 }
 
-crate::tag_from_type!(Padded => Padded);
+crate::element_from_type!(Padded => Padded);

@@ -1,0 +1,34 @@
+---
+source: tests/scripted/mod.rs
+expression: input
+---
+<math display="block">
+  <msubsup>
+    <mo>
+      ∑
+    </mo>
+    <mrow>
+      <mi>
+        i
+      </mi>
+      <mo>
+        =
+      </mo>
+      <mn>
+        0
+      </mn>
+    </mrow>
+    <mi>
+      k
+    </mi>
+  </msubsup>
+  <msup>
+    <mn>
+      2
+    </mn>
+    <mi>
+      i
+    </mi>
+  </msup>
+</math>
+

@@ -1,44 +1,93 @@
 //! Library for type-safe building of MathML.
 
 pub mod attributes;
+mod buf_writer;
+mod default_renderer;
 pub mod elements;
 pub mod markers;
+mod to_mathml;
 
-use elements::{
-    grouping::{Action, Error, Phantom, Row, Style},
-    radicals::Radical,
-    scripted::{Multiscripts, SubSup, UnderOver},
-    Annotation, Frac, Ident, Num, Operator, Padded, Semantics, Space, StrLiteral, Table, Text,
-};
+use attributes::Attribute;
+use buf_writer::BufMathMlWriter;
+pub use default_renderer::MathMlFormatter;
+pub(crate) use elements::element_from_type;
+use elements::IntoElements;
+pub use elements::{Element, Elements};
+pub use to_mathml::*;
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
-pub(crate) enum Tag {
-    Action(Action),
-    Annotation(Annotation),
-    Error(Error),
-    Frac(Frac),
-    Ident(Ident),
-    Multiscripts(Multiscripts),
-    Num(Num),
-    Operator(Operator),
-    Padded(Padded),
-    Phantom(Phantom),
-    Radical(Radical),
-    Row(Row),
-    Semantics(Semantics),
-    Space(Space),
-    StrLiteral(StrLiteral),
-    Style(Style),
-    SubSup(SubSup),
-    Table(Table),
-    Text(Text),
-    UnderOver(UnderOver),
+pub enum MathMlAttr {
+    Display(String),
+    AltText(String),
+
+    Global(Attribute),
 }
 
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct MathMl {
-    content: Vec<Tag>,
-    // TODO: decide what fields should go inside
+    content: Elements,
+    attr: Vec<MathMlAttr>,
+}
+
+impl MathMl {
+    pub fn content(&self) -> &Elements {
+        &self.content
+    }
+
+    pub fn attributes(&self) -> &[MathMlAttr] {
+        &self.attr
+    }
+
+    pub fn with_content(content: impl IntoElements) -> Self {
+        Self {
+            content: content.into_elements(),
+            attr: Default::default(),
+        }
+    }
+
+    pub fn append_content(&mut self, content: impl IntoElements) {
+        self.content.append(&mut content.into_elements());
+    }
+
+    pub fn add_attr(&mut self, attr: impl Into<MathMlAttr>) {
+        self.attr.push(attr.into());
+    }
+
+    pub fn with_attr<I, A>(mut self, attr: I) -> Self
+    where
+        I: IntoIterator<Item = A>,
+        A: Into<MathMlAttr>,
+    {
+        self.attr.extend(attr.into_iter().map(Into::into));
+        self
+    }
+
+    pub fn extend_attr<I, A>(&mut self, attr: I)
+    where
+        I: IntoIterator<Item = A>,
+        A: Into<MathMlAttr>,
+    {
+        self.attr.extend(attr.into_iter().map(Into::into))
+    }
+
+    pub fn len(&self) -> usize {
+        self.content.len()
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.content.is_empty()
+    }
+
+    pub fn render_with<R: Renderer>(&self, renderer: &mut R) -> Result<R::Output, R::Error> {
+        renderer.render_mathml(self)
+    }
+
+    pub fn render(&self) -> Result<String, <BufMathMlWriter as crate::Writer>::Error> {
+        let mut buf_writer = BufMathMlWriter::default();
+        buf_writer.write_mathml(self)?;
+
+        Ok(buf_writer.into_inner())
+    }
 }
 
 macro_rules! from_types {
@@ -54,14 +103,4 @@ macro_rules! from_types {
     };
 }
 
-macro_rules! tag_from_type {
-    ($variant:ident => $type:path) => {
-        impl From<$type> for crate::Tag {
-            fn from(value: $type) -> Self {
-                Self::$variant(value)
-            }
-        }
-    };
-}
-
-pub(crate) use {from_types, tag_from_type};
+pub(crate) use from_types;

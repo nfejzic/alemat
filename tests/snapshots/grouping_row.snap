@@ -1,0 +1,18 @@
+---
+source: tests/grouping/mod.rs
+expression: input
+---
+<math>
+  <mrow>
+    <mi>
+      x
+    </mi>
+    <mo>
+      +
+    </mo>
+    <mn>
+      42
+    </mn>
+  </mrow>
+</math>
+

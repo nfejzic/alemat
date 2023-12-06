@@ -1,0 +1,10 @@
+---
+source: tests/others/mi.rs
+expression: input
+---
+<math>
+  <mi>
+    Ψ
+  </mi>
+</math>
+

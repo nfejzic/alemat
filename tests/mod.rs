@@ -1,34 +1,26 @@
-use alemat::{
-    attributes::Attribute,
-    elements::{Annotation, Ident, Num, Table},
-};
-use alemat::{row, table};
+mod grouping;
+mod others;
+mod radicals;
+mod scripted;
 
-#[test]
-fn test_annotation_api() {
-    let _annotation = Annotation::builder()
-        .content(Num::from(42))
-        .attr([Attribute::Id("Some id".into())])
-        .build();
+macro_rules! snap_test {
+    ($input:expr $(, name: $name:expr)?) => {
+        use std::str::FromStr;
+        let mut settings = insta::Settings::clone_current();
+        let input = $input.expect("Failed to render MathMl.");
+
+        let input = xmlem::Document::from_str(&input).expect(&format!("input: {} is not valid XML.", input)).to_string_pretty();
+
+        let base_dir = env!("CARGO_MANIFEST_DIR");
+
+        let path = std::path::Path::new(base_dir).join("tests/snapshots");
+        settings.set_snapshot_path(path);
+        settings.set_prepend_module_to_snapshot(false);
+
+        settings.bind(|| {
+            insta::assert_snapshot!($($name,)? input);
+        });
+    };
 }
 
-#[test]
-fn test_table_api() {
-    let _table = Table::from([
-        // this should be a row
-        [Num::from(40), Num::from(41)],
-        [Num::from(42), Num::from(43)],
-        [Num::from(44), Num::from(45)],
-    ]);
-
-    let _table = Table::from([
-        row![Ident::from("x"), Num::from(41)],
-        row![Num::from(42), Num::from(43)],
-        row![Num::from(44), Num::from(45)],
-    ]);
-
-    let _table = table![
-        [Ident::from("x"), Num::from(41)],
-        [Ident::from("x"), Num::from(41)]
-    ];
-}
+use snap_test;

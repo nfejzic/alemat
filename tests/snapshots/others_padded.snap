@@ -1,0 +1,17 @@
+---
+source: tests/others/mpadded.rs
+expression: input
+---
+<math>
+  <mpadded lspace="2em" voffset="-1em" height="1em" depth="3em" width="7em" style="background: lightblue;">
+    <mfrac>
+      <mn>
+        23456
+      </mn>
+      <mn>
+        78
+      </mn>
+    </mfrac>
+  </mpadded>
+</math>
+

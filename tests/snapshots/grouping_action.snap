@@ -1,0 +1,12 @@
+---
+source: tests/grouping/mod.rs
+expression: input
+---
+<math>
+  <maction id="action-id">
+    <mi>
+      x
+    </mi>
+  </maction>
+</math>
+
