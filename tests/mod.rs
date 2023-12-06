@@ -7,8 +7,9 @@ macro_rules! snap_test {
     ($input:expr $(, name: $name:expr)?) => {
         use std::str::FromStr;
         let mut settings = insta::Settings::clone_current();
+        let input = $input.expect("Failed to render MathMl.");
 
-        let input = xmlem::Document::from_str(&$input).expect(&format!("input: {} is not valid XML.", $input)).to_string_pretty();
+        let input = xmlem::Document::from_str(&input).expect(&format!("input: {} is not valid XML.", input)).to_string_pretty();
 
         let base_dir = env!("CARGO_MANIFEST_DIR");
 

@@ -27,12 +27,15 @@ pub enum MathMlAttr {
 pub struct MathMl {
     content: Elements,
     attr: Vec<MathMlAttr>,
-    // TODO: decide what fields should go inside
 }
 
 impl MathMl {
     pub fn content(&self) -> &Elements {
         &self.content
+    }
+
+    pub fn attributes(&self) -> &[MathMlAttr] {
+        &self.attr
     }
 
     pub fn with_content(content: impl IntoElements) -> Self {
@@ -75,15 +78,15 @@ impl MathMl {
         self.content.is_empty()
     }
 
-    pub fn render_with<R: Render>(&self, renderer: &mut R) -> R::Output {
+    pub fn render_with<R: Renderer>(&self, renderer: &mut R) -> Result<R::Output, R::Error> {
         renderer.render_mathml(self)
     }
 
-    pub fn render(&self) -> String {
+    pub fn render(&self) -> Result<String, <BufMathMlWriter as crate::Writer>::Error> {
         let mut buf_writer = BufMathMlWriter::default();
-        buf_writer.write_mathml(self);
+        buf_writer.write_mathml(self)?;
 
-        buf_writer.into_inner()
+        Ok(buf_writer.into_inner())
     }
 }
 
