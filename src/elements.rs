@@ -2,16 +2,16 @@
 //! elements.
 
 mod maction;
-mod math;
 mod merror;
 mod mmultiscripts;
 mod mphantom;
 mod mrow;
 mod mstyle;
 
+/// The grouping elements are `maction`, `math`, `merror`, `mphantom`, `mprescripts`, `mrow`,
+/// `mstyle`, `semantics` and unknown MathML elements.
 pub mod grouping {
     pub use super::maction::*;
-    pub use super::math::*;
     pub use super::merror::*;
     pub use super::mmultiscripts::Prescripts;
     pub use super::mphantom::*;
@@ -21,6 +21,8 @@ pub mod grouping {
 
 mod mroot;
 
+/// The radical elements are `mroot` and `msqrt`. In this implementation both are constructed using
+/// the [`Radical`] struct.
 pub mod radicals {
     pub use super::mroot::*;
 }
@@ -28,6 +30,8 @@ pub mod radicals {
 mod msubsup;
 mod munderover;
 
+/// The scripted elements are `mmultiscripts`, `mover`, `msub`, `msubsup`, `msup`, `munder` and
+/// `munderover`.
 pub mod scripted {
     pub use super::mmultiscripts::Multiscripts;
     pub use super::msubsup::*;
@@ -66,31 +70,74 @@ use self::{
     scripted::UnderOver,
 };
 
+/// The MathML elements.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Element {
+    /// `maction` element.
     Action(Action),
+
+    /// `annotation` and `annotation-xml` elements.
     Annotation(Annotation),
+
+    /// `merror` element.
     Error(Error),
+
+    /// `mfrac` element.
     Frac(Frac),
+
+    /// `mi` element.
     Ident(Ident),
+
+    /// `mmultiscripts` element.
     Multiscripts(Multiscripts),
+
+    /// `mprescripts` element.
     Prescripts(Prescripts),
+
+    /// `mn` element.
     Num(Num),
+
+    /// `mo` element.
     Operator(Operator),
+
+    /// `mpadded` element.
     Padded(Padded),
+
+    /// `mphantom` element.
     Phantom(Phantom),
+
+    /// `mroot` and `msqrt` elements.
     Radical(Radical),
+
+    /// `mrow` element.
     Row(Row),
+
+    /// `msemantics` element.
     Semantics(Semantics),
+
+    /// `mspace` element.
     Space(Space),
+
+    /// `ms` element.
     StrLiteral(StrLiteral),
+
+    /// `mstyle`
     Style(Style),
+
+    /// `msub`, `msup` and `msubsup` elements.
     SubSup(SubSup),
+
+    /// `mtable` element.
     Table(Table),
+
+    /// `mtext` element.
     Text(Text),
+
+    /// `munder`, `mover` and `munderover` elements.
     UnderOver(UnderOver),
 }
 
+/// A list of [`Element`]s.
 #[repr(transparent)]
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Elements(pub(crate) Vec<Element>);
@@ -109,6 +156,7 @@ impl DerefMut for Elements {
 }
 
 impl Elements {
+    /// Consumes the [`Elements`] and returns a [`Vec`] of [`Element`]s.
     pub fn into_inner(self) -> Vec<Element> {
         self.0
     }
@@ -130,6 +178,7 @@ macro_rules! children {
     }
 }
 
+/// Trait for conversion into [`Elements`].
 pub trait IntoElements {
     /// Converts the type into elements.
     fn into_elements(self) -> Elements;

@@ -21,6 +21,7 @@ where
 }
 
 impl StrLiteral {
+    /// Add attributes.
     pub fn add_attr<I, A>(&mut self, attr: I)
     where
         I: IntoIterator<Item = A>,
@@ -29,6 +30,7 @@ impl StrLiteral {
         self.attr.extend(attr.into_iter().map(Into::into));
     }
 
+    /// Create a new instance of [`StrLiteral`] with additional attributes.
     pub fn with_attr<I, A>(mut self, attr: I) -> Self
     where
         I: IntoIterator<Item = A>,
@@ -38,10 +40,12 @@ impl StrLiteral {
         self
     }
 
+    /// Get a reference to the literal content of the [`StrLiteral`] element.
     pub fn content(&self) -> &str {
         &self.literal
     }
 
+    /// Get a reference to all attributes of the [`StrLiteral`] element.
     pub fn attributes(&self) -> &[Attribute] {
         &self.attr
     }

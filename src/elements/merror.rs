@@ -26,14 +26,17 @@ impl Error {
         }
     }
 
+    /// Create a builder for [`Error`] element.
     pub fn builder() -> ErrorBuilder<Uninit> {
         ErrorBuilder::default()
     }
 
+    /// Get a reference to the inner content of the [`Error`] element.
     pub fn content(&self) -> &[Element] {
         &self.content
     }
 
+    /// Get a reference to all attributes of the [`Error`] element.
     pub fn attributes(&self) -> &[Attribute] {
         &self.attributes
     }
@@ -59,6 +62,7 @@ impl From<Elements> for Error {
 
 crate::element_from_type!(Error => Error);
 
+/// Builder of the [`Error`] element.
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct ErrorBuilder<T> {
     content: Option<Elements>,
@@ -68,6 +72,7 @@ pub struct ErrorBuilder<T> {
 }
 
 impl<T> ErrorBuilder<T> {
+    /// Set the content of the [`Error`] element.
     pub fn content(self, content: impl IntoElements) -> ErrorBuilder<Init> {
         ErrorBuilder {
             content: Some(content.into_elements()),
@@ -77,6 +82,7 @@ impl<T> ErrorBuilder<T> {
         }
     }
 
+    /// Add attributes.
     pub fn attr<I, A>(mut self, attr: I) -> Self
     where
         I: IntoIterator<Item = A>,
@@ -88,6 +94,7 @@ impl<T> ErrorBuilder<T> {
 }
 
 impl ErrorBuilder<Init> {
+    /// Build [`Error`] element.
     pub fn build(self) -> Error {
         Error {
             content: self.content.expect("Content is guaranteed to be init."),

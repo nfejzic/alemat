@@ -1,3 +1,5 @@
+//! This module provides traits for rendering MathML elements.
+
 use std::borrow::Borrow;
 
 use crate::{
@@ -11,30 +13,48 @@ use crate::{
     Element, MathMl,
 };
 
+/// Trait for rendering MathML elements. Each method in this trait has a default implementation
+/// that returns [`Result::Ok`] with an empty [`String`].
+/// This makes it possible to potentially introduce new elements without breaking existing
+/// renderers.
+/// This means that any new elements introduced will be omitted in the final render, if the
+/// corresponding methods are not implemented.
 pub trait Renderer {
+    /// The `Output` type of the renderer that will be returned by `render_*` methods.
     type Output;
+
+    /// The `Error` type of the renderer that will be returned by `render_*` methods in cases where
+    /// rendering can fail. Use [`Infallible`] for renderers that cannot fail.
+    ///
+    /// [`Infallible`]: std::convert::Infallible
     type Error;
 
+    /// Render an [`Action`] element.
     fn render_action(&mut self, action: &Action) -> Result<Self::Output, Self::Error> {
         unimplemented!("Rendering of {:?} not implemented", action);
     }
 
+    /// Render an [`Annotation`] element.
     fn render_annotation(&mut self, annotation: &Annotation) -> Result<Self::Output, Self::Error> {
         unimplemented!("Rendering of {:?} not implemented", annotation);
     }
 
+    /// Render an [`Error`] element.
     fn render_error(&mut self, error: &Error) -> Result<Self::Output, Self::Error> {
         unimplemented!("Rendering of {:?} not implemented", error);
     }
 
+    /// Render a [`Frac`] element.
     fn render_frac(&mut self, frac: &Frac) -> Result<Self::Output, Self::Error> {
         unimplemented!("Rendering of {:?} not implemented", frac);
     }
 
+    /// Render an [`Ident`] element.
     fn render_ident(&mut self, ident: &Ident) -> Result<Self::Output, Self::Error> {
         unimplemented!("Rendering of {:?} not implemented", ident);
     }
 
+    /// Render a [`Multiscripts`] element.
     fn render_multiscripts(
         &mut self,
         multiscripts: &Multiscripts,
@@ -42,42 +62,52 @@ pub trait Renderer {
         unimplemented!("Rendering of {:?} not implemented", multiscripts);
     }
 
+    /// Render a [`Prescripts`] element.
     fn render_prescripts(&mut self, prescripts: &Prescripts) -> Result<Self::Output, Self::Error> {
         unimplemented!("Rendering of {:?} not implemented", prescripts);
     }
 
+    /// Render a [`Num`] element.
     fn render_num(&mut self, num: &Num) -> Result<Self::Output, Self::Error> {
         unimplemented!("Rendering of {:?} not implemented", num);
     }
 
+    /// Render an [`Operator`] element.
     fn render_operator(&mut self, operator: &Operator) -> Result<Self::Output, Self::Error> {
         unimplemented!("Rendering of {:?} not implemented", operator);
     }
 
+    /// Render a [`Padded`] element.
     fn render_padded(&mut self, padded: &Padded) -> Result<Self::Output, Self::Error> {
         unimplemented!("Rendering of {:?} not implemented", padded);
     }
 
+    /// Render a [`Phantom`] element.
     fn render_phantom(&mut self, phantom: &Phantom) -> Result<Self::Output, Self::Error> {
         unimplemented!("Rendering of {:?} not implemented", phantom);
     }
 
+    /// Render a [`Radical`] element.
     fn render_radical(&mut self, radical: &Radical) -> Result<Self::Output, Self::Error> {
         unimplemented!("Rendering of {:?} not implemented", radical);
     }
 
+    /// Render a [`Row`] element.
     fn render_row(&mut self, row: &Row) -> Result<Self::Output, Self::Error> {
         unimplemented!("Rendering of {:?} not implemented", row);
     }
 
+    /// Render a [`Semantics`] element.
     fn render_semantics(&mut self, semantics: &Semantics) -> Result<Self::Output, Self::Error> {
         unimplemented!("Rendering of {:?} not implemented", semantics);
     }
 
+    /// Render a [`Space`] element.
     fn render_space(&mut self, space: &Space) -> Result<Self::Output, Self::Error> {
         unimplemented!("Rendering of {:?} not implemented", space);
     }
 
+    /// Render a [`StrLiteral`] element.
     fn render_str_literal(
         &mut self,
         str_literal: &StrLiteral,
@@ -85,30 +115,37 @@ pub trait Renderer {
         unimplemented!("Rendering of {:?} not implemented", str_literal);
     }
 
+    /// Render a [`Style`] element.
     fn render_style(&mut self, style: &Style) -> Result<Self::Output, Self::Error> {
         unimplemented!("Rendering of {:?} not implemented", style);
     }
 
+    /// Render a [`SubSup`] element.
     fn render_subsup(&mut self, sub_sup: &SubSup) -> Result<Self::Output, Self::Error> {
         unimplemented!("Rendering of {:?} not implemented", sub_sup);
     }
 
+    /// Render a [`Table`] element.
     fn render_table(&mut self, table: &Table) -> Result<Self::Output, Self::Error> {
         unimplemented!("Rendering of {:?} not implemented", table);
     }
 
+    /// Render a [`Text`] element.
     fn render_text(&mut self, text: &Text) -> Result<Self::Output, Self::Error> {
         unimplemented!("Rendering of {:?} not implemented", text);
     }
 
+    /// Render an [`UnderOver`] element.
     fn render_underover(&mut self, under_over: &UnderOver) -> Result<Self::Output, Self::Error> {
         unimplemented!("Rendering of {:?} not implemented", under_over);
     }
 
+    /// Render an [`Attribute`] element.
     fn render_attr(&mut self, attr: &Attribute) -> Result<Self::Output, Self::Error> {
         unimplemented!("Rendering of {:?} not implemented", attr);
     }
 
+    /// Render an [`Element`] element.
     fn render_element(&mut self, element: &Element) -> Result<Self::Output, Self::Error> {
         match element {
             Element::Action(action) => self.render_action(action),
@@ -135,103 +172,146 @@ pub trait Renderer {
         }
     }
 
+    /// Render a [`MathMl`] element.
     fn render_mathml(&mut self, mathml: &MathMl) -> Result<Self::Output, Self::Error> {
         unimplemented!("Rendering of {:?} not implemented", mathml)
     }
 }
 
+/// Trait for writing MathML elements. Each method in this trait has a default implementation that
+/// does nothing.
+///
+/// In contrast with [`Renderer`] trait, implementors of this trait are meant to write the rendered
+/// representation into a buffer instead of returning the rendered output from each function.
+/// This enables buffered rendering, where instead of allocating many [`String`]s (for example),
+/// one [`String`] is allocated and written into.
+///
+/// Each method in this trait has a default implementation that corresponds to a no-op.
+/// This makes it possible to potentially introduce new elements without breaking existing
+/// renderers.
+/// This also means that any new elements introduced will be omitted in the final render, as long
+/// as the corresponding methods are not implemented.
 pub trait Writer {
+    /// The type of the buffer that this writer writes into.
     type Buffer;
+
+    /// The `Error` type of the writer that will be returned by `write_*` methods in cases where
+    /// writing can fail. Use [`Infallible`] for writers that cannot fail.
+    ///
+    /// [`Infallible`]: std::convert::Infallible
     type Error;
 
-    fn write_action(&mut self, action: &Action) -> Result<(), Self::Error> {
-        unimplemented!("Rendering of {:?} not implemented", action);
+    /// Write an [`Action`] element.
+    fn write_action(&mut self, _action: &Action) -> Result<(), Self::Error> {
+        Ok(())
     }
 
-    fn write_annotation(&mut self, annotation: &Annotation) -> Result<(), Self::Error> {
-        unimplemented!("Rendering of {:?} not implemented", annotation);
+    /// Write an [`Annotation`] element.
+    fn write_annotation(&mut self, _annotation: &Annotation) -> Result<(), Self::Error> {
+        Ok(())
     }
 
-    fn write_error(&mut self, error: &Error) -> Result<(), Self::Error> {
-        unimplemented!("Rendering of {:?} not implemented", error);
+    /// Write an [`Error`] element.
+    fn write_error(&mut self, _error: &Error) -> Result<(), Self::Error> {
+        Ok(())
     }
 
-    fn write_frac(&mut self, frac: &Frac) -> Result<(), Self::Error> {
-        unimplemented!("Rendering of {:?} not implemented", frac);
+    /// Write a [`Frac`] element.
+    fn write_frac(&mut self, _frac: &Frac) -> Result<(), Self::Error> {
+        Ok(())
     }
 
-    fn write_ident(&mut self, ident: &Ident) -> Result<(), Self::Error> {
-        unimplemented!("Rendering of {:?} not implemented", ident);
+    /// Write an [`Ident`] element.
+    fn write_ident(&mut self, _ident: &Ident) -> Result<(), Self::Error> {
+        Ok(())
     }
 
-    fn write_multiscripts(&mut self, multiscripts: &Multiscripts) -> Result<(), Self::Error> {
-        unimplemented!("Rendering of {:?} not implemented", multiscripts);
+    /// Write a [`Multiscripts`] element.
+    fn write_multiscripts(&mut self, _multiscripts: &Multiscripts) -> Result<(), Self::Error> {
+        Ok(())
     }
 
-    fn write_prescripts(&mut self, prescripts: &Prescripts) -> Result<(), Self::Error> {
-        unimplemented!("Rendering of {:?} not implemented", prescripts);
+    /// Write a [`Prescripts`] element.
+    fn write_prescripts(&mut self, _prescripts: &Prescripts) -> Result<(), Self::Error> {
+        Ok(())
     }
 
-    fn write_num(&mut self, num: &Num) -> Result<(), Self::Error> {
-        unimplemented!("Rendering of {:?} not implemented", num);
+    /// Write a [`Num`] element.
+    fn write_num(&mut self, _num: &Num) -> Result<(), Self::Error> {
+        Ok(())
     }
 
-    fn write_operator(&mut self, operator: &Operator) -> Result<(), Self::Error> {
-        unimplemented!("Rendering of {:?} not implemented", operator);
+    /// Write an [`Operator`] element.
+    fn write_operator(&mut self, _operator: &Operator) -> Result<(), Self::Error> {
+        Ok(())
     }
 
-    fn write_padded(&mut self, padded: &Padded) -> Result<(), Self::Error> {
-        unimplemented!("Rendering of {:?} not implemented", padded);
+    /// Write a [`Padded`] element.
+    fn write_padded(&mut self, _padded: &Padded) -> Result<(), Self::Error> {
+        Ok(())
     }
 
-    fn write_phantom(&mut self, phantom: &Phantom) -> Result<(), Self::Error> {
-        unimplemented!("Rendering of {:?} not implemented", phantom);
+    /// Write a [`Phantom`] element.
+    fn write_phantom(&mut self, _phantom: &Phantom) -> Result<(), Self::Error> {
+        Ok(())
     }
 
-    fn write_radical(&mut self, radical: &Radical) -> Result<(), Self::Error> {
-        unimplemented!("Rendering of {:?} not implemented", radical);
+    /// Write a [`Radical`] element.
+    fn write_radical(&mut self, _radical: &Radical) -> Result<(), Self::Error> {
+        Ok(())
     }
 
-    fn write_row(&mut self, row: &Row) -> Result<(), Self::Error> {
-        unimplemented!("Rendering of {:?} not implemented", row);
+    /// Write a [`Row`] element.
+    fn write_row(&mut self, _row: &Row) -> Result<(), Self::Error> {
+        Ok(())
     }
 
-    fn write_semantics(&mut self, semantics: &Semantics) -> Result<(), Self::Error> {
-        unimplemented!("Rendering of {:?} not implemented", semantics);
+    /// Write a [`Semantics`] element.
+    fn write_semantics(&mut self, _semantics: &Semantics) -> Result<(), Self::Error> {
+        Ok(())
     }
 
-    fn write_space(&mut self, space: &Space) -> Result<(), Self::Error> {
-        unimplemented!("Rendering of {:?} not implemented", space);
+    /// Write a [`Space`] element.
+    fn write_space(&mut self, _space: &Space) -> Result<(), Self::Error> {
+        Ok(())
     }
 
-    fn write_str_literal(&mut self, str_literal: &StrLiteral) -> Result<(), Self::Error> {
-        unimplemented!("Rendering of {:?} not implemented", str_literal);
+    /// Write a [`StrLiteral`] element.
+    fn write_str_literal(&mut self, _str_literal: &StrLiteral) -> Result<(), Self::Error> {
+        Ok(())
     }
 
-    fn write_style(&mut self, style: &Style) -> Result<(), Self::Error> {
-        unimplemented!("Rendering of {:?} not implemented", style);
+    /// Write a [`Style`] element.
+    fn write_style(&mut self, _style: &Style) -> Result<(), Self::Error> {
+        Ok(())
     }
 
-    fn write_subsup(&mut self, sub_sup: &SubSup) -> Result<(), Self::Error> {
-        unimplemented!("Rendering of {:?} not implemented", sub_sup);
+    /// Write a [`SubSup`] element.
+    fn write_subsup(&mut self, _sub_sup: &SubSup) -> Result<(), Self::Error> {
+        Ok(())
     }
 
-    fn write_table(&mut self, table: &Table) -> Result<(), Self::Error> {
-        unimplemented!("Rendering of {:?} not implemented", table);
+    /// Write a [`Table`] element.
+    fn write_table(&mut self, _table: &Table) -> Result<(), Self::Error> {
+        Ok(())
     }
 
-    fn write_text(&mut self, text: &Text) -> Result<(), Self::Error> {
-        unimplemented!("Rendering of {:?} not implemented", text);
+    /// Write a [`Text`] element.
+    fn write_text(&mut self, _text: &Text) -> Result<(), Self::Error> {
+        Ok(())
     }
 
-    fn write_underover(&mut self, under_over: &UnderOver) -> Result<(), Self::Error> {
-        unimplemented!("Rendering of {:?} not implemented", under_over);
+    /// Write an [`UnderOver`] element.
+    fn write_underover(&mut self, _under_over: &UnderOver) -> Result<(), Self::Error> {
+        Ok(())
     }
 
-    fn write_attr(&mut self, attr: &Attribute) -> Result<(), Self::Error> {
-        unimplemented!("Rendering of {:?} not implemented", attr);
+    /// Write an [`Attribute`] element.
+    fn write_attr(&mut self, _attr: &Attribute) -> Result<(), Self::Error> {
+        Ok(())
     }
 
+    /// Write an [`Element`] into the `Self::Buffer`.
     fn write_element(&mut self, tag: &Element) -> Result<(), Self::Error> {
         match tag {
             Element::Action(action) => self.write_action(action),
@@ -258,13 +338,23 @@ pub trait Writer {
         }
     }
 
+    /// Write a [`MathMl`] element.
     fn write_mathml(&mut self, mathml: &MathMl) -> Result<(), Self::Error> {
-        unimplemented!("Rendering of {:?} not implemented", mathml)
+        for element in mathml.content().iter() {
+            self.write_element(element)?;
+        }
+
+        Ok(())
     }
 
+    /// Return a reference to the buffer.
     fn buffer<T>(&self) -> &T
     where
         Self::Buffer: Borrow<T>;
 
+    /// Produce a rendered representation of the [`MathMl`] content written into the [`Writer`].
+    fn finish(&mut self) -> Self::Buffer;
+
+    /// Consume the [`Writer`] and return the inner buffer.
     fn into_inner(self) -> Self::Buffer;
 }

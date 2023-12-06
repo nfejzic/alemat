@@ -1,6 +1,6 @@
 use alemat::elements::scripted::{SubSup, UnderOver};
 use alemat::elements::{Ident, Num, Operator, Text};
-use alemat::{MathMl, MathMlAttr};
+use alemat::{DisplayAttr, MathMl, MathMlAttr};
 
 #[test]
 fn subsup() {
@@ -27,7 +27,7 @@ fn subsup_integral() {
         Ident::from("x"),
         Ident::from("dx"),
     ])
-    .with_attr([MathMlAttr::Display(String::from("block"))])
+    .with_attr([MathMlAttr::Display(DisplayAttr::Block)])
     .render();
 
     crate::snap_test!(out, name: "subsup_integral");
@@ -46,7 +46,7 @@ fn subsup_summation() {
             .supscript(Ident::from("i"))
             .build()
     ])
-    .with_attr([MathMlAttr::Display(String::from("block"))])
+    .with_attr([MathMlAttr::Display(DisplayAttr::Block)])
     .render();
 
     crate::snap_test!(out, name: "subsup_summation");
@@ -77,7 +77,7 @@ fn underover_integral() {
         Ident::from("x"),
         Ident::from("dx"),
     ])
-    .with_attr([MathMlAttr::Display(String::from("block"))])
+    .with_attr([MathMlAttr::Display(DisplayAttr::Block)])
     .render();
 
     crate::snap_test!(out, name: "underover_integral");
@@ -96,7 +96,7 @@ fn underover_summation() {
             .supscript(Ident::from("i"))
             .build()
     ])
-    .with_attr([MathMlAttr::Display(String::from("block"))])
+    .with_attr([MathMlAttr::Display(DisplayAttr::Block)])
     .render();
 
     crate::snap_test!(out, name: "underover_summation");

@@ -14,6 +14,7 @@ use super::IntoElements;
 /// [`Attribute`]: crate::attributes::Attribute
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum ActionAttr {
+    /// The of the global [`Attribute`]s.
     Global(Attribute),
 
     /// The child element currently visible, only taken into account for `actiontype="toggle"` or
@@ -72,10 +73,12 @@ impl Action {
         ActionBuilder::default()
     }
 
+    /// Get a reference to the inner content of the [`Action`] element.
     pub fn content(&self) -> &[Element] {
         &self.content
     }
 
+    /// Get a reference to all attributes of the [`Action`] element.
     pub fn attributes(&self) -> &[ActionAttr] {
         &self.attributes
     }
@@ -83,6 +86,7 @@ impl Action {
 
 crate::element_from_type!(Action => Action);
 
+/// Builder of the [`Action`] element.
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct ActionBuilder<T> {
     content: Option<Elements>,
@@ -92,6 +96,7 @@ pub struct ActionBuilder<T> {
 }
 
 impl<T> ActionBuilder<T> {
+    /// Set the content of the [`Action`] element.
     pub fn content(self, content: impl IntoElements) -> ActionBuilder<Init> {
         ActionBuilder {
             content: Some(content.into_elements()),
@@ -100,6 +105,7 @@ impl<T> ActionBuilder<T> {
         }
     }
 
+    /// Add attributes.
     pub fn attr<I, A>(mut self, attributes: I) -> Self
     where
         I: IntoIterator<Item = A>,
@@ -113,6 +119,7 @@ impl<T> ActionBuilder<T> {
 }
 
 impl ActionBuilder<Init> {
+    /// Build the [`Action`] element.
     pub fn build(self) -> Action {
         Action {
             content: self.content.expect("Content is guaranteed to be init."),

@@ -9,9 +9,10 @@ use crate::{
         AnnotationAttr, AnnotationContent, FracAttr, Num, OperatorAttr, PaddedAttr, SpaceAttr,
         TableAttr, TableCellAttr,
     },
-    Element, MathMlAttr, Renderer, Writer,
+    DisplayAttr, Element, MathMlAttr, Renderer, Writer,
 };
 
+/// Default implementation of MathMl [`Writer`].
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct BufMathMlWriter {
     buf: String,
@@ -580,7 +581,13 @@ impl Writer for BufMathMlWriter {
             self.write_str(" ")?;
 
             match attr {
-                MathMlAttr::Display(d) => write!(self, r#"display="{d}""#)?,
+                MathMlAttr::Display(d) => {
+                    write!(self, r#"display=""#)?;
+                    match d {
+                        DisplayAttr::Block => write!(self, r#"block""#)?,
+                        DisplayAttr::Inline => write!(self, r#"inline""#)?,
+                    }
+                }
                 MathMlAttr::AltText(alt_t) => write!(self, r#"alttext="{alt_t}""#)?,
                 MathMlAttr::Global(a) => self.write_attr(a)?,
             }
@@ -599,6 +606,10 @@ impl Writer for BufMathMlWriter {
 
     fn into_inner(self) -> Self::Buffer {
         self.buf
+    }
+
+    fn finish(&mut self) -> Self::Buffer {
+        std::mem::take(&mut self.buf)
     }
 }
 

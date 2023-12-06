@@ -18,8 +18,15 @@ use super::IntoElements;
 /// attributes are absent or invalid, they are treated as equal to false.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum UnderOverAttr {
+    /// Indicates whether the under script should be treated as an accent (i.e. drawn bigger and
+    /// closer to the base expression).
     AccentUnder,
+
+    /// Indicates whether the over script should be treated as an accent (i.e. drawn bigger and
+    /// closer to the base expression).
     AccentOver,
+
+    /// One of the global [`Attribute`]s.
     Global(Attribute),
 }
 
@@ -40,14 +47,17 @@ pub struct UnderOver {
 }
 
 impl UnderOver {
+    /// Create a builder for [`UnderOver`] element.
     pub fn builder() -> UnderOverBuilder<Uninit, Uninit> {
         UnderOverBuilder::default()
     }
 
+    /// Get a reference to the base content of the [`UnderOver`] element.
     pub fn expr(&self) -> &[Element] {
         &self.expr
     }
 
+    /// Get a reference to the under script content of the [`UnderOver`] element if present.
     pub fn under(&self) -> Option<&[Element]> {
         match self.inner {
             UnderOverInner::Under(ref under) | UnderOverInner::UnderOver { ref under, .. } => {
@@ -57,6 +67,7 @@ impl UnderOver {
         }
     }
 
+    /// Get a reference to the over script content of the [`UnderOver`] element if present.
     pub fn over(&self) -> Option<&[Element]> {
         match self.inner {
             UnderOverInner::Over(ref over) | UnderOverInner::UnderOver { ref over, .. } => {
@@ -66,6 +77,7 @@ impl UnderOver {
         }
     }
 
+    /// Get a reference to all attributes of the [`UnderOver`] element.
     pub fn attributes(&self) -> &[UnderOverAttr] {
         &self.attributes
     }
@@ -73,6 +85,7 @@ impl UnderOver {
 
 crate::element_from_type!(UnderOver => UnderOver);
 
+/// Builder of the [`UnderOver`] element.
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct UnderOverBuilder<T1, T2> {
     expr: Option<Elements>,
@@ -84,6 +97,7 @@ pub struct UnderOverBuilder<T1, T2> {
 }
 
 impl<T1, T2> UnderOverBuilder<T1, T2> {
+    /// Set the base expression of the [`UnderOver`] element.
     pub fn expr(self, expr: impl IntoElements) -> UnderOverBuilder<Init, T2> {
         UnderOverBuilder {
             expr: Some(expr.into_elements()),
@@ -95,6 +109,7 @@ impl<T1, T2> UnderOverBuilder<T1, T2> {
         }
     }
 
+    /// Set the under script of the [`UnderOver`] element.
     pub fn over(self, over: impl IntoElements) -> UnderOverBuilder<T1, Init> {
         UnderOverBuilder {
             expr: self.expr,
@@ -105,6 +120,7 @@ impl<T1, T2> UnderOverBuilder<T1, T2> {
         }
     }
 
+    /// Set the over script of the [`UnderOver`] element.
     pub fn under(self, under: impl IntoElements) -> UnderOverBuilder<T1, Init> {
         UnderOverBuilder {
             expr: self.expr,
@@ -115,6 +131,7 @@ impl<T1, T2> UnderOverBuilder<T1, T2> {
         }
     }
 
+    /// Add attributes.
     pub fn attr<I, A>(mut self, attr: I) -> Self
     where
         I: IntoIterator<Item = A>,
@@ -126,6 +143,7 @@ impl<T1, T2> UnderOverBuilder<T1, T2> {
 }
 
 impl UnderOverBuilder<Init, Init> {
+    /// Build the [`UnderOver`] element.
     pub fn build(self) -> UnderOver {
         debug_assert!(
             self.over.is_some() || self.under.is_some(),

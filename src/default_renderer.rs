@@ -8,9 +8,10 @@ use crate::{
         AnnotationAttr, AnnotationContent, FracAttr, Num, OperatorAttr, PaddedAttr, SpaceAttr,
         TableAttr, TableCellAttr,
     },
-    Element, MathMlAttr, Renderer,
+    DisplayAttr, Element, MathMlAttr, Renderer,
 };
 
+/// Default MathMl [`Renderer`] implementation.
 #[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct MathMlFormatter;
 
@@ -521,7 +522,10 @@ impl Renderer for MathMlFormatter {
             .attr
             .iter()
             .map(|a| match a {
-                MathMlAttr::Display(d) => Ok(format!(r#"display="{d}""#)),
+                MathMlAttr::Display(d) => match d {
+                    DisplayAttr::Block => Ok(String::from(r#"display="block""#)),
+                    DisplayAttr::Inline => Ok(String::from(r#"display="inline""#)),
+                },
                 MathMlAttr::AltText(alt_t) => Ok(format!(r#"alttext="{alt_t}""#)),
                 MathMlAttr::Global(a) => self.render_attr(a),
             })

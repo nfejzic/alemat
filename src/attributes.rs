@@ -1,39 +1,65 @@
+//! Global attributes of MathML elements.
+
 use std::fmt::Display;
 
 /// Direction for [`Attribute::Dir`].
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Dir {
+    /// `rtl` direction.
     RightToLeft,
+    /// `ltr` direction.
     LeftToRight,
 }
 
 /// ScriptLevel for [`Attribute::ScriptLevel`].
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum ScriptLevel {
+    /// A positive number.
     Add(usize),
+    /// A negative number.
     Sub(usize),
+    /// A (positive) number.
     Num(usize),
 }
 
+/// MathVariant for [`Attribute::MathVariant`].
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum MathVariant {
+    /// Normal variant.
     Normal,
+    /// Bold variant.
     Bold,
+    /// Italic variant.
     Italic,
+    /// Bold italic variant.
     BoldItalic,
+    /// Double struck variant.
     DoubleStruck,
+    /// Bold fraktur variant.
     BoldFraktur,
+    /// Script variant.
     Script,
+    /// Bold script variant.
     BoldScript,
+    /// Fraktur variant.
     Fraktur,
+    /// Sans serif variant.
     SansSerif,
+    /// Bold sans serif variant.
     BoldSansSerif,
+    /// Sans serif italic variant.
     SansSerifItalic,
+    /// Sans serif bold italic variant.
     SansSerifBoldItalic,
+    /// Monospace variant.
     Monospace,
+    /// Initial variant.
     Initial,
+    /// Tailed variant.
     Tailed,
+    /// Looped variant.
     Looped,
+    /// Stretched variant.
     Stretched,
 }
 
@@ -121,6 +147,22 @@ pub enum Attribute {
     /// The `tabindex` attribute, same as in HTML.
     TabIndex(i16),
 
+    /// Event handler function, e.g. `onclick="..."`.
+    ///
+    /// # Example
+    /// ```rust
+    /// use alemat::{Attribute, BufMathMlWriter, Writer};
+    ///
+    /// let handler = Attribute::OnHandler {
+    ///     name: "click".to_string(),
+    ///     handler: "console.log('Clicked!')".to_string(),
+    /// };
+    ///
+    /// let mut writer = BufMathMlWriter::default();
+    /// writer.write_attr(&handler);
+    /// let output = writer.finish();
+    ///
+    /// assert_eq!(output, "onclick=\"console.log('Clicked!')\"");
     OnHandler {
         /// Name of the event.
         name: String,

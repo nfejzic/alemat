@@ -16,14 +16,17 @@ pub struct Ident {
 }
 
 impl Ident {
+    /// Create a builder for [`Ident`] element.
     pub fn builder() -> IdentBuilder<Uninit> {
         IdentBuilder::default()
     }
 
+    /// Get a reference to the inner content of the [`Ident`] element.
     pub fn ident(&self) -> &str {
         &self.ident
     }
 
+    /// Get a reference to all attributes of the [`Ident`] element.
     pub fn attributes(&self) -> &[Attribute] {
         &self.attributes
     }
@@ -43,6 +46,7 @@ where
 
 crate::element_from_type!(Ident => Ident);
 
+/// Builder of the [`Ident`] element.
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct IdentBuilder<T> {
     ident: Option<String>,
@@ -51,6 +55,7 @@ pub struct IdentBuilder<T> {
 }
 
 impl<T> IdentBuilder<T> {
+    /// Set the identifier string for the [`Ident`] element.
     pub fn ident(self, ident: impl Into<String>) -> IdentBuilder<Uninit> {
         IdentBuilder {
             ident: Some(ident.into()),
@@ -59,6 +64,7 @@ impl<T> IdentBuilder<T> {
         }
     }
 
+    /// Add a attributes.
     pub fn attr<I, A>(mut self, attr: I) -> Self
     where
         I: IntoIterator<Item = A>,
@@ -70,6 +76,7 @@ impl<T> IdentBuilder<T> {
 }
 
 impl IdentBuilder<Init> {
+    /// Build the [`Ident`] element.
     pub fn build(self) -> Ident {
         Ident {
             ident: self.ident.expect("Content is guaranteed to be init."),

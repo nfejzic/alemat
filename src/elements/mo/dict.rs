@@ -1,5 +1,6 @@
 use super::Operator;
 
+#[allow(missing_docs)]
 impl Operator {
     pub fn plus() -> Self {
         Self::from("\u{002B}")

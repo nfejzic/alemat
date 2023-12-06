@@ -17,10 +17,12 @@ pub struct Multiscripts {
 }
 
 impl Multiscripts {
+    /// Get a reference to the inner content of the [`Multiscripts`] element.
     pub fn content(&self) -> &[Element] {
         &self.content
     }
 
+    /// Get a reference to all attributes of the [`Multiscripts`] element.
     pub fn attributes(&self) -> &[Attribute] {
         &self.attributes
     }
@@ -36,6 +38,7 @@ impl From<Elements> for Multiscripts {
 }
 
 impl Multiscripts {
+    /// Create a builder for [`Multiscripts`] element.
     pub fn builder() -> MultiscriptsBuilder<Uninit> {
         MultiscriptsBuilder::default()
     }
@@ -88,6 +91,7 @@ pub struct Prescripts {
 }
 
 impl Prescripts {
+    /// Create a [`Prescripts`] element with the given attributes.
     pub fn with_attr<I, A>(attr: I) -> Self
     where
         I: IntoIterator<Item = A>,
@@ -98,6 +102,7 @@ impl Prescripts {
         }
     }
 
+    /// Get a reference to all attributes of the [`Prescripts`] element.
     pub fn attributes(&self) -> &[Attribute] {
         &self.attr
     }

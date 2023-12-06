@@ -43,6 +43,7 @@ pub struct Space {
 }
 
 impl Space {
+    /// Add attributes.
     pub fn add_attr<I, A>(&mut self, attr: I)
     where
         I: IntoIterator<Item = A>,
@@ -51,6 +52,7 @@ impl Space {
         self.attr.extend(attr.into_iter().map(Into::into));
     }
 
+    /// Create a new instance of [`Space`] with additional attributes.
     pub fn with_attr<I, A>(mut self, attr: I) -> Self
     where
         I: IntoIterator<Item = A>,
@@ -60,6 +62,7 @@ impl Space {
         self
     }
 
+    /// Get a reference to all attributes of the [`Space`] element.
     pub fn attributes(&self) -> &[SpaceAttr] {
         &self.attr
     }
