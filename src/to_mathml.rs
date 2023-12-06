@@ -13,9 +13,6 @@ use crate::{
     Element, MathMl,
 };
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
-pub struct Unimplemented;
-
 /// Trait for rendering MathML elements. Each method in this trait has a default implementation
 /// that returns [`Result::Ok`] with an empty [`String`].
 /// This makes it possible to potentially introduce new elements without breaking existing
