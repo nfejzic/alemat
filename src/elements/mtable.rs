@@ -1,5 +1,6 @@
 use crate::{attributes::Attribute, Element, Elements};
 
+/// One of the values for `columnlines` attribute.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum ColumnLine {
     /// No line is drawn.
@@ -45,14 +46,17 @@ pub struct Table {
 }
 
 impl Table {
+    /// Get a reference to the [`Table`]s rows.
     pub fn rows(&self) -> &[TableRow] {
         &self.rows
     }
 
+    /// Add a [`TableRow`] to the [`Table`].
     pub fn add_row(&mut self, row: TableRow) {
         self.rows.push(row);
     }
 
+    /// Add multiple [`TableRow`]s to the [`Table`].
     pub fn add_rows<I, R>(&mut self, rows: I)
     where
         I: IntoIterator<Item = R>,
@@ -61,11 +65,13 @@ impl Table {
         self.rows.extend(rows.into_iter().map(Into::into));
     }
 
+    /// Create a new instance of [`Table`] extended with the given [`TableRow`].
     pub fn with_row(mut self, row: TableRow) -> Self {
         self.rows.push(row);
         self
     }
 
+    /// Create a new instance of [`Table`] extended with given [`TableRow`]s.
     pub fn with_rows<I, R>(mut self, rows: I) -> Self
     where
         I: IntoIterator<Item = R>,
@@ -75,8 +81,28 @@ impl Table {
         self
     }
 
+    /// Get a reference to the attributes of the [`Table`] element.
     pub fn attributes(&self) -> &[TableAttr] {
         &self.attributes
+    }
+
+    /// Add attributes.
+    pub fn add_attr<I, A>(&mut self, attr: I)
+    where
+        I: IntoIterator<Item = A>,
+        A: Into<TableAttr>,
+    {
+        self.attributes.extend(attr.into_iter().map(Into::into));
+    }
+
+    /// Create a new instance of [`Table`] with additional attributes.
+    pub fn with_attr<I, A>(mut self, attr: I) -> Self
+    where
+        I: IntoIterator<Item = A>,
+        A: Into<TableAttr>,
+    {
+        self.attributes.extend(attr.into_iter().map(Into::into));
+        self
     }
 }
 
@@ -101,25 +127,6 @@ where
 {
     fn from(value: I) -> Self {
         Self::from_iter(value)
-    }
-}
-
-impl Table {
-    pub fn add_attr<I, A>(&mut self, attr: I)
-    where
-        I: IntoIterator<Item = A>,
-        A: Into<TableAttr>,
-    {
-        self.attributes.extend(attr.into_iter().map(Into::into));
-    }
-
-    pub fn with_attr<I, A>(mut self, attr: I) -> Self
-    where
-        I: IntoIterator<Item = A>,
-        A: Into<TableAttr>,
-    {
-        self.attributes.extend(attr.into_iter().map(Into::into));
-        self
     }
 }
 
@@ -176,6 +183,7 @@ where
 }
 
 impl TableRow {
+    /// Add attributes.
     pub fn add_attr<I, A>(&mut self, attr: I)
     where
         I: IntoIterator<Item = A>,
@@ -184,10 +192,12 @@ impl TableRow {
         self.attr.extend(attr.into_iter().map(Into::into));
     }
 
+    /// Add a [`TableCell`] to this instance of [`TableRow`].
     pub fn add_cell(&mut self, cell: TableCell) {
         self.cells.push(cell);
     }
 
+    /// Add multiple [`TableCell`]s to this instance of [`TableRow`].
     pub fn add_cells<I, C>(&mut self, cells: I)
     where
         I: IntoIterator<Item = C>,
@@ -196,11 +206,13 @@ impl TableRow {
         self.cells.extend(cells.into_iter().map(Into::into));
     }
 
+    /// Create a new instance of [`TableRow`] extended with the given [`TableCell`].
     pub fn with_cell(mut self, cell: TableCell) -> Self {
         self.cells.push(cell);
         self
     }
 
+    /// Create a new instance of [`TableRow`] extended with given [`TableCell`]s.
     pub fn with_cells<I, C>(mut self, cells: I) -> Self
     where
         I: IntoIterator<Item = C>,
@@ -210,10 +222,12 @@ impl TableRow {
         self
     }
 
+    /// Get a reference to the cells of the [`TableRow`] element.
     pub fn cells(&self) -> &[TableCell] {
         &self.cells
     }
 
+    /// Get a reference to all attributes of the [`TableRow`] element.
     pub fn attributes(&self) -> &[Attribute] {
         &self.attr
     }
@@ -331,14 +345,17 @@ impl<const N: usize, I: Into<Element>> From<[I; N]> for TableCell {
 }
 
 impl TableCell {
+    /// Get a reference to the children of the [`TableCell`] element.
     pub fn children(&self) -> &[Element] {
         &self.children
     }
 
+    /// Get a reference to all attributes of the [`TableCell`] element.
     pub fn attributes(&self) -> &[TableCellAttr] {
         &self.attr
     }
 
+    /// Create a [`TableCell`] with the given content.
     pub fn with_content(content: impl IntoElements) -> Self {
         Self {
             children: content.into_elements(),
@@ -346,6 +363,7 @@ impl TableCell {
         }
     }
 
+    /// Add attributes.
     pub fn add_attr<I, A>(&mut self, attr: I)
     where
         I: IntoIterator<Item = A>,
@@ -354,6 +372,7 @@ impl TableCell {
         self.attr.extend(attr.into_iter().map(Into::into));
     }
 
+    /// Create a new instance of [`TableCell`] with additional attributes.
     pub fn with_attr<I, A>(mut self, attr: I) -> Self
     where
         I: IntoIterator<Item = A>,
