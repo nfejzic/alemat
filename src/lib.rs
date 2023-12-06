@@ -15,6 +15,7 @@ use elements::IntoElements;
 pub use elements::{Element, Elements};
 pub use to_mathml::*;
 
+/// Specifies how the enclosed MathML markup should be rendered.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum MathMlDisplay {
     /// This element will be displayed in its own block outside the current span of text and with
@@ -26,6 +27,7 @@ pub enum MathMlDisplay {
     Inline,
 }
 
+/// Attributes of the `math` ([`MathMl`]) element.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum MathMlAttr {
     /// This enumerated attribute specifies how the enclosed MathML markup should be rendered. It
@@ -43,6 +45,7 @@ pub enum MathMlAttr {
     /// implement math layout.
     AltText(String),
 
+    /// One of the global [`Attribute`]s.
     Global(Attribute),
 }
 
@@ -120,6 +123,7 @@ impl MathMl {
         renderer.render_mathml(self)
     }
 
+    /// Write this `math` element and its children using the given writer.
     pub fn write<W: Writer>(&self, writer: &mut W) -> Result<W::Buffer, W::Error> {
         writer.write_mathml(self)?;
         Ok(writer.finish())
@@ -129,10 +133,7 @@ impl MathMl {
     ///
     /// In this implementation, [`BufMathMlWriter`] is used.
     pub fn render(&self) -> Result<String, <BufMathMlWriter as crate::Writer>::Error> {
-        let mut buf_writer = BufMathMlWriter::default();
-        buf_writer.write_mathml(self)?;
-
-        Ok(buf_writer.into_inner())
+        self.write(&mut BufMathMlWriter::default())
     }
 }
 
