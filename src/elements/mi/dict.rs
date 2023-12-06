@@ -1,5 +1,6 @@
 use super::Ident;
 
+#[allow(missing_docs)]
 impl Ident {
     pub fn empty_set() -> Self {
         Self::from("\u{2205}")
