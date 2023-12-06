@@ -197,6 +197,8 @@ pub trait Writer {
 
     /// The `Error` type of the writer that will be returned by `write_*` methods in cases where
     /// writing can fail. Use [`Infallible`] for writers that cannot fail.
+    ///
+    /// [`Infallible`]: std::convert::Infallible
     type Error;
 
     /// Write an [`Action`] element.
