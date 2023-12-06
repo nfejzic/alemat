@@ -9,7 +9,7 @@ use crate::{
         AnnotationAttr, AnnotationContent, FracAttr, Num, OperatorAttr, PaddedAttr, SpaceAttr,
         TableAttr, TableCellAttr,
     },
-    Element, MathMlAttr, MathMlDisplay, Renderer, Writer,
+    DisplayAttr, Element, MathMlAttr, Renderer, Writer,
 };
 
 /// Default implementation of MathMl [`Writer`].
@@ -584,8 +584,8 @@ impl Writer for BufMathMlWriter {
                 MathMlAttr::Display(d) => {
                     write!(self, r#"display=""#)?;
                     match d {
-                        MathMlDisplay::Block => write!(self, r#"block""#)?,
-                        MathMlDisplay::Inline => write!(self, r#"inline""#)?,
+                        DisplayAttr::Block => write!(self, r#"block""#)?,
+                        DisplayAttr::Inline => write!(self, r#"inline""#)?,
                     }
                 }
                 MathMlAttr::AltText(alt_t) => write!(self, r#"alttext="{alt_t}""#)?,

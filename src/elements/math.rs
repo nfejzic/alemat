@@ -3,19 +3,8 @@ use std::marker::PhantomData;
 use crate::{
     attributes::Attribute,
     markers::{Init, Uninit},
-    MathMl,
+    DisplayAttr, MathMl,
 };
-
-/// The display attribute, if present, must be an ASCII case-insensitive match to `block` or
-/// `inline`.
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
-pub enum DisplayAttr {
-    /// `block` display attribute.
-    Block,
-
-    /// `inline` display attribute.
-    Inline,
-}
 
 /// An attribute of `math` element. Either one of the global [`Attribute`]s, `display` or `alttext`
 /// attribute.

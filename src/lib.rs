@@ -18,13 +18,13 @@ pub use to_mathml::*;
 
 /// Specifies how the enclosed MathML markup should be rendered.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
-pub enum MathMlDisplay {
-    /// This element will be displayed in its own block outside the current span of text and with
-    /// math-style set to normal.
+pub enum DisplayAttr {
+    /// `block` display attribute. The element will be displayed in its own block outside the
+    /// current span of text and with math-style set to normal.
     Block,
 
-    /// This element will be displayed inside the current span of text and with math-style set to
-    /// compact.
+    /// `inline` display attribute. The element will be displayed inside the current span of text
+    /// and with math-style set to compact.
     Inline,
 }
 
@@ -40,7 +40,7 @@ pub enum MathMlAttr {
     ///    text and with math-style set to compact.
     ///
     /// If not present, its default value is `inline`.
-    Display(MathMlDisplay),
+    Display(DisplayAttr),
 
     /// The alttext attribute may be used as alternative text by some legacy systems that do not
     /// implement math layout.
