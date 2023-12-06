@@ -30,6 +30,7 @@ impl<const N: usize, I: Into<Element>> From<[I; N]> for Row {
 }
 
 impl Row {
+    /// Add attributes.
     pub fn add_attr<I, A>(&mut self, attr: I)
     where
         I: IntoIterator<Item = A>,
@@ -38,6 +39,7 @@ impl Row {
         self.attr.extend(attr.into_iter().map(Into::into));
     }
 
+    /// Create a new instance of [`Row`] with additional attributes.
     pub fn with_attr<I, A>(mut self, attr: I) -> Self
     where
         I: Iterator<Item = A>,
@@ -47,10 +49,12 @@ impl Row {
         self
     }
 
+    /// Get a reference to the children of the [`Row`] element.
     pub fn children(&self) -> &[Element] {
         &self.children
     }
 
+    /// Get a reference to all attributes of the [`Row`] element.
     pub fn attributes(&self) -> &[Attribute] {
         &self.attr
     }
