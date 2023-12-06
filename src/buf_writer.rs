@@ -610,4 +610,216 @@ impl Renderer for BufMathMlWriter {
         self.write_mathml(mathml)?;
         Ok(std::mem::take(&mut self.buf))
     }
+
+    fn render_action(
+        &mut self,
+        action: &crate::elements::grouping::Action,
+    ) -> Result<Self::Output, Self::Error> {
+        let mut s = std::mem::take(&mut self.buf);
+        self.write_action(action)?;
+        std::mem::swap(&mut self.buf, &mut s);
+        Ok(s)
+    }
+
+    fn render_annotation(
+        &mut self,
+        annotation: &crate::elements::Annotation,
+    ) -> Result<Self::Output, Self::Error> {
+        let mut s = std::mem::take(&mut self.buf);
+        self.write_annotation(annotation)?;
+        std::mem::swap(&mut self.buf, &mut s);
+        Ok(s)
+    }
+
+    fn render_error(
+        &mut self,
+        error: &crate::elements::grouping::Error,
+    ) -> Result<Self::Output, Self::Error> {
+        let mut s = std::mem::take(&mut self.buf);
+        self.write_error(error)?;
+        std::mem::swap(&mut self.buf, &mut s);
+        Ok(s)
+    }
+
+    fn render_frac(&mut self, frac: &crate::elements::Frac) -> Result<Self::Output, Self::Error> {
+        let mut s = std::mem::take(&mut self.buf);
+        self.write_frac(frac)?;
+        std::mem::swap(&mut self.buf, &mut s);
+        Ok(s)
+    }
+
+    fn render_ident(
+        &mut self,
+        ident: &crate::elements::Ident,
+    ) -> Result<Self::Output, Self::Error> {
+        let mut s = std::mem::take(&mut self.buf);
+        self.write_ident(ident)?;
+        std::mem::swap(&mut self.buf, &mut s);
+        Ok(s)
+    }
+
+    fn render_multiscripts(
+        &mut self,
+        multiscripts: &crate::elements::scripted::Multiscripts,
+    ) -> Result<Self::Output, Self::Error> {
+        let mut s = std::mem::take(&mut self.buf);
+        self.write_multiscripts(multiscripts)?;
+        std::mem::swap(&mut self.buf, &mut s);
+        Ok(s)
+    }
+
+    fn render_prescripts(&mut self, prescripts: &Prescripts) -> Result<Self::Output, Self::Error> {
+        let mut s = std::mem::take(&mut self.buf);
+        self.write_prescripts(prescripts)?;
+        std::mem::swap(&mut self.buf, &mut s);
+        Ok(s)
+    }
+
+    fn render_num(&mut self, num: &Num) -> Result<Self::Output, Self::Error> {
+        let mut s = std::mem::take(&mut self.buf);
+        self.write_num(num)?;
+        std::mem::swap(&mut self.buf, &mut s);
+        Ok(s)
+    }
+
+    fn render_operator(
+        &mut self,
+        operator: &crate::elements::Operator,
+    ) -> Result<Self::Output, Self::Error> {
+        let mut s = std::mem::take(&mut self.buf);
+        self.write_operator(operator)?;
+        std::mem::swap(&mut self.buf, &mut s);
+        Ok(s)
+    }
+
+    fn render_padded(
+        &mut self,
+        padded: &crate::elements::Padded,
+    ) -> Result<Self::Output, Self::Error> {
+        let mut s = std::mem::take(&mut self.buf);
+        self.write_padded(padded)?;
+        std::mem::swap(&mut self.buf, &mut s);
+        Ok(s)
+    }
+
+    fn render_phantom(
+        &mut self,
+        phantom: &crate::elements::grouping::Phantom,
+    ) -> Result<Self::Output, Self::Error> {
+        let mut s = std::mem::take(&mut self.buf);
+        self.write_phantom(phantom)?;
+        std::mem::swap(&mut self.buf, &mut s);
+        Ok(s)
+    }
+
+    fn render_radical(
+        &mut self,
+        radical: &crate::elements::radicals::Radical,
+    ) -> Result<Self::Output, Self::Error> {
+        let mut s = std::mem::take(&mut self.buf);
+        self.write_radical(radical)?;
+        std::mem::swap(&mut self.buf, &mut s);
+        Ok(s)
+    }
+
+    fn render_row(
+        &mut self,
+        row: &crate::elements::grouping::Row,
+    ) -> Result<Self::Output, Self::Error> {
+        let mut s = std::mem::take(&mut self.buf);
+        self.write_row(row)?;
+        std::mem::swap(&mut self.buf, &mut s);
+        Ok(s)
+    }
+
+    fn render_semantics(
+        &mut self,
+        semantics: &crate::elements::Semantics,
+    ) -> Result<Self::Output, Self::Error> {
+        let mut s = std::mem::take(&mut self.buf);
+        self.write_semantics(semantics)?;
+        std::mem::swap(&mut self.buf, &mut s);
+        Ok(s)
+    }
+
+    fn render_space(
+        &mut self,
+        space: &crate::elements::Space,
+    ) -> Result<Self::Output, Self::Error> {
+        let mut s = std::mem::take(&mut self.buf);
+        self.write_space(space)?;
+        std::mem::swap(&mut self.buf, &mut s);
+        Ok(s)
+    }
+
+    fn render_str_literal(
+        &mut self,
+        str_literal: &crate::elements::StrLiteral,
+    ) -> Result<Self::Output, Self::Error> {
+        let mut s = std::mem::take(&mut self.buf);
+        self.write_str_literal(str_literal)?;
+        std::mem::swap(&mut self.buf, &mut s);
+        Ok(s)
+    }
+
+    fn render_style(
+        &mut self,
+        style: &crate::elements::grouping::Style,
+    ) -> Result<Self::Output, Self::Error> {
+        let mut s = std::mem::take(&mut self.buf);
+        self.write_style(style)?;
+        std::mem::swap(&mut self.buf, &mut s);
+        Ok(s)
+    }
+
+    fn render_subsup(
+        &mut self,
+        sub_sup: &crate::elements::scripted::SubSup,
+    ) -> Result<Self::Output, Self::Error> {
+        let mut s = std::mem::take(&mut self.buf);
+        self.write_subsup(sub_sup)?;
+        std::mem::swap(&mut self.buf, &mut s);
+        Ok(s)
+    }
+
+    fn render_table(
+        &mut self,
+        table: &crate::elements::Table,
+    ) -> Result<Self::Output, Self::Error> {
+        let mut s = std::mem::take(&mut self.buf);
+        self.write_table(table)?;
+        std::mem::swap(&mut self.buf, &mut s);
+        Ok(s)
+    }
+
+    fn render_text(&mut self, text: &crate::elements::Text) -> Result<Self::Output, Self::Error> {
+        let mut s = std::mem::take(&mut self.buf);
+        self.write_text(text)?;
+        std::mem::swap(&mut self.buf, &mut s);
+        Ok(s)
+    }
+
+    fn render_underover(
+        &mut self,
+        under_over: &crate::elements::scripted::UnderOver,
+    ) -> Result<Self::Output, Self::Error> {
+        let mut s = std::mem::take(&mut self.buf);
+        self.write_underover(under_over)?;
+        std::mem::swap(&mut self.buf, &mut s);
+        Ok(s)
+    }
+
+    fn render_attr(&mut self, attr: &Attribute) -> Result<Self::Output, Self::Error> {
+        let mut s = std::mem::take(&mut self.buf);
+        self.write_attr(attr)?;
+        std::mem::swap(&mut self.buf, &mut s);
+        Ok(s)
+    }
+
+    fn render_element(&mut self, element: &Element) -> Result<Self::Output, Self::Error> {
+        let mut s = std::mem::take(&mut self.buf);
+        self.write_element(element)?;
+        std::mem::swap(&mut self.buf, &mut s);
+        Ok(s)
+    }
 }

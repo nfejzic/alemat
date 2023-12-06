@@ -109,8 +109,8 @@ pub trait Renderer {
         unimplemented!("Rendering of {:?} not implemented", attr);
     }
 
-    fn render_element(&mut self, tag: &Element) -> Result<Self::Output, Self::Error> {
-        match tag {
+    fn render_element(&mut self, element: &Element) -> Result<Self::Output, Self::Error> {
+        match element {
             Element::Action(action) => self.render_action(action),
             Element::Annotation(annotation) => self.render_annotation(annotation),
             Element::Error(error) => self.render_error(error),
