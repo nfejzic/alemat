@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/nfejzic/alemat/compare/v0.3.0...v0.3.1) (2023-12-08)
+
+
+### Bug Fixes
+
+* make &lt;mi&gt; buildable, improve rendering API ([#8](https://github.com/nfejzic/alemat/issues/8)) ([41889eb](https://github.com/nfejzic/alemat/commit/41889eb6931a01a3eaa592039474ac55fad0e68f))
+
 ## [0.3.0](https://github.com/nfejzic/alemat/compare/v0.2.0...v0.3.0) (2023-12-07)
 
 
