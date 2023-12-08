@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/nfejzic/alemat/compare/v0.3.0...v0.4.0) (2023-12-08)
+
+
+### Features
+
+* improve write API ([#14](https://github.com/nfejzic/alemat/issues/14)) ([99eacaf](https://github.com/nfejzic/alemat/commit/99eacaf4ab51a19bdab7ba3b320b08039f5c5266))
+
 ## [0.3.0](https://github.com/nfejzic/alemat/compare/v0.2.0...v0.3.0) (2023-12-08)
 
 
