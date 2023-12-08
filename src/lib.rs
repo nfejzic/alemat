@@ -125,12 +125,9 @@ impl MathMl {
     }
 
     /// Write this `math` element and its children using the given writer.
-    pub fn write<'writer, W: Writer>(
-        &self,
-        writer: &'writer mut W,
-    ) -> Result<&'writer mut W, W::Error> {
+    pub fn write<W: Writer>(&self, writer: &mut W) -> Result<W::Buffer, W::Error> {
         writer.write_mathml(self)?;
-        Ok(writer)
+        Ok(writer.finish())
     }
 
     /// Render this `math` element and its children using the default renderer.
@@ -138,7 +135,6 @@ impl MathMl {
     /// In this implementation, [`BufMathMlWriter`] is used.
     pub fn render(&self) -> Result<String, <BufMathMlWriter as crate::Writer>::Error> {
         self.write(&mut BufMathMlWriter::default())
-            .map(|w| w.finish())
     }
 }
 
