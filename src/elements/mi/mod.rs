@@ -56,7 +56,7 @@ pub struct IdentBuilder<T> {
 
 impl<T> IdentBuilder<T> {
     /// Set the identifier string for the [`Ident`] element.
-    pub fn ident(self, ident: impl Into<String>) -> IdentBuilder<Uninit> {
+    pub fn ident(self, ident: impl Into<String>) -> IdentBuilder<Init> {
         IdentBuilder {
             ident: Some(ident.into()),
             attributes: self.attributes,
