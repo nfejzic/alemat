@@ -155,6 +155,12 @@ impl DerefMut for Elements {
     }
 }
 
+impl IntoElements for Elements {
+    fn into_elements(self) -> Elements {
+        self
+    }
+}
+
 impl Elements {
     /// Consumes the [`Elements`] and returns a [`Vec`] of [`Element`]s.
     pub fn into_inner(self) -> Vec<Element> {
