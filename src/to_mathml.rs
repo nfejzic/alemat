@@ -27,7 +27,7 @@ pub trait Renderer {
     /// rendering can fail. Use [`Infallible`] for renderers that cannot fail.
     ///
     /// [`Infallible`]: std::convert::Infallible
-    type Error;
+    type Error: std::error::Error;
 
     /// Render an [`Action`] element.
     fn render_action(&mut self, action: &Action) -> Result<Self::Output, Self::Error> {
@@ -199,7 +199,7 @@ pub trait Writer {
     /// writing can fail. Use [`Infallible`] for writers that cannot fail.
     ///
     /// [`Infallible`]: std::convert::Infallible
-    type Error;
+    type Error: std::error::Error;
 
     /// Write an [`Action`] element.
     fn write_action(&mut self, _action: &Action) -> Result<(), Self::Error> {
