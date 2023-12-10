@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.1](https://github.com/nfejzic/alemat/compare/v0.4.0...v0.4.1) (2023-12-10)
+
+
+### Bug Fixes
+
+* constrain `Error` associated type with `std::error::Error` ([#15](https://github.com/nfejzic/alemat/issues/15)) ([2177ea8](https://github.com/nfejzic/alemat/commit/2177ea8da922371088156496f1cfe1e23a661ccd))
+
 ## [0.4.0](https://github.com/nfejzic/alemat/compare/v0.3.0...v0.4.0) (2023-12-08)
 
 
