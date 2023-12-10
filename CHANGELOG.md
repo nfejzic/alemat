@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/nfejzic/alemat/compare/v0.4.1...v0.5.0) (2023-12-10)
+
+
+### Features
+
+* implement `IntoElements` for `Elements` ([#17](https://github.com/nfejzic/alemat/issues/17)) ([9a61b9b](https://github.com/nfejzic/alemat/commit/9a61b9b8642b4dcd281e27452f978dfcd695fbcf))
+
 ## [0.4.1](https://github.com/nfejzic/alemat/compare/v0.4.0...v0.4.1) (2023-12-10)
 
 
