@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.1](https://github.com/nfejzic/alemat/compare/v0.5.0...v0.5.1) (2023-12-12)
+
+
+### Bug Fixes
+
+* wrap elements of underover and subsup in row when many used ([#19](https://github.com/nfejzic/alemat/issues/19)) ([8355f4d](https://github.com/nfejzic/alemat/commit/8355f4d17172d54ab5f8276233686884e4aa56e2))
+
 ## [0.5.0](https://github.com/nfejzic/alemat/compare/v0.4.1...v0.5.0) (2023-12-10)
 
 
