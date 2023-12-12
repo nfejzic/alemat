@@ -99,6 +99,12 @@ pub struct UnderOverBuilder<T1, T2> {
 impl<T1, T2> UnderOverBuilder<T1, T2> {
     /// Set the base expression of the [`UnderOver`] element.
     pub fn expr(self, expr: impl IntoElements) -> UnderOverBuilder<Init, T2> {
+        let mut expr = expr.into_elements();
+
+        if expr.len() > 1 {
+            expr = Row::from(expr).into_elements();
+        }
+
         UnderOverBuilder {
             expr: Some(expr.into_elements()),
             under: self.under,
@@ -111,6 +117,12 @@ impl<T1, T2> UnderOverBuilder<T1, T2> {
 
     /// Set the under script of the [`UnderOver`] element.
     pub fn over(self, over: impl IntoElements) -> UnderOverBuilder<T1, Init> {
+        let mut over = over.into_elements();
+
+        if over.len() > 1 {
+            over = Row::from(over).into_elements();
+        }
+
         UnderOverBuilder {
             expr: self.expr,
             under: self.under,
@@ -122,6 +134,12 @@ impl<T1, T2> UnderOverBuilder<T1, T2> {
 
     /// Set the over script of the [`UnderOver`] element.
     pub fn under(self, under: impl IntoElements) -> UnderOverBuilder<T1, Init> {
+        let mut under = under.into_elements();
+
+        if under.len() > 1 {
+            under = Row::from(under).into_elements();
+        }
+
         UnderOverBuilder {
             expr: self.expr,
             under: Some(under.into_elements()),
@@ -160,11 +178,7 @@ impl UnderOverBuilder<Init, Init> {
             }
         };
 
-        let mut expr = self.expr.expect("Expr is guaranteed to be init.");
-
-        if expr.len() > 1 {
-            expr = Row::from(expr).into_elements();
-        }
+        let expr = self.expr.expect("Expr is guaranteed to be init.");
 
         UnderOver {
             expr,

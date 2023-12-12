@@ -6,7 +6,7 @@ use crate::{
     Element, Elements,
 };
 
-use super::IntoElements;
+use super::{grouping::Row, IntoElements};
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 enum SubSupInner {
@@ -72,6 +72,12 @@ pub struct SubSupBuilder<T1, T2> {
 impl<T1, T2> SubSupBuilder<T1, T2> {
     /// Set the base of the [`SubSup`] element.
     pub fn base(self, base: impl IntoElements) -> SubSupBuilder<Init, T2> {
+        let mut base = base.into_elements();
+
+        if base.len() > 1 {
+            base = Row::from(base).into_elements();
+        }
+
         SubSupBuilder {
             base: Some(base.into_elements()),
             sub: self.sub,
@@ -83,6 +89,12 @@ impl<T1, T2> SubSupBuilder<T1, T2> {
 
     /// Set the subscript of the [`SubSup`] element.
     pub fn subscript(self, sub: impl IntoElements) -> SubSupBuilder<T1, Init> {
+        let mut sub = sub.into_elements();
+
+        if sub.len() > 1 {
+            sub = Row::from(sub).into_elements();
+        }
+
         SubSupBuilder {
             base: self.base,
             sub: Some(sub.into_elements()),
@@ -94,6 +106,12 @@ impl<T1, T2> SubSupBuilder<T1, T2> {
 
     /// Set the superscript of the [`SubSup`] element.
     pub fn supscript(self, sup: impl IntoElements) -> SubSupBuilder<T1, Init> {
+        let mut sup = sup.into_elements();
+
+        if sup.len() > 1 {
+            sup = Row::from(sup).into_elements();
+        }
+
         SubSupBuilder {
             base: self.base,
             sub: self.sub,
@@ -132,8 +150,10 @@ impl SubSupBuilder<Init, Init> {
             }
         };
 
+        let base = self.base.expect("Base is guaranteed to be init.");
+
         SubSup {
-            base: self.base.expect("Base is guaranteed to be init."),
+            base,
             inner,
             attributes: self.attr,
         }
