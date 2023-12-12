@@ -17,6 +17,28 @@ fn subsup() {
 }
 
 #[test]
+fn subsup_many() {
+    let sub = alemat::children![
+        Operator::lparens(),
+        Ident::from("n"),
+        Operator::eq(),
+        Num::from(0),
+        Operator::rparens(),
+    ];
+
+    let sup = alemat::children![Ident::from("k"), Operator::plus(), Num::from(1)];
+
+    let out = MathMl::with_content(alemat::children![SubSup::builder()
+        .base(Operator::integral())
+        .subscript(sub)
+        .supscript(sup)
+        .build()])
+    .render();
+
+    crate::snap_test!(out, name: "subsup_many");
+}
+
+#[test]
 fn subsup_integral() {
     let out = MathMl::with_content(alemat::children![
         SubSup::builder()
@@ -64,6 +86,28 @@ fn underover() {
     .render();
 
     crate::snap_test!(out, name: "underover_underover");
+}
+
+#[test]
+fn underover_many() {
+    let under = alemat::children![
+        Operator::lparens(),
+        Ident::from("n"),
+        Operator::eq(),
+        Num::from(0),
+        Operator::rparens(),
+    ];
+
+    let over = alemat::children![Ident::from("k"), Operator::plus(), Num::from(1)];
+
+    let out = MathMl::with_content(alemat::children![UnderOver::builder()
+        .expr(Operator::sum())
+        .under(under)
+        .over(over)
+        .build()])
+    .render();
+
+    crate::snap_test!(out, name: "underover_many");
 }
 
 #[test]

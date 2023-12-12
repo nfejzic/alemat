@@ -1,0 +1,40 @@
+---
+source: tests/scripted/mod.rs
+expression: input
+---
+<math>
+  <munderover>
+    <mo>
+      ∑
+    </mo>
+    <mrow>
+      <mo>
+        (
+      </mo>
+      <mi>
+        n
+      </mi>
+      <mo>
+        =
+      </mo>
+      <mn>
+        0
+      </mn>
+      <mo>
+        )
+      </mo>
+    </mrow>
+    <mrow>
+      <mi>
+        k
+      </mi>
+      <mo>
+        +
+      </mo>
+      <mn>
+        1
+      </mn>
+    </mrow>
+  </munderover>
+</math>
+
