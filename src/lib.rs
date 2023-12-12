@@ -1,20 +1,22 @@
 #![warn(missing_docs)]
 //! Library for type-safe building of MathML (core) markup.
 
-pub mod attributes;
 mod buf_writer;
 mod default_renderer;
+mod to_mathml;
+use elements::IntoElements;
+
+pub mod attributes;
 pub mod elements;
 pub mod markers;
-mod to_mathml;
 
 pub use attributes::Attribute;
 pub use buf_writer::BufMathMlWriter;
 pub use default_renderer::MathMlFormatter;
-pub(crate) use elements::element_from_type;
-use elements::IntoElements;
 pub use elements::{Element, Elements};
 pub use to_mathml::*;
+
+pub(crate) use elements::element_from_type;
 
 /// Specifies how the enclosed MathML markup should be rendered.
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
