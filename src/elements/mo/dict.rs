@@ -166,7 +166,7 @@ impl Operator {
         Self::from("\u{003C}")
     }
 
-    pub fn rt() -> Self {
+    pub fn gt() -> Self {
         Self::from("\u{003E}")
     }
 
