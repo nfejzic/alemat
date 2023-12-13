@@ -30,6 +30,16 @@ impl<const N: usize, I: Into<Element>> From<[I; N]> for Row {
 }
 
 impl Row {
+    /// Add a single element.
+    pub fn add_element(&mut self, el: impl Into<Element>) {
+        self.children.push(el.into());
+    }
+
+    /// Add multiple elements.
+    pub fn add_elements(&mut self, el: impl IntoElements) {
+        self.children.append(&mut el.into_elements());
+    }
+
     /// Add attributes.
     pub fn add_attr<I, A>(&mut self, attr: I)
     where
