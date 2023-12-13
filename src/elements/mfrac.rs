@@ -4,6 +4,7 @@ use crate::attributes::Attribute;
 use crate::markers::{Init, Uninit};
 use crate::{Element, Elements};
 
+use super::grouping::Row;
 use super::IntoElements;
 
 /// An attribute of `mfrac` element. Either one of the global [`Attribute`]s, or `linethickness`
@@ -102,6 +103,12 @@ pub struct FracBuilder<N, D> {
 impl<N, D> FracBuilder<N, D> {
     /// Add or overwrite the numerator to the `mfrac` element.
     pub fn num(self, num: impl IntoElements) -> FracBuilder<Init, D> {
+        let mut num = num.into_elements();
+
+        if num.len() > 1 {
+            num = Row::from(num).into_elements();
+        }
+
         FracBuilder {
             num: Some(num.into_elements()),
             denom: self.denom,
@@ -112,6 +119,12 @@ impl<N, D> FracBuilder<N, D> {
 
     /// Add or overwrite the denominator to the `mfrac` element.
     pub fn denom(self, denom: impl IntoElements) -> FracBuilder<N, Init> {
+        let mut denom = denom.into_elements();
+
+        if denom.len() > 1 {
+            denom = Row::from(denom).into_elements();
+        }
+
         FracBuilder {
             num: self.num,
             denom: Some(denom.into_elements()),
