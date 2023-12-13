@@ -155,6 +155,24 @@ impl DerefMut for Elements {
     }
 }
 
+impl FromIterator<Element> for Elements {
+    fn from_iter<T: IntoIterator<Item = Element>>(iter: T) -> Self {
+        let inner = iter.into_iter().collect();
+        Self(inner)
+    }
+}
+
+impl FromIterator<Elements> for Elements {
+    fn from_iter<T: IntoIterator<Item = Elements>>(iter: T) -> Self {
+        let mut elements = Self::default();
+        for mut el in iter.into_iter() {
+            elements.append(&mut el);
+        }
+
+        elements
+    }
+}
+
 impl IntoElements for Elements {
     fn into_elements(self) -> Elements {
         self
