@@ -1,0 +1,39 @@
+---
+source: tests/radicals/mod.rs
+expression: input
+---
+<math>
+  <mroot>
+    <mrow>
+      <mn>
+        1
+      </mn>
+      <mo>
+        +
+      </mo>
+      <msubsup>
+        <mi>
+          n
+        </mi>
+        <mn>
+          2
+        </mn>
+        <mn>
+          3
+        </mn>
+      </msubsup>
+    </mrow>
+    <mrow>
+      <mi>
+        n
+      </mi>
+      <mo>
+        +
+      </mo>
+      <mn>
+        1
+      </mn>
+    </mrow>
+  </mroot>
+</math>
+

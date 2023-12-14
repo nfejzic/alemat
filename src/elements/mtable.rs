@@ -38,7 +38,7 @@ pub enum TableAttr {
 /// stylesheet must contain the following rules in order to implement these properties:
 ///
 /// The `mtable` accepts the global [`Attribute`]s.
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Table {
     rows: Vec<TableRow>,
     /// The `mtable` accepts the global [`Attribute`]s.
@@ -162,7 +162,7 @@ macro_rules! table {
 ///   display: table-row;
 /// }
 /// ```
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct TableRow {
     /// Table cells (`mtd`) of this table row.
     cells: Vec<TableCell>,
@@ -308,7 +308,7 @@ impl From<Attribute> for TableCellAttr {
 ///   padding: 0.5ex 0.4em;
 /// }
 /// ```
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct TableCell {
     children: Elements,
     attr: Vec<TableCellAttr>,
