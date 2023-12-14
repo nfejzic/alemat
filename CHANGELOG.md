@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.1](https://github.com/nfejzic/alemat/compare/v0.6.0...v0.6.1) (2023-12-14)
+
+
+### Bug Fixes
+
+* document the operator and ident constructors ([#24](https://github.com/nfejzic/alemat/issues/24)) ([329fa2c](https://github.com/nfejzic/alemat/commit/329fa2c94e30b918223418977f5fac151614d664))
+
 ## [0.6.0](https://github.com/nfejzic/alemat/compare/v0.5.1...v0.6.0) (2023-12-14)
 
 
