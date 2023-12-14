@@ -30,7 +30,7 @@ use super::{grouping::Row, IntoElements};
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Radical {
     /// The index of the radical, e.g. the 3 in `∛`.
-    index: String,
+    index: Elements,
     content: Elements,
     attributes: Vec<Attribute>,
 }
@@ -42,13 +42,20 @@ impl Radical {
     }
 
     /// Get a reference to the index of the radical. e.g. "2" for the square root.
-    pub fn index(&self) -> &str {
+    pub fn index(&self) -> &Elements {
         &self.index
     }
 
     /// Check if the radical is a square root.
     pub fn is_square(&self) -> bool {
-        self.index.parse::<u8>().map_or(false, |num| num == 2)
+        if self.index().len() != 1 {
+            return false;
+        }
+
+        match &self.index[0] {
+            Element::Num(num) => num.num().parse::<f32>().is_ok_and(|val| val == 2f32),
+            _ => false,
+        }
     }
 
     /// Get a reference to the inner content of the [`Radical`] element.
@@ -67,7 +74,7 @@ crate::element_from_type!(Radical => Radical);
 /// Builder of the [`Radical`] element.
 #[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct RadicalsBuilder<T1, T2> {
-    index: Option<String>,
+    index: Option<Elements>,
     content: Option<Elements>,
     attr: Vec<Attribute>,
 
@@ -76,9 +83,19 @@ pub struct RadicalsBuilder<T1, T2> {
 
 impl<T1, T2> RadicalsBuilder<T1, T2> {
     /// Set the index of the radical. e.g. "2" for the square root.
-    pub fn index(self, index: impl Into<String>) -> RadicalsBuilder<Init, T2> {
+    ///
+    /// You can pass as may children as you want, but if you pass more than two with an index other
+    /// than "2" they will be wrapped in a `mrow`. If you use [`alemat::row!`] to wrap children in
+    /// a row yourself, they won't be wrapped again.
+    pub fn index(self, index: impl IntoElements) -> RadicalsBuilder<Init, T2> {
+        let mut index = index.into_elements();
+
+        if index.len() > 1 {
+            index = Row::from(index).into_elements();
+        }
+
         RadicalsBuilder {
-            index: Some(index.into()),
+            index: Some(index.into_elements()),
             content: self.content,
             attr: self.attr,
             _marker: PhantomData,
@@ -93,8 +110,8 @@ impl<T1, T2> RadicalsBuilder<T1, T2> {
     ///   - the second is the index
     ///
     /// You can pass as may children as you want, but if you pass more than two with an index other
-    /// than "2" they will be wrapped in a `mrow`. If you use [`alemat::row!`] to wrap children in a row
-    /// yourself, they won't be wrapped again.
+    /// than "2" they will be wrapped in a `mrow`. If you use [`alemat::row!`] to wrap children in
+    /// a row yourself, they won't be wrapped again.
     ///
     /// [`alemat::row!`]: crate::row
     pub fn content(self, content: impl IntoElements) -> RadicalsBuilder<T1, Init> {

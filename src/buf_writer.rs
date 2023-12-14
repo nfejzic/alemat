@@ -294,7 +294,7 @@ impl Writer for BufMathMlWriter {
         if radical.is_square() {
             self.write_str("</msqrt>")
         } else {
-            self.write_num(&Num::from(radical.index()))?;
+            self.write_elements(radical.index())?;
             self.write_str("</mroot>")
         }
     }
