@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/nfejzic/alemat/compare/v0.5.1...v0.6.0) (2023-12-14)
+
+
+### Features
+
+* improve API of alemat ([#22](https://github.com/nfejzic/alemat/issues/22)) ([4e068a6](https://github.com/nfejzic/alemat/commit/4e068a6b96dfdae4ddcff34163abd068a3b4a7b3))
+
 ## [0.5.1](https://github.com/nfejzic/alemat/compare/v0.5.0...v0.5.1) (2023-12-12)
 
 
