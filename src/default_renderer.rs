@@ -5,7 +5,7 @@ use crate::{
     elements::{
         grouping::{ActionAttr, Prescripts},
         scripted::UnderOverAttr,
-        AnnotationAttr, AnnotationContent, FracAttr, Num, OperatorAttr, PaddedAttr, SpaceAttr,
+        AnnotationAttr, AnnotationContent, FracAttr, OperatorAttr, PaddedAttr, SpaceAttr,
         TableAttr, TableCellAttr,
     },
     DisplayAttr, Element, MathMlAttr, Renderer,
@@ -244,7 +244,7 @@ impl Renderer for MathMlFormatter {
         if radical.is_square() {
             Ok(format!(r#"<msqrt {attr}>{content}</msqrt>"#))
         } else {
-            let index = self.render_num(&Num::from(radical.index()))?;
+            let index = self.render_elements(radical.index())?;
 
             Ok(format!(r#"<mroot {attr}>{content}{index}</mroot>"#))
         }
