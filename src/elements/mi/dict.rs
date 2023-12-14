@@ -1,6 +1,5 @@
 use super::Ident;
 
-#[allow(missing_docs)]
 impl Ident {
     /// Create a '&#x2205;' identifier.
     pub fn empty_set() -> Self {

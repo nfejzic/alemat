@@ -1,6 +1,5 @@
 use super::Operator;
 
-#[allow(missing_docs)]
 impl Operator {
     /// Create a '&#x002B;' operator.
     pub fn plus() -> Self {
