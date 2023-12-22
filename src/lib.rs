@@ -72,8 +72,24 @@ impl MathMl {
     /// Map the content contained in [`MathMl`].
     ///
     /// Useful, for example, when wrapping the content in [`elements::Row`] is desired.
-    pub fn map(&mut self, f: impl FnOnce(Elements) -> Elements) {
-        self.content = f(std::mem::take(&mut self.content));
+    ///
+    /// # Example
+    /// ```ignore
+    /// let out = MathMl::with_content(
+    ///     Frac::builder()
+    ///         .num(Ident::from("x"))
+    ///         .denom(Ident::from("y"))
+    ///         .build(),
+    /// )
+    /// .map(Row::from)
+    /// .render();
+    /// ```
+    pub fn map<T>(mut self, f: impl FnOnce(Elements) -> T) -> Self
+    where
+        T: IntoElements,
+    {
+        self.content = f(self.content).into_elements();
+        self
     }
 
     /// Get a reference to all attributes of the `math` element.
