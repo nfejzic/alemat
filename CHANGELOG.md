@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0](https://github.com/nfejzic/alemat/compare/v0.6.1...v0.7.0) (2023-12-22)
+
+
+### Features
+
+* add possibility to map content of `MathMl` ([#29](https://github.com/nfejzic/alemat/issues/29)) ([91d35de](https://github.com/nfejzic/alemat/commit/91d35dec4e3adcd746875c27f826905859498230))
+
 ## [0.6.1](https://github.com/nfejzic/alemat/compare/v0.6.0...v0.6.1) (2023-12-14)
 
 
