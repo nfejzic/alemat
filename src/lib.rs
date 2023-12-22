@@ -69,6 +69,13 @@ impl MathMl {
         &self.content
     }
 
+    /// Map the content contained in [`MathMl`].
+    ///
+    /// Useful, for example, when wrapping the content in [`elements::Row`] is desired.
+    pub fn map(&mut self, f: impl FnOnce(Elements) -> Elements) {
+        self.content = f(std::mem::take(&mut self.content));
+    }
+
     /// Get a reference to all attributes of the `math` element.
     pub fn attributes(&self) -> &[MathMlAttr] {
         &self.attr
