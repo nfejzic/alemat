@@ -1,4 +1,5 @@
 mod annotation;
+mod mapping;
 mod mfrac;
 mod mi;
 mod mn;

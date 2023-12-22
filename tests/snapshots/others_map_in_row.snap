@@ -1,0 +1,17 @@
+---
+source: tests/others/mapping.rs
+expression: input
+---
+<math>
+  <mrow>
+    <mfrac>
+      <mi>
+        x
+      </mi>
+      <mi>
+        y
+      </mi>
+    </mfrac>
+  </mrow>
+</math>
+
