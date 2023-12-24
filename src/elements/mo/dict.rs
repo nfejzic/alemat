@@ -416,6 +416,11 @@ impl Operator {
         Self::from("\u{007C}")
     }
 
+    /// Create a '&#x2225;' operator.
+    pub fn norm() -> Self {
+        Self::from("\u{2225}")
+    }
+
     /// Create a '&#x005E;' operator.
     pub fn hat() -> Self {
         Self::from("\u{005E}")
