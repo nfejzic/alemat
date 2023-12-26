@@ -16,6 +16,11 @@ impl Operator {
         Self::from("\u{22C5}")
     }
 
+    /// Create a '&#x00A8;' operator.
+    pub fn double_dot() -> Self {
+        Self::from("\u{00A8}")
+    }
+
     /// Create a '&#x2217;' operator.
     pub fn asterisk() -> Self {
         Self::from("\u{2217}")
@@ -189,6 +194,11 @@ impl Operator {
     /// Create a '&#x2309;' operator.
     pub fn rceiling() -> Self {
         Self::from("\u{2309}")
+    }
+
+    /// Create a '&#x2254;' operator.
+    pub fn assign() -> Self {
+        Self::from("\u{2254}")
     }
 
     /// Create a '&#x003D;' operator.
@@ -449,5 +459,10 @@ impl Operator {
     /// Create a '&#x2190;' operator.
     pub fn larrow() -> Self {
         Self::from("\u{2190}")
+    }
+
+    /// Create a '&#x007E;' operator.
+    pub fn tilde() -> Self {
+        Self::from("\u{007E}")
     }
 }
