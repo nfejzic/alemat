@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.8.0](https://github.com/nfejzic/alemat/compare/v0.7.0...v0.8.0) (2023-12-26)
+
+
+### Features
+
+* add constructor for the norm (`∥`) operator ([660a412](https://github.com/nfejzic/alemat/commit/660a4123d08ba6168dde3ec2bae6ecb3c407bda4))
+* add more constructors for operator ([#33](https://github.com/nfejzic/alemat/issues/33)) ([71ab5ca](https://github.com/nfejzic/alemat/commit/71ab5cabb1b1866a140b591adc19ba8c417e3174))
+
 ## [0.7.0](https://github.com/nfejzic/alemat/compare/v0.6.1...v0.7.0) (2023-12-22)
 
 
